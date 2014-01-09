@@ -21,9 +21,11 @@ gulp.task 'clean:bower', ->
 	gulp.src('./bower_components/')
 		.pipe(rimraf())
 
-gulp.task 'bower', ['clean:bower'], ->
+gulp.task 'bower', ['clean:bower'], (cb) ->
 	gulp.src('')
-		.pipe(bower())
+		.pipe(bower().on('end', ->
+			cb(null, 'ok')
+		))
 
 gulp.task 'clean:temp', ->
 	gulp.src('./.temp/')
