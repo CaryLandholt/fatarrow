@@ -1,6 +1,8 @@
+bower = require 'gulp-bower'
 coffee = require 'gulp-coffee'
 coffeelint = require 'gulp-coffeelint'
 es = require 'event-stream'
+filter = require 'gulp-filter'
 gulp = require 'gulp'
 gutil = require 'gulp-util'
 jade = require 'gulp-jade'
@@ -10,22 +12,70 @@ minifyHtml = require 'gulp-minify-html'
 rimraf = require 'gulp-rimraf'
 template = require 'gulp-template'
 
-bower = (opts) ->
-	es.map (file, cb) ->
-		require('bower').commands
-			.install([], opts)
-			.on 'end', ->
-				cb(null, file)
-
 gulp.task 'clean:bower', ->
 	gulp.src('./bower_components/')
 		.pipe(rimraf())
 
-gulp.task 'bower', ['clean:bower'], (cb) ->
-	gulp.src('')
-		.pipe(bower().on('end', ->
-			cb(null, 'ok')
-		))
+gulp.task 'bower', ->
+	components = bower()
+
+	components
+		.pipe(filter (file) ->
+			switch file.path
+				when 'angular/angular.min.js'
+					file.cwd = 'angular/'
+					file.path = file.path.replace(file.cwd, '')
+				when 'angular-animate/angular-animate.min.js'
+					file.cwd = 'angular-animate/'
+					file.path = file.path.replace(file.cwd, '')
+				when 'angular-mocks/angular-mocks.js'
+					file.cwd = 'angular-mocks/'
+					file.path = file.path.replace(file.cwd, '')
+				when 'angular-route/angular-route.min.js'
+					file.cwd = 'angular-route/'
+					file.path = file.path.replace(file.cwd, '')
+				when 'html5shiv/dist/html5shiv-printshiv.js'
+					file.cwd = 'html5shiv/dist/'
+					file.path = file.path.replace(file.cwd, '')
+				when 'json3/lib/json3.min.js'
+					file.cwd = 'json3/lib/'
+					file.path = file.path.replace(file.cwd, '')
+				when 'requirejs/require.js'
+					file.cwd = 'requirejs/'
+					file.path = file.path.replace(file.cwd, '')
+				else
+					return false
+		)
+		.pipe(gulp.dest('./components/scripts/libs/'))
+
+	components
+		.pipe(filter (file) ->
+			isLess = /bootstrap\/less\//.test(file.path)
+
+			return if not isLess
+
+			file.cwd = 'bootstrap/less/'
+			file.path = file.path.replace(file.cwd, '')
+		)
+		.pipe(gulp.dest('./components/styles/'))
+
+	components
+		.pipe(filter (file) ->
+			isLess = /bootstrap\/dist\/fonts\//.test(file.path)
+
+			return if not isLess
+
+			file.cwd = 'bootstrap/dist/fonts/'
+			file.path = file.path.replace(file.cwd, '')
+		)
+		.pipe(gulp.dest('./components/fonts/'))
+
+
+# gulp.task 'bower', ['clean:bower'], (cb) ->
+# 	gulp.src('')
+# 		.pipe(bower().on('end', ->
+# 			cb(null, 'ok')
+# 		))
 
 gulp.task 'clean:temp', ->
 	gulp.src('./.temp/')
