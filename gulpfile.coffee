@@ -1,4 +1,5 @@
 bower = require 'gulp-bower'
+clean = require 'gulp-clean'
 coffee = require 'gulp-coffee'
 coffeelint = require 'gulp-coffeelint'
 es = require 'event-stream'
@@ -9,14 +10,18 @@ jade = require 'gulp-jade'
 less = require 'gulp-less'
 markdown = require 'gulp-markdown'
 minifyHtml = require 'gulp-minify-html'
-rimraf = require 'gulp-rimraf'
 template = require 'gulp-template'
 
-gulp.task 'clean:bower', ->
-	gulp.src('./bower_components/')
-		.pipe(rimraf())
 
-gulp.task 'bower', ->
+gulp.task 'default', ['scripts', 'styles', 'views'], ->
+	gulp.src('./.temp/**')
+		.pipe(gulp.dest('./dist/'))
+
+gulp.task 'clean', ->
+	gulp.src(['./.temp/', './bower_components/', './components/'])
+		.pipe(clean())
+
+gulp.task 'bower', ['clean'], ->
 	components = bower()
 
 	components
@@ -70,41 +75,9 @@ gulp.task 'bower', ->
 		)
 		.pipe(gulp.dest('./components/fonts/'))
 
-
-# gulp.task 'bower', ['clean:bower'], (cb) ->
-# 	gulp.src('')
-# 		.pipe(bower().on('end', ->
-# 			cb(null, 'ok')
-# 		))
-
-gulp.task 'clean:temp', ->
-	gulp.src('./.temp/')
-		.pipe(rimraf())
-
-gulp.task 'copy:temp', ['clean:temp'], ->
-	gulp.src('./src/**')
+gulp.task 'copy:temp', ['clean', 'bower'], ->
+	gulp.src(['./src/**', './components/**'])
 		.pipe(gulp.dest('./.temp/'))
-
-	gulp.src([
-		'./bower_components/angular/angular.min.js'
-		'./bower_components/angular-animate/angular-animate.min.js'
-		'./bower_components/angular-mocks/angular-mocks.js'
-		'./bower_components/angular-route/angular-route.min.js'
-		'./bower_components/html5shiv/dist/html5shiv-printshiv.js'
-		'./bower_components/json3/lib/json3.min.js'
-		'./bower_components/requirejs/require.js'
-	])
-	.pipe(gulp.dest('./.temp/scripts/libs/'))
-
-	gulp.src('./bower_components/bootstrap/less/**/*.less')
-	.pipe(gulp.dest('./.temp/styles/'))
-
-	gulp.src('./bower_components/bootstrap/dist/fonts/**/*.{eot,svg,ttf,woff}')
-	.pipe(gulp.dest('./.temp/fonts/'))
-
-gulp.task 'copy:dev', ->
-	gulp.src('./.temp/**')
-		.pipe(gulp.dest('./dist/'))
 
 gulp.task 'coffeelint', ->
 	options =
@@ -121,23 +94,21 @@ gulp.task 'coffeelint', ->
 		.pipe(coffeelint(options))
 		.pipe(coffeelint.reporter())
 
-gulp.task 'coffee', ['coffeelint'], ->
+gulp.task 'coffee', ['coffeelint', 'copy:temp'], ->
 	gulp.src('./.temp/**/*.coffee')
-		.pipe(coffee())
+		.pipe(coffee({sourceMap: true}))
 		.pipe(gulp.dest('./.temp/'))
 
-gulp.task 'scripts', ->
-	gulp.run('coffee')
+gulp.task 'scripts', ['coffee']
 
-gulp.task 'less', ->
+gulp.task 'less', ['copy:temp'], ->
 	gulp.src('./.temp/styles/styles.less')
 		.pipe(less())
 		.pipe(gulp.dest('./.temp/styles/'))
 
-gulp.task 'styles', ->
-	gulp.run('less')
+gulp.task 'styles', ['less']
 
-gulp.task 'template', ->
+gulp.task 'template', ['copy:temp'], ->
 	data =
 		scripts: '<script data-main="/scripts/main.js" src="/scripts/libs/require.js"></script>'
 		styles: '<!--[if lte IE 8]> <script src="/scripts/libs/json3.js"></script> <script src="/scripts/libs/html5shiv-printshiv.js"></script> <![endif]--><link rel="stylesheet" href="/styles/styles.css" />'
@@ -156,14 +127,67 @@ gulp.task 'markdown', ['template'], ->
 		.pipe(markdown())
 		.pipe(gulp.dest('./.temp/'))
 
-gulp.task 'views', ->
-	gulp.run('jade', 'markdown')
+gulp.task 'views', ['jade', 'markdown']
+
+# gulp.task 'clean:temp', ->
+# 	gulp.src('./.temp/')
+# 		.pipe(clean())
+
+# gulp.task 'clean:components', ->
+# 	gulp.src(['./bower_components/', './components/'])
+# 		.pipe(clean())
+
+
+
+
+
+# gulp.task 'bower', ['clean:bower'], (cb) ->
+# 	gulp.src('')
+# 		.pipe(bower().on('end', ->
+# 			cb(null, 'ok')
+# 		))
+
+
+
+# gulp.task 'copy:temp', ['clean:temp'], ->
+# 	gulp.src('./src/**')
+# 		.pipe(gulp.dest('./.temp/'))
+
+# 	gulp.src([
+# 		'./bower_components/angular/angular.min.js'
+# 		'./bower_components/angular-animate/angular-animate.min.js'
+# 		'./bower_components/angular-mocks/angular-mocks.js'
+# 		'./bower_components/angular-route/angular-route.min.js'
+# 		'./bower_components/html5shiv/dist/html5shiv-printshiv.js'
+# 		'./bower_components/json3/lib/json3.min.js'
+# 		'./bower_components/requirejs/require.js'
+# 	])
+# 	.pipe(gulp.dest('./.temp/scripts/libs/'))
+
+# 	gulp.src('./bower_components/bootstrap/less/**/*.less')
+# 	.pipe(gulp.dest('./.temp/styles/'))
+
+# 	gulp.src('./bower_components/bootstrap/dist/fonts/**/*.{eot,svg,ttf,woff}')
+# 	.pipe(gulp.dest('./.temp/fonts/'))
+
+# gulp.task 'copy:dev', ->
+# 	gulp.src('./.temp/**')
+# 		.pipe(gulp.dest('./dist/'))
+
+
+
+
+
+
+
+
+
 
 gulp.task 'build', ['copy:temp'], ->
 	gulp.run('scripts', 'styles', 'views')
 
-gulp.task 'default', ['build'], ->
-	gulp.run('copy:dev')
+# gulp.task 'default', ['build'], ->
+# 	gulp.run('copy:dev')
 
 gulp.task 'init', ['bower'], ->
 	gulp.run('default')
