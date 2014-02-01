@@ -1,11 +1,11 @@
-[![Build Status](https://secure.travis-ci.org/CaryLandholt/AngularFun.png)](http://travis-ci.org/CaryLandholt/AngularFun)
+[![Build Status](https://secure.travis-ci.org/CaryLandholt/fatarrow.png)](http://travis-ci.org/CaryLandholt/fatarrow)
 [![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
-[![Dependency Status](https://david-dm.org/CaryLandholt/AngularFun.png)](https://david-dm.org/CaryLandholt/AngularFun)
-# AngularFun
+[![Dependency Status](https://david-dm.org/CaryLandholt/fatarrow.png)](https://david-dm.org/CaryLandholt/fatarrow)
+# fatarrow
 *By [@CaryLandholt](https://twitter.com/carylandholt)*
 
 ## About
-AngularFun is an [AngularJS](http://angularjs.org/) large application Reference Architecture.  The intent is to provide a base for creating your own AngularJS applications with minimal boilerplate setup and ceremony.
+fatarrow is an [AngularJS](http://angularjs.org/) large application Reference Architecture.  The intent is to provide a base for creating your own AngularJS applications with minimal boilerplate setup and ceremony.
 
 Simply follow the patterns and you'll get a complete development workflow, including:
 
@@ -30,8 +30,8 @@ Simply follow the patterns and you'll get a complete development workflow, inclu
 ## Install Angular Fun
 Enter the following commands in the terminal.
 
-1. `git clone git://github.com/CaryLandholt/AngularFun.git`
-2. `cd AngularFun`
+1. `git clone git://github.com/CaryLandholt/fatarrow.git`
+2. `cd fatarrow`
 3. `npm install`
 
 ## Compile Angular Fun
@@ -57,7 +57,7 @@ Some of you prefer working with plain old JavaScript.  We've got ya covered.  Si
 `grunt test` - Runs unit tests using the [Karma](http://karma-runner.github.io/) Test Runner
 
 ## Commentary
-AngularFun is a by-product of my learning AngularJS and became the reference architecture to my day job project, a very large internally and externally-facing application with extensive user interactions.
+fatarrow is a by-product of my learning AngularJS and became the reference architecture to my day job project, a very large internally and externally-facing application with extensive user interactions.
 
 I needed something that could support our Architecture Principles, including scale, stability, and maintenance.
 
@@ -212,7 +212,7 @@ So that's actually where we are.  The shim file from [Take 3](#take-3) is built 
 Whew!
 
 ### Give and Take
-After many iterations it now feels right.  All [comments and questions](https://github.com/CaryLandholt/AngularFun/issues) and [Pull Requests](https://github.com/CaryLandholt/AngularFun/pulls) are always welcome.  I respond to all.
+After many iterations it now feels right.  All [comments and questions](https://github.com/CaryLandholt/fatarrow/issues) and [Pull Requests](https://github.com/CaryLandholt/fatarrow/pulls) are always welcome.  I respond to all.
 
 ### Contributing
 In lieu of a formal styleguide, take care to maintain the existing coding style. Add unit tests for any new or changed functionality. Lint and test your code using grunt.
