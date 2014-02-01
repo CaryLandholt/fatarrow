@@ -1,23 +1,27 @@
 bower = require 'gulp-bower'
+changelog = require 'conventional-changelog'
 clean = require 'gulp-clean'
 coffee = require 'gulp-coffee'
 coffeelint = require 'gulp-coffeelint'
 es = require 'event-stream'
 filter = require 'gulp-filter'
+fs = require 'fs'
 gulp = require 'gulp'
 gutil = require 'gulp-util'
 jade = require 'gulp-jade'
 less = require 'gulp-less'
 markdown = require 'gulp-markdown'
 minifyHtml = require 'gulp-minify-html'
+pkg = require './package.json'
 template = require 'gulp-template'
 
-changelog = require 'conventional-changelog'
-
 gulp.task 'changelog', ->
-	changelog({version: require('./package.json').version}, (err, log) ->
-		console.log err, log
-	)
+	config =
+		repository: pkg.repository.url
+		version: pkg.version
+
+	changelog config, (err, log) ->
+		fs.writeFile './changelog.md', log
 
 
 gulp.task 'default', ['scripts', 'styles', 'views'], ->
