@@ -1,7 +1,7 @@
 {
 	"name": "fatarrow",
-	"description": "AngularJS Reference Architecture",
 	"version": "2.1.5",
+	"description": "AngularJS Reference Architecture",
 	"author": {
 		"name": "Cary Landholt",
 		"email": "cary@landholt.com",
@@ -24,6 +24,7 @@
 	},
 	"dependencies": {
 		"coffee-script": "~1.7.1",
+		"conventional-changelog": "~0.0.6",
 		"event-stream": "~3.1.0",
 		"gulp": "~3.5.0",
 		"gulp-bower": "~0.0.2",
@@ -35,6 +36,7 @@
 		"gulp-less": "~1.2.1",
 		"gulp-markdown": "~0.1.2",
 		"gulp-minify-html": "~0.1.0",
+		"gulp-ng-classify": "~0.1.0",
 		"gulp-template": "~0.1.1",
 		"gulp-util": "~2.2.13"
 	},

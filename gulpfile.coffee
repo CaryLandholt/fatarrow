@@ -12,8 +12,15 @@ jade = require 'gulp-jade'
 less = require 'gulp-less'
 markdown = require 'gulp-markdown'
 minifyHtml = require 'gulp-minify-html'
+ngClassify = require 'gulp-ng-classify'
 pkg = require './package.json'
 template = require 'gulp-template'
+
+gulp.task 'ngClassify', ['copy:temp'], ->
+	gulp
+		.src './.temp/**/*.coffee'
+		.pipe ngClassify()
+		.pipe gulp.dest './.temp/' 
 
 gulp.task 'changelog', ->
 	options =
@@ -101,7 +108,7 @@ gulp.task 'coffeelint', ->
 		.pipe coffeelint options
 		.pipe coffeelint.reporter()
 
-gulp.task 'coffee', ['coffeelint', 'copy:temp'], ->
+gulp.task 'coffee', ['coffeelint', 'copy:temp', 'ngClassify'], ->
 	options =
 		sourceMap: true
 
@@ -146,89 +153,6 @@ gulp.task 'markdown', ['template'], ->
 		.pipe gulp.dest './.temp/'
 
 gulp.task 'views', ['jade', 'markdown']
-
-# gulp.task 'clean:temp', ->
-# 	gulp.src('./.temp/')
-# 		.pipe(clean())
-
-# gulp.task 'clean:components', ->
-# 	gulp.src(['./bower_components/', './components/'])
-# 		.pipe(clean())
-
-
-
-
-
-# gulp.task 'bower', ['clean:bower'], (cb) ->
-# 	gulp.src('')
-# 		.pipe(bower().on('end', ->
-# 			cb(null, 'ok')
-# 		))
-
-
-
-# gulp.task 'copy:temp', ['clean:temp'], ->
-# 	gulp.src('./src/**')
-# 		.pipe(gulp.dest('./.temp/'))
-
-# 	gulp.src([
-# 		'./bower_components/angular/angular.min.js'
-# 		'./bower_components/angular-animate/angular-animate.min.js'
-# 		'./bower_components/angular-mocks/angular-mocks.js'
-# 		'./bower_components/angular-route/angular-route.min.js'
-# 		'./bower_components/html5shiv/dist/html5shiv-printshiv.js'
-# 		'./bower_components/json3/lib/json3.min.js'
-# 		'./bower_components/requirejs/require.js'
-# 	])
-# 	.pipe(gulp.dest('./.temp/scripts/libs/'))
-
-# 	gulp.src('./bower_components/bootstrap/less/**/*.less')
-# 	.pipe(gulp.dest('./.temp/styles/'))
-
-# 	gulp.src('./bower_components/bootstrap/dist/fonts/**/*.{eot,svg,ttf,woff}')
-# 	.pipe(gulp.dest('./.temp/fonts/'))
-
-# gulp.task 'copy:dev', ->
-# 	gulp.src('./.temp/**')
-# 		.pipe(gulp.dest('./dist/'))
-
-
-
-
-
-
-
-
-
-
-gulp.task 'build', ['copy:temp'], ->
-	gulp.run('scripts', 'styles', 'views')
-
-# gulp.task 'default', ['build'], ->
-# 	gulp.run('copy:dev')
-
-gulp.task 'init', ['bower'], ->
-	gulp.run('default')
-
-
-
-
-
-
-# gulp.task 'uglify', ['scripts'], ->
-# 	gulp.src('./.temp/**/*.js')
-# 		.pipe(uglify())
-# 		.pipe(gulp.dest('./.temp/scripts/scripts.min.js'))
-
-
-
-
-
-
-
-
-
-
 
 gulp.task 'minifyHtml', ['jade', 'markdown'], ->
 	options =
