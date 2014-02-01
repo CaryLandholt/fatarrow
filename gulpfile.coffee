@@ -12,42 +12,46 @@ markdown = require 'gulp-markdown'
 minifyHtml = require 'gulp-minify-html'
 template = require 'gulp-template'
 
+changelog = require 'conventional-changelog'
+
+gulp.task 'changelog', ->
+	changelog({repository: 'https://github.com/CaryLandholt/fatarrow', version: '1.0.0'}, (err, log) ->
+		console.log err, log
+	)
+
 
 gulp.task 'default', ['scripts', 'styles', 'views'], ->
 	gulp.src('./.temp/**')
 		.pipe(gulp.dest('./dist/'))
 
 gulp.task 'clean', ->
-	gulp.src(['./.temp/', './bower_components/', './components/'])
+	gulp.src(['./bower_components/', './components/', './.temp/', './dist/'])
 		.pipe(clean())
 
 gulp.task 'bower', ['clean'], ->
+	trim = (file, prefix) ->
+		file.cwd = prefix
+		file.path = file.path.replace file.cwd, ''
+
 	components = bower()
 
 	components
 		.pipe(filter (file) ->
 			switch file.path
 				when 'angular/angular.min.js'
-					file.cwd = 'angular/'
-					file.path = file.path.replace(file.cwd, '')
+					trim file, 'angular/'
 				when 'angular-animate/angular-animate.min.js'
-					file.cwd = 'angular-animate/'
-					file.path = file.path.replace(file.cwd, '')
+					trim file, 'angular-animate/'
 				when 'angular-mocks/angular-mocks.js'
-					file.cwd = 'angular-mocks/'
-					file.path = file.path.replace(file.cwd, '')
+					trim file, 'angular-mocks/'
 				when 'angular-route/angular-route.min.js'
-					file.cwd = 'angular-route/'
-					file.path = file.path.replace(file.cwd, '')
+					trim file, 'angular-route/'
 				when 'html5shiv/dist/html5shiv-printshiv.js'
-					file.cwd = 'html5shiv/dist/'
-					file.path = file.path.replace(file.cwd, '')
+					trim file, 'html5shiv/dist/'
 				when 'json3/lib/json3.min.js'
-					file.cwd = 'json3/lib/'
-					file.path = file.path.replace(file.cwd, '')
+					trim file, 'json3/lib/'
 				when 'requirejs/require.js'
-					file.cwd = 'requirejs/'
-					file.path = file.path.replace(file.cwd, '')
+					trim file, 'requirejs/'
 				else
 					return false
 		)
@@ -59,8 +63,7 @@ gulp.task 'bower', ['clean'], ->
 
 			return if not isLess
 
-			file.cwd = 'bootstrap/less/'
-			file.path = file.path.replace(file.cwd, '')
+			trim file, 'bootstrap/less/'
 		)
 		.pipe(gulp.dest('./components/styles/'))
 
@@ -70,8 +73,7 @@ gulp.task 'bower', ['clean'], ->
 
 			return if not isLess
 
-			file.cwd = 'bootstrap/dist/fonts/'
-			file.path = file.path.replace(file.cwd, '')
+			trim file, 'bootstrap/dist/fonts/'
 		)
 		.pipe(gulp.dest('./components/fonts/'))
 
