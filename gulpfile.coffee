@@ -15,7 +15,7 @@ template = require 'gulp-template'
 changelog = require 'conventional-changelog'
 
 gulp.task 'changelog', ->
-	changelog({repository: 'https://github.com/CaryLandholt/fatarrow', version: '1.0.0'}, (err, log) ->
+	changelog({version: require('./package.json').version}, (err, log) ->
 		console.log err, log
 	)
 
