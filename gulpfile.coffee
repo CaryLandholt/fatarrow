@@ -16,21 +16,23 @@ pkg = require './package.json'
 template = require 'gulp-template'
 
 gulp.task 'changelog', ->
-	config =
+	options =
 		repository: pkg.repository.url
 		version: pkg.version
 
-	changelog config, (err, log) ->
+	changelog options, (err, log) ->
 		fs.writeFile './CHANGELOG.md', log
 
 
 gulp.task 'default', ['scripts', 'styles', 'views'], ->
-	gulp.src('./.temp/**')
-		.pipe(gulp.dest('./dist/'))
+	gulp
+		.src './.temp/**'
+		.pipe gulp.dest './dist/'
 
 gulp.task 'clean', ->
-	gulp.src(['./bower_components/', './components/', './.temp/', './dist/'])
-		.pipe(clean())
+	gulp
+		.src ['./bower_components/', './components/', './.temp/', './dist/']
+		.pipe clean()
 
 gulp.task 'bower', ['clean'], ->
 	trim = (file, prefix) ->
@@ -40,7 +42,7 @@ gulp.task 'bower', ['clean'], ->
 	components = bower()
 
 	components
-		.pipe(filter (file) ->
+		.pipe filter (file) ->
 			switch file.path
 				when 'angular/angular.min.js'
 					trim file, 'angular/'
@@ -58,32 +60,30 @@ gulp.task 'bower', ['clean'], ->
 					trim file, 'requirejs/'
 				else
 					return false
-		)
-		.pipe(gulp.dest('./components/scripts/libs/'))
+		.pipe gulp.dest './components/scripts/libs/'
 
 	components
-		.pipe(filter (file) ->
-			isLess = /bootstrap\/less\//.test(file.path)
+		.pipe filter (file) ->
+			isLess = /bootstrap\/less\//.test file.path
 
 			return if not isLess
 
 			trim file, 'bootstrap/less/'
-		)
-		.pipe(gulp.dest('./components/styles/'))
+		.pipe gulp.dest './components/styles/'
 
 	components
-		.pipe(filter (file) ->
-			isLess = /bootstrap\/dist\/fonts\//.test(file.path)
+		.pipe filter (file) ->
+			isFont = /bootstrap\/dist\/fonts\//.test file.path
 
-			return if not isLess
+			return if not isFont
 
 			trim file, 'bootstrap/dist/fonts/'
-		)
-		.pipe(gulp.dest('./components/fonts/'))
+		.pipe gulp.dest './components/fonts/'
 
 gulp.task 'copy:temp', ['clean', 'bower'], ->
-	gulp.src(['./src/**', './components/**'])
-		.pipe(gulp.dest('./.temp/'))
+	gulp
+		.src ['./src/**', './components/**']
+		.pipe gulp.dest './.temp/'
 
 gulp.task 'coffeelint', ->
 	options =
@@ -96,21 +96,27 @@ gulp.task 'coffeelint', ->
 		no_tabs:
 			level: 'ignore'
 
-	gulp.src('./src/**/*.coffee')
-		.pipe(coffeelint(options))
-		.pipe(coffeelint.reporter())
+	gulp
+		.src './src/**/*.coffee'
+		.pipe coffeelint options
+		.pipe coffeelint.reporter()
 
 gulp.task 'coffee', ['coffeelint', 'copy:temp'], ->
-	gulp.src('./.temp/**/*.coffee')
-		.pipe(coffee({sourceMap: true}))
-		.pipe(gulp.dest('./.temp/'))
+	options =
+		sourceMap: true
+
+	gulp
+		.src './.temp/**/*.coffee'
+		.pipe coffee options
+		.pipe gulp.dest './.temp/'
 
 gulp.task 'scripts', ['coffee']
 
 gulp.task 'less', ['copy:temp'], ->
-	gulp.src('./.temp/styles/styles.less')
-		.pipe(less())
-		.pipe(gulp.dest('./.temp/styles/'))
+	gulp
+		.src './.temp/styles/styles.less'
+		.pipe less()
+		.pipe gulp.dest './.temp/styles/'
 
 gulp.task 'styles', ['less']
 
@@ -119,19 +125,25 @@ gulp.task 'template', ['copy:temp'], ->
 		scripts: '<script data-main="/scripts/main.js" src="/scripts/libs/require.js"></script>'
 		styles: '<!--[if lte IE 8]> <script src="/scripts/libs/json3.js"></script> <script src="/scripts/libs/html5shiv-printshiv.js"></script> <![endif]--><link rel="stylesheet" href="/styles/styles.css" />'
 
-	gulp.src('./.temp/**/*.{html,jade,md,markdown}')
-		.pipe(template(data))
-		.pipe(gulp.dest('./.temp/'))
+	gulp
+		.src './.temp/**/*.{html,jade,md,markdown}'
+		.pipe template data
+		.pipe gulp.dest './.temp/'
 
 gulp.task 'jade', ['template'], ->
-	gulp.src('./.temp/**/*.jade')
-		.pipe(jade(pretty: true))
-		.pipe(gulp.dest('./.temp/'))
+	options =
+		pretty: true
+
+	gulp
+		.src './.temp/**/*.jade'
+		.pipe jade options
+		.pipe gulp.dest './.temp/'
 
 gulp.task 'markdown', ['template'], ->
-	gulp.src('./.temp/**/*.{md,markdown}')
-		.pipe(markdown())
-		.pipe(gulp.dest('./.temp/'))
+	gulp
+		.src './.temp/**/*.{md,markdown}'
+		.pipe markdown()
+		.pipe gulp.dest './.temp/'
 
 gulp.task 'views', ['jade', 'markdown']
 
@@ -222,14 +234,7 @@ gulp.task 'minifyHtml', ['jade', 'markdown'], ->
 	options =
 		quotes: true
 
-	gulp.src('./.temp/**/*.html')
-		.pipe(minifyHtml(options))
-		.pipe(gulp.dest('./.temp/'))
-
-
-
-
-
-
-
-
+	gulp
+		.src './.temp/**/*.html'
+		.pipe minifyHtml options
+		.pipe gulp.dest './.temp/'
