@@ -21,7 +21,7 @@ gulp.task 'changelog', ->
 		version: pkg.version
 
 	changelog config, (err, log) ->
-		fs.writeFile './changelog.md', log
+		fs.writeFile './CHANGELOG.md', log
 
 
 gulp.task 'default', ['scripts', 'styles', 'views'], ->
