@@ -16,6 +16,67 @@ ngClassify = require 'gulp-ng-classify'
 pkg = require './package.json'
 template = require 'gulp-template'
 
+
+
+
+
+through = require 'through'
+PluginError = gutil.PluginError
+
+ngScriptify = (fileName, opt = {}) ->
+	path = require 'path'
+
+	if !fileName
+		throw new PluginError 'gulp-ng-scriptify', 'Missing filename option'
+
+	if !opt.newLine
+		opt.newLine = gutil.linefeed
+
+	scripts = []
+
+	bufferContents = (file) ->
+		return if file.isNull()
+
+		return if file.isStream()
+			@emit 'error', new PluginError 'gulp-ng-scriptify', 'Streaming not supported'
+
+		p = path.resolve '/', path.relative file.cwd, file.path
+		# script = "<script src=\"#{p}\"></script>"
+
+		scripts.push p
+
+	endStream = ->
+		return if scripts.length is 0
+			@emit 'end'
+
+		# result = "\n#{scripts.join('\n')}\n"
+
+		@emit 'data', scripts
+		@emit 'end'
+
+	through bufferContents, endStream
+
+gulp.task 'scriptify', ->
+	files = [
+		'scripts/libs/angular.min.js'
+		'scripts/libs/angular-mocks.js'
+		'scripts/libs/angular-animate.min.js'
+		'scripts/libs/angular-route.min.js'
+		'!scripts/libs/html5shiv-printshiv.js'
+		'!scripts/libs/json3.min.js'
+		'**/*.js'
+	]
+
+	gulp
+		.src files, cwd: './.temp/'
+		.pipe ngScriptify('./.temp/scripts/main.coffee')
+		.on 'data', (scripts) ->
+			gulp
+				.src './.temp/index.html'
+				.pipe template {scripts, styles: []}
+				.pipe gulp.dest './.temp/'
+
+
 gulp.task 'ngClassify', ['copy:temp'], ->
 	gulp
 		.src './.temp/**/*.coffee'
