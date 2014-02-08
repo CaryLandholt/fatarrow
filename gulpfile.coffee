@@ -13,75 +13,86 @@ less = require 'gulp-less'
 markdown = require 'gulp-markdown'
 minifyHtml = require 'gulp-minify-html'
 ngClassify = require 'gulp-ng-classify'
+path = require 'path'
 pkg = require './package.json'
 template = require 'gulp-template'
 
 
 
 
+scripts = [
+	'scripts/libs/angular.min.js'
+	'scripts/libs/angular-mocks.js'
+	'scripts/libs/angular-animate.min.js'
+	'scripts/libs/angular-route.min.js'
+	'!scripts/libs/html5shiv-printshiv.js'
+	'!scripts/libs/json3.min.js'
+	'**/*.js'
+]
 
-through = require 'through'
+styles = [
+	'styles/styles.css'
+]
+
+
+
 PluginError = gutil.PluginError
 
-ngScriptify = (fileName, opt = {}) ->
-	path = require 'path'
-
+includify = (fileName, opt = {}) ->
 	if !fileName
-		throw new PluginError 'gulp-ng-scriptify', 'Missing filename option'
+		throw new PluginError 'includify', 'Missing filename option'
 
-	if !opt.newLine
-		opt.newLine = gutil.linefeed
-
-	scripts = []
+	scriptsToInclude = []
+	stylesToInclude = []
 
 	bufferContents = (file) ->
 		return if file.isNull()
 
 		return if file.isStream()
-			@emit 'error', new PluginError 'gulp-ng-scriptify', 'Streaming not supported'
+			@emit 'error', new PluginError 'includify', 'Streaming not supported'
 
+		ext = path.extname file.path
 		p = path.resolve '/', path.relative file.cwd, file.path
-		# script = "<script src=\"#{p}\"></script>"
 
-		scripts.push p
+		return if ext is '.js'
+			scriptsToInclude.push p
+
+		return if ext is '.css'
+			stylesToInclude.push p
 
 	endStream = ->
-		return if scripts.length is 0
+		return if scriptsToInclude.length is 0 or stylesToInclude.length is 0
 			@emit 'end'
 
-		# result = "\n#{scripts.join('\n')}\n"
-
-		@emit 'data', scripts
+		@emit 'data', {scripts: scriptsToInclude, styles: stylesToInclude}
 		@emit 'end'
 
-	through bufferContents, endStream
+	es.through bufferContents, endStream
 
-gulp.task 'scriptify', ->
-	files = [
-		'scripts/libs/angular.min.js'
-		'scripts/libs/angular-mocks.js'
-		'scripts/libs/angular-animate.min.js'
-		'scripts/libs/angular-route.min.js'
-		'!scripts/libs/html5shiv-printshiv.js'
-		'!scripts/libs/json3.min.js'
-		'**/*.js'
-	]
+
+
+gulp.task 'template', ['copy:temp', 'scripts', 'styles'], ->
+	files = []
+		.concat scripts
+		.concat styles
 
 	gulp
 		.src files, cwd: './.temp/'
-		.pipe ngScriptify('./.temp/scripts/main.coffee')
-		.on 'data', (scripts) ->
+		.pipe includify('./.temp/index.html')
+		.on 'data', (data) ->
 			gulp
 				.src './.temp/index.html'
-				.pipe template {scripts, styles: []}
+				.pipe template data
 				.pipe gulp.dest './.temp/'
+
+
 
 
 gulp.task 'ngClassify', ['copy:temp'], ->
 	gulp
 		.src './.temp/**/*.coffee'
 		.pipe ngClassify()
-		.pipe gulp.dest './.temp/' 
+		.pipe gulp.dest './.temp/'
 
 gulp.task 'changelog', ->
 	options =
@@ -90,6 +101,12 @@ gulp.task 'changelog', ->
 
 	changelog options, (err, log) ->
 		fs.writeFile './CHANGELOG.md', log
+
+
+
+
+
+
 
 
 gulp.task 'default', ['scripts', 'styles', 'views'], ->
@@ -124,8 +141,6 @@ gulp.task 'bower', ['clean'], ->
 					trim file, 'html5shiv/dist/'
 				when 'json3/lib/json3.min.js'
 					trim file, 'json3/lib/'
-				when 'requirejs/require.js'
-					trim file, 'requirejs/'
 				else
 					return false
 		.pipe gulp.dest './components/scripts/libs/'
@@ -188,15 +203,7 @@ gulp.task 'less', ['copy:temp'], ->
 
 gulp.task 'styles', ['less']
 
-gulp.task 'template', ['copy:temp'], ->
-	data =
-		scripts: '<script data-main="/scripts/main.js" src="/scripts/libs/require.js"></script>'
-		styles: '<!--[if lte IE 8]> <script src="/scripts/libs/json3.js"></script> <script src="/scripts/libs/html5shiv-printshiv.js"></script> <![endif]--><link rel="stylesheet" href="/styles/styles.css" />'
 
-	gulp
-		.src './.temp/**/*.{html,jade,md,markdown}'
-		.pipe template data
-		.pipe gulp.dest './.temp/'
 
 gulp.task 'jade', ['template'], ->
 	options =
@@ -209,7 +216,10 @@ gulp.task 'jade', ['template'], ->
 
 gulp.task 'markdown', ['template'], ->
 	gulp
-		.src './.temp/**/*.{md,markdown}'
+		.src [
+			'./.temp/**/*.md'
+			'./.temp/**/*.markdown'
+		]
 		.pipe markdown()
 		.pipe gulp.dest './.temp/'
 

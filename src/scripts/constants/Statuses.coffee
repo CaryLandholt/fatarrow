@@ -1,3 +1,3 @@
 class Statuses extends Constant
-	constant:
+	@constructor =
 		'403': 'Forbidden'
