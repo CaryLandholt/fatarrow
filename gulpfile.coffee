@@ -6,6 +6,15 @@ distDirectory = './dist/'
 srcDirectory = './src/'
 tempDirectory = './.temp/'
 
+normalizeComponentMap =
+	'.css': 'styles/'
+	'.eot': 'fonts/'
+	'.js': 'scripts/libs/'
+	'.less': 'styles/'
+	'.svg': 'fonts/'
+	'.ttf': 'fonts/'
+	'.woff': 'fonts/'
+
 bower = require 'gulp-bower'
 bowerFiles = require 'gulp-bower-files'
 clean = require 'gulp-clean'
@@ -57,13 +66,7 @@ gulp.task 'components', ['bower', 'clean:working'], ->
 		.on 'data', (data) ->
 			fileName = path.basename data.path
 			ext = path.extname fileName
-			subPath = ''
-
-			switch ext
-				when '.js' then subPath = '/scripts/libs/'
-				when '.less', '.css' then subPath = '/styles/'
-				when '.eot', '.svg', '.ttf', '.woff' then subPath = '/fonts/'
-
+			subPath = normalizeComponentMap[ext]
 			p = path.join data.base, subPath, fileName
 			data.path = p
 
