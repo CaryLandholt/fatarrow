@@ -1,24 +1,126 @@
+# gulp scripts
+
+bowerComponentsDirectory = './bower_components/'
+componentsDirectory = './components/'
+distDirectory = './dist/'
+srcDirectory = './src/'
+tempDirectory = './.temp/'
+
 bower = require 'gulp-bower'
-changelog = require 'conventional-changelog'
+bowerFiles = require 'gulp-bower-files'
 clean = require 'gulp-clean'
 coffee = require 'gulp-coffee'
 coffeelint = require 'gulp-coffeelint'
+gulp = require 'gulp'
+ngClassify = require 'gulp-ng-classify'
+
+gulp.task 'bower', ->
+	bower()
+
+gulp.task 'clean', ->
+	gulp
+		.src [bowerComponentsDirectory, componentsDirectory, tempDirectory, distDirectory]
+		.pipe clean()
+
+gulp.task 'clean:working', ->
+	gulp
+		.src [componentsDirectory, tempDirectory, distDirectory]
+		.pipe clean()
+
+gulp.task 'coffee', ['coffeelint', 'ngClassify'], ->
+	options =
+		sourceMap: true
+
+	gulp
+		.src '**/*.coffee', cwd: tempDirectory
+		.pipe coffee options
+		.pipe gulp.dest tempDirectory
+
+gulp.task 'coffeelint', ->
+	options =
+		arrow_spacing:
+			level: 'error'
+		indentation:
+			value: 1
+		max_line_length:
+			level: 'ignore'
+		no_tabs:
+			level: 'ignore'
+
+	gulp
+		.src '**/*.coffee', cwd: srcDirectory
+		.pipe coffeelint options
+		.pipe coffeelint.reporter()
+
+gulp.task 'components', ['bower', 'clean:working'], ->
+	bowerFiles()
+		.on 'data', (data) ->
+			fileName = path.basename data.path
+			ext = path.extname fileName
+			subPath = ''
+
+			switch ext
+				when '.js' then subPath = '/scripts/libs/'
+				when '.less', '.css' then subPath = '/styles/'
+				when '.eot', '.svg', '.ttf', '.woff' then subPath = '/fonts/'
+
+			p = path.join data.base, subPath, fileName
+			data.path = p
+
+			data
+		.pipe gulp.dest componentsDirectory
+
+gulp.task 'copy:temp', ['clean:working', 'components'], ->
+	gulp
+		.src ["#{srcDirectory}**", "#{componentsDirectory}**"]
+		.pipe gulp.dest tempDirectory
+
+gulp.task 'ngClassify', ['copy:temp'], ->
+	gulp
+		.src '**/*.coffee', cwd: tempDirectory
+		.pipe ngClassify()
+		.pipe gulp.dest tempDirectory
+
+gulp.task 'scripts', ['coffee']
+
+
+
+# gulp.task 'default', ['scripts', 'styles', 'views'], ->
+# 	gulp
+# 		.src "#{tempDirectory}**"
+# 		.pipe gulp.dest distDirectory
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+changelog = require 'conventional-changelog'
+
+
+
 es = require 'event-stream'
 filter = require 'gulp-filter'
 fs = require 'fs'
-gulp = require 'gulp'
+
 gutil = require 'gulp-util'
 jade = require 'gulp-jade'
 less = require 'gulp-less'
 markdown = require 'gulp-markdown'
 minifyHtml = require 'gulp-minify-html'
-ngClassify = require 'gulp-ng-classify'
+
 path = require 'path'
 pkg = require './package.json'
 template = require 'gulp-template'
-
-
-
 
 scripts = [
 	'scripts/libs/angular.min.js'
@@ -33,6 +135,55 @@ scripts = [
 styles = [
 	'styles/styles.css'
 ]
+
+fonts = ['**/*.{eot,svg,ttf,woff}']
+assets = [].concat(scripts).concat(styles).concat(fonts)
+
+
+
+
+# inject = require 'gulp-inject'
+
+# gulp.task 'inject', ->
+# 	gulp
+# 		.src assets, {cwd: tempDirectory, read: false}
+# 		.pipe inject './index.html', ignorePath: path.resolve tempDirectory
+# 		.pipe gulp.dest tempDirectory
+
+
+
+
+
+
+bust = require 'gulp-buster'
+rename = require 'gulp-rename'
+
+gulp.task 'bust', ->
+	bust.config
+		length: 10
+
+	gulp
+		.src assets, cwd: tempDirectory
+		.pipe bust 'busters.json'
+		.pipe gulp.dest '.'
+
+gulp.task 'bustit', ['bust'], ->
+	busters = require './busters.json'
+
+	gulp
+		.src assets, cwd: tempDirectory
+		.pipe rename (filePath) ->
+			originalPath = path.join filePath.dirname, filePath.basename + filePath.extname
+			hash = busters[originalPath]
+			filePath.basename += ".#{hash}"
+
+			filePath
+		.pipe gulp.dest tempDirectory
+
+
+
+
+
 
 
 
@@ -78,7 +229,7 @@ gulp.task 'template', ['copy:temp', 'scripts', 'styles'], ->
 
 	gulp
 		.src files, cwd: './.temp/'
-		.pipe includify('./.temp/index.html')
+		.pipe includify './.temp/index.html'
 		.on 'data', (data) ->
 			gulp
 				.src './.temp/index.html'
@@ -88,11 +239,7 @@ gulp.task 'template', ['copy:temp', 'scripts', 'styles'], ->
 
 
 
-gulp.task 'ngClassify', ['copy:temp'], ->
-	gulp
-		.src './.temp/**/*.coffee'
-		.pipe ngClassify()
-		.pipe gulp.dest './.temp/'
+
 
 gulp.task 'changelog', ->
 	options =
@@ -109,91 +256,19 @@ gulp.task 'changelog', ->
 
 
 
-gulp.task 'default', ['scripts', 'styles', 'views'], ->
-	gulp
-		.src './.temp/**'
-		.pipe gulp.dest './dist/'
 
-gulp.task 'clean', ->
-	gulp
-		.src ['./bower_components/', './components/', './.temp/', './dist/']
-		.pipe clean()
 
-gulp.task 'bower', ['clean'], ->
-	trim = (file, prefix) ->
-		file.cwd = prefix
-		file.path = file.path.replace file.cwd, ''
 
-	components = bower()
 
-	components
-		.pipe filter (file) ->
-			switch file.path
-				when 'angular/angular.min.js'
-					trim file, 'angular/'
-				when 'angular-animate/angular-animate.min.js'
-					trim file, 'angular-animate/'
-				when 'angular-mocks/angular-mocks.js'
-					trim file, 'angular-mocks/'
-				when 'angular-route/angular-route.min.js'
-					trim file, 'angular-route/'
-				when 'html5shiv/dist/html5shiv-printshiv.js'
-					trim file, 'html5shiv/dist/'
-				when 'json3/lib/json3.min.js'
-					trim file, 'json3/lib/'
-				else
-					return false
-		.pipe gulp.dest './components/scripts/libs/'
 
-	components
-		.pipe filter (file) ->
-			isLess = /bootstrap\/less\//.test file.path
 
-			return if not isLess
 
-			trim file, 'bootstrap/less/'
-		.pipe gulp.dest './components/styles/'
 
-	components
-		.pipe filter (file) ->
-			isFont = /bootstrap\/dist\/fonts\//.test file.path
 
-			return if not isFont
 
-			trim file, 'bootstrap/dist/fonts/'
-		.pipe gulp.dest './components/fonts/'
 
-gulp.task 'copy:temp', ['clean', 'bower'], ->
-	gulp
-		.src ['./src/**', './components/**']
-		.pipe gulp.dest './.temp/'
 
-gulp.task 'coffeelint', ->
-	options =
-		arrow_spacing:
-			level: 'error'
-		indentation:
-			value: 1
-		max_line_length:
-			level: 'ignore'
-		no_tabs:
-			level: 'ignore'
 
-	gulp
-		.src './src/**/*.coffee'
-		.pipe coffeelint options
-		.pipe coffeelint.reporter()
-
-gulp.task 'coffee', ['coffeelint', 'copy:temp', 'ngClassify'], ->
-	options =
-		sourceMap: true
-
-	gulp
-		.src './.temp/**/*.coffee'
-		.pipe coffee options
-		.pipe gulp.dest './.temp/'
-
-gulp.task 'scripts', ['coffee']
 
 gulp.task 'less', ['copy:temp'], ->
 	gulp
