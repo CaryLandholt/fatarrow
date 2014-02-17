@@ -34,9 +34,6 @@ gulp.task 'bower', ->
 	bower()
 
 gulp.task 'build', ['scripts', 'styles', 'views'], ->
-	gulp
-		.src '**', cwd: tempDirectory
-		.pipe gulp.dest distDirectory
 
 gulp.task 'changelog', ->
 	options =
@@ -79,7 +76,7 @@ gulp.task 'coffeelint', ->
 			level: 'ignore'
 
 	gulp
-		.src '**/*.coffee', cwd: srcDirectory
+		.src ['**/*.coffee', '!scripts/app.coffee'], cwd: srcDirectory
 		.pipe coffeelint options
 		.pipe coffeelint.reporter()
 
@@ -95,12 +92,17 @@ gulp.task 'components', ['bower', 'clean:working'], ->
 			data
 		.pipe gulp.dest componentsDirectory
 
+gulp.task 'copy:dist', ['build'], ->
+	gulp
+		.src '**', cwd: tempDirectory
+		.pipe gulp.dest distDirectory
+		
 gulp.task 'copy:temp', ['clean:working', 'components'], ->
 	gulp
 		.src ["#{srcDirectory}**", "#{componentsDirectory}**"]
 		.pipe gulp.dest tempDirectory
 
-gulp.task 'default', ['build']
+gulp.task 'default', ['copy:dist']
 
 gulp.task 'jade', ['copy:temp'], ->
 	options =
@@ -124,9 +126,13 @@ gulp.task 'markdown', ['copy:temp'], ->
 		.pipe gulp.dest tempDirectory
 
 gulp.task 'ngClassify', ['copy:temp'], ->
+	options =
+		data:
+			environment: 'dev'
+
 	gulp
 		.src '**/*.coffee', cwd: tempDirectory
-		.pipe ngClassify()
+		.pipe ngClassify options
 		.pipe gulp.dest tempDirectory
 
 gulp.task 'scripts', ['coffee']
@@ -135,48 +141,10 @@ gulp.task 'styles', ['less']
 
 gulp.task 'views', ['jade', 'markdown']
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # es = require 'event-stream'
 # filter = require 'gulp-filter'
 
-
-
-
-
-
 # minifyHtml = require 'gulp-minify-html'
-
-
 
 # template = require 'gulp-template'
 
@@ -185,6 +153,7 @@ gulp.task 'views', ['jade', 'markdown']
 # 	'scripts/libs/angular-mocks.js'
 # 	'scripts/libs/angular-animate.min.js'
 # 	'scripts/libs/angular-route.min.js'
+# 	'scripts/app.js'
 # 	'!scripts/libs/html5shiv-printshiv.js'
 # 	'!scripts/libs/json3.min.js'
 # 	'**/*.js'
@@ -197,9 +166,6 @@ gulp.task 'views', ['jade', 'markdown']
 # fonts = ['**/*.{eot,svg,ttf,woff}']
 # assets = [].concat(scripts).concat(styles).concat(fonts)
 
-
-
-
 # # inject = require 'gulp-inject'
 
 # # gulp.task 'inject', ->
@@ -207,11 +173,6 @@ gulp.task 'views', ['jade', 'markdown']
 # # 		.src assets, {cwd: tempDirectory, read: false}
 # # 		.pipe inject './index.html', ignorePath: path.resolve tempDirectory
 # # 		.pipe gulp.dest tempDirectory
-
-
-
-
-
 
 # # bust = require 'gulp-buster'
 # # rename = require 'gulp-rename'
@@ -237,13 +198,6 @@ gulp.task 'views', ['jade', 'markdown']
 
 # 			filePath
 # 		.pipe gulp.dest tempDirectory
-
-
-
-
-
-
-
 
 # PluginError = gutil.PluginError
 
@@ -278,8 +232,6 @@ gulp.task 'views', ['jade', 'markdown']
 
 # 	es.through bufferContents, endStream
 
-
-
 # gulp.task 'template', ['copy:temp', 'scripts', 'styles'], ->
 # 	files = []
 # 		.concat scripts
@@ -293,46 +245,6 @@ gulp.task 'views', ['jade', 'markdown']
 # 				.src './.temp/index.html'
 # 				.pipe template data
 # 				.pipe gulp.dest './.temp/'
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 # gulp.task 'minifyHtml', ['jade', 'markdown'], ->
 # 	options =
