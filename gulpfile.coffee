@@ -1,6 +1,6 @@
 bowerDirectory = './bower_components/'
 changelog = './CHANGELOG.md'
-componentsDirectory = './components/'
+componentsDirectory = "#{bowerDirectory}flattened_components/"
 distDirectory = './dist/'
 srcDirectory = './src/'
 tempDirectory = './.temp/'

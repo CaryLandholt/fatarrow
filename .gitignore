@@ -1,6 +1,5 @@
 .temp/
 bower_components/
-components/
 dist/
 node_modules/
 npm-debug.log
