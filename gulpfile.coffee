@@ -1,3 +1,20 @@
+appName = 'app'
+
+scripts = [
+	'scripts/libs/angular.min.js'
+	'scripts/libs/angular-mocks.js'
+	'scripts/libs/angular-animate.min.js'
+	'scripts/libs/angular-route.min.js'
+	'scripts/app.js'
+	'!scripts/libs/html5shiv-printshiv.js'
+	'!scripts/libs/json3.min.js'
+	'**/*.js'
+]
+
+styles = [
+	'styles/styles.css'
+]
+
 bowerDirectory = './bower_components/'
 changelog = './CHANGELOG.md'
 componentsDirectory = "#{bowerDirectory}flattened_components/"
@@ -29,6 +46,7 @@ markdown = require 'gulp-markdown'
 ngClassify = require 'gulp-ng-classify'
 path = require 'path'
 pkg = require './package.json'
+template = require 'gulp-template'
 
 gulp.task 'bower', ->
 	bower()
@@ -127,6 +145,7 @@ gulp.task 'markdown', ['copy:temp'], ->
 
 gulp.task 'ngClassify', ['copy:temp'], ->
 	options =
+		appName: appName or 'app'
 		data:
 			environment: 'dev'
 
@@ -137,9 +156,65 @@ gulp.task 'ngClassify', ['copy:temp'], ->
 
 gulp.task 'scripts', ['coffee']
 
+
+
+gulp.task 'spa', ->
+	files = []
+		.concat scripts
+		.concat styles
+
+	data =
+		appName: appName or 'app'
+		scripts: []
+		styles: []
+
+	gulp
+		.src files, cwd: tempDirectory
+		.on 'data', (file) ->
+			ext = path.extname file.path
+			p = path.resolve '/', path.relative file.cwd, file.path
+
+			return if ext is '.js'
+				data.scripts.push p
+
+			return if ext is '.css'
+				data.styles.push p
+		.on 'end', ->
+			gulp
+				.src 'index.html', cwd: tempDirectory
+				.pipe template data
+				.pipe gulp.dest tempDirectory
+
 gulp.task 'styles', ['less']
 
 gulp.task 'views', ['jade', 'markdown']
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	# files = []
+	# 	.concat scripts
+	# 	.concat styles
+
+	# gulp
+	# 	.src files, cwd: './.temp/'
+	# 	.pipe includify './.temp/index.html'
+	# 	.on 'data', (data) ->
+	# 		gulp
+	# 			.src './.temp/index.html'
+	# 			.pipe template data
+	# 			.pipe gulp.dest './.temp/'
+
 
 # es = require 'event-stream'
 # filter = require 'gulp-filter'

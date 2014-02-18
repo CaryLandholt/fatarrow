@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" xmlns:ng="http://angularjs.org" xmlns:app="ignored"> <![endif]-->
-<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" xmlns:ng="http://angularjs.org" xmlns:app="ignored"> <![endif]-->
-<!--[if IE 8]> <html class="no-js lt-ie9" xmlns:ng="http://angularjs.org" xmlns:app="ignored"> <![endif]-->
-<!--[if gt IE 8]><!--> <html class="no-js" xmlns:ng="http://angularjs.org" xmlns:app="ignored"> <!--<![endif]-->
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" xmlns:ng="http://angularjs.org" xmlns:app="ignored" ng-app="<%= appName %>"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" xmlns:ng="http://angularjs.org" xmlns:app="ignored" ng-app="<%= appName %>"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" xmlns:ng="http://angularjs.org" xmlns:app="ignored" ng-app="<%= appName %>"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" xmlns:ng="http://angularjs.org" xmlns:app="ignored" ng-app="<%= appName %>"> <!--<![endif]-->
 	<head>
 		<meta charset="utf-8" />
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -10,7 +10,7 @@
 		<meta name="description" content="AngularJS Reference Architecture" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		
-		<% _.forEach(styles, function (style) { %><link rel="stylesheet" href="<%= style %>"></script>
+		<% _.forEach(styles, function (style) { %><link rel="stylesheet" href="<%= style %>" />
 		<% }); %>
 
 		<!-- ClickJacking Defense begin (https://www.owasp.org/index.php/Clickjacking_Defense_Cheat_Sheet) -->
