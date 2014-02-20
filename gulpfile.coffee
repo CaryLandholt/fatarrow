@@ -37,6 +37,7 @@ clean = require 'gulp-clean'
 coffee = require 'gulp-coffee'
 coffeelint = require 'gulp-coffeelint'
 conventionalChangelog = require 'conventional-changelog'
+es = require 'event-stream'
 fs = require 'fs'
 gulp = require 'gulp'
 gutil = require 'gulp-util'
@@ -46,6 +47,7 @@ markdown = require 'gulp-markdown'
 ngClassify = require 'gulp-ng-classify'
 path = require 'path'
 pkg = require './package.json'
+Q = require 'q'
 template = require 'gulp-template'
 
 gulp.task 'bower', ->
@@ -246,57 +248,97 @@ gulp.task 'views', ['jade', 'markdown']
 # 		.pipe gulp.dest tempDirectory
 
 
-es = require 'event-stream'
-PluginError = gutil.PluginError
-includify = (opt = {}) ->
-	scripts = []
-	styles = []
 
-	bufferContents = (file) ->
-		return if file.isNull()
 
-		return if file.isStream()
-			@emit 'error', new PluginError 'includify', 'Streaming not supported'
 
-		ext = path.extname file.path
-		p = path.resolve '/', path.relative file.cwd, file.path
 
-		return if ext is '.js'
-			scripts.push p
 
-		return if ext is '.css'
-			styles.push p
 
-	endStream = ->
-		@emit 'data', {scripts, styles}
-		@emit 'end'
+gulp.task 'spa', ['scripts', 'styles', 'views'], ->
+	includify = ->
+		scripts = []
+		styles = []
 
-	es.through bufferContents, endStream
+		bufferContents = (file) ->
+			return if file.isNull()
 
-scriptsToInclude = []
-stylesToInclude = []
-gulp.task 'includify', ['scripts', 'styles', 'views'], ->
-	files = []
-		.concat scripts
-		.concat styles
+			ext = path.extname file.path
+			p = path.resolve '/', path.relative file.cwd, file.path
 
-	gulp
-		.src files, cwd: tempDirectory
-		.pipe includify()
-		.on 'data', (data) ->
-			scriptsToInclude = data.scripts
-			stylesToInclude = data.styles
+			return if ext is '.js'
+				scripts.push p
 
-gulp.task 'spa', ['includify'], ->
-	data =
-		appName: appName
-		scripts: scriptsToInclude
-		styles: stylesToInclude
+			return if ext is '.css'
+				styles.push p
 
-	gulp
-		.src 'index.html', cwd: tempDirectory
-		.pipe template data
-		.pipe gulp.dest tempDirectory
+		endStream = ->
+			@emit 'data', {scripts, styles}
+			@emit 'end', {scripts, styles}
+
+		es.through bufferContents, endStream
+
+	getIncludes = ->
+		deferred = Q.defer()
+
+		files = []
+			.concat scripts
+			.concat styles
+
+		gulp
+			.src files, cwd: tempDirectory
+			.pipe includify()
+			.on 'end', (data) ->
+				deferred.resolve data
+
+		deferred.promise
+
+	processTemplate = (files) ->
+		deferred = Q.defer()
+
+		data =
+			appName: appName
+			scripts: files.scripts
+			styles: files.styles
+
+		gulp
+			.src 'index.html', cwd: tempDirectory
+			.pipe template data
+			.pipe gulp.dest tempDirectory
+			.on 'end', ->
+				deferred.resolve()
+
+		deferred.promise
+
+	getIncludes()
+		.then processTemplate
+
+# scriptsToInclude = []
+# stylesToInclude = []
+# gulp.task 'includify', ['scripts', 'styles', 'views'], ->
+# 	files = []
+# 		.concat scripts
+# 		.concat styles
+
+# 	gulp
+# 		.src files, cwd: tempDirectory
+# 		.pipe includify()
+# 		.on 'data', (data) ->
+# 			scriptsToInclude = data.scripts
+# 			stylesToInclude = data.styles
+
+# gulp.task 'spa', ['includify'], ->
+# 	data =
+# 		appName: appName
+# 		scripts: scriptsToInclude
+# 		styles: stylesToInclude
+
+# 	gulp
+# 		.src 'index.html', cwd: tempDirectory
+# 		.pipe template data
+# 		.pipe gulp.dest tempDirectory
+
+
+
 
 
 
