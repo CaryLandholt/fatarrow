@@ -116,7 +116,7 @@ gulp.task 'copy:dist', ['build'], ->
 	gulp
 		.src '**', cwd: tempDirectory
 		.pipe gulp.dest distDirectory
-		
+
 gulp.task 'copy:temp', ['clean:working', 'components'], ->
 	gulp
 		.src ["#{srcDirectory}**", "#{componentsDirectory}**"]
@@ -255,6 +255,10 @@ gulp.task 'views', ['jade', 'markdown']
 
 
 gulp.task 'spa', ['scripts', 'styles', 'views'], ->
+	unixifyPath = (p) ->
+			regex = /\\/g
+			p.replace regex, '/'
+
 	includify = ->
 		scripts = []
 		styles = []
@@ -263,7 +267,7 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 			return if file.isNull()
 
 			ext = path.extname file.path
-			p = path.resolve '/', path.relative file.cwd, file.path
+			p = unixifyPath(path.join('/', path.relative(file.cwd, file.path)))
 
 			return if ext is '.js'
 				scripts.push p
