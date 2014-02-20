@@ -51,7 +51,7 @@ template = require 'gulp-template'
 gulp.task 'bower', ->
 	bower()
 
-gulp.task 'build', ['scripts', 'styles', 'views'], ->
+gulp.task 'build', ['scripts', 'styles', 'views', 'spa'], ->
 
 gulp.task 'changelog', ->
 	options =
@@ -156,35 +156,6 @@ gulp.task 'ngClassify', ['copy:temp'], ->
 
 gulp.task 'scripts', ['coffee']
 
-
-
-gulp.task 'spa', ->
-	files = []
-		.concat scripts
-		.concat styles
-
-	data =
-		appName: appName or 'app'
-		scripts: []
-		styles: []
-
-	gulp
-		.src files, cwd: tempDirectory
-		.on 'data', (file) ->
-			ext = path.extname file.path
-			p = path.resolve '/', path.relative file.cwd, file.path
-
-			return if ext is '.js'
-				data.scripts.push p
-
-			return if ext is '.css'
-				data.styles.push p
-		.on 'end', ->
-			gulp
-				.src 'index.html', cwd: tempDirectory
-				.pipe template data
-				.pipe gulp.dest tempDirectory
-
 gulp.task 'styles', ['less']
 
 gulp.task 'views', ['jade', 'markdown']
@@ -202,21 +173,21 @@ gulp.task 'views', ['jade', 'markdown']
 
 
 
-	# files = []
-	# 	.concat scripts
-	# 	.concat styles
+# files = []
+# 	.concat scripts
+# 	.concat styles
 
-	# gulp
-	# 	.src files, cwd: './.temp/'
-	# 	.pipe includify './.temp/index.html'
-	# 	.on 'data', (data) ->
-	# 		gulp
-	# 			.src './.temp/index.html'
-	# 			.pipe template data
-	# 			.pipe gulp.dest './.temp/'
+# gulp
+# 	.src files, cwd: './.temp/'
+# 	.pipe includify './.temp/index.html'
+# 	.on 'data', (data) ->
+# 		gulp
+# 			.src './.temp/index.html'
+# 			.pipe template data
+# 			.pipe gulp.dest './.temp/'
 
 
-# es = require 'event-stream'
+
 # filter = require 'gulp-filter'
 
 # minifyHtml = require 'gulp-minify-html'
@@ -274,52 +245,61 @@ gulp.task 'views', ['jade', 'markdown']
 # 			filePath
 # 		.pipe gulp.dest tempDirectory
 
-# PluginError = gutil.PluginError
 
-# includify = (fileName, opt = {}) ->
-# 	if !fileName
-# 		throw new PluginError 'includify', 'Missing filename option'
+es = require 'event-stream'
+PluginError = gutil.PluginError
+includify = (opt = {}) ->
+	scripts = []
+	styles = []
 
-# 	scriptsToInclude = []
-# 	stylesToInclude = []
+	bufferContents = (file) ->
+		return if file.isNull()
 
-# 	bufferContents = (file) ->
-# 		return if file.isNull()
+		return if file.isStream()
+			@emit 'error', new PluginError 'includify', 'Streaming not supported'
 
-# 		return if file.isStream()
-# 			@emit 'error', new PluginError 'includify', 'Streaming not supported'
+		ext = path.extname file.path
+		p = path.resolve '/', path.relative file.cwd, file.path
 
-# 		ext = path.extname file.path
-# 		p = path.resolve '/', path.relative file.cwd, file.path
+		return if ext is '.js'
+			scripts.push p
 
-# 		return if ext is '.js'
-# 			scriptsToInclude.push p
+		return if ext is '.css'
+			styles.push p
 
-# 		return if ext is '.css'
-# 			stylesToInclude.push p
+	endStream = ->
+		@emit 'data', {scripts, styles}
+		@emit 'end'
 
-# 	endStream = ->
-# 		return if scriptsToInclude.length is 0 or stylesToInclude.length is 0
-# 			@emit 'end'
+	es.through bufferContents, endStream
 
-# 		@emit 'data', {scripts: scriptsToInclude, styles: stylesToInclude}
-# 		@emit 'end'
+scriptsToInclude = []
+stylesToInclude = []
+gulp.task 'includify', ['scripts', 'styles', 'views'], ->
+	files = []
+		.concat scripts
+		.concat styles
 
-# 	es.through bufferContents, endStream
+	gulp
+		.src files, cwd: tempDirectory
+		.pipe includify()
+		.on 'data', (data) ->
+			scriptsToInclude = data.scripts
+			stylesToInclude = data.styles
 
-# gulp.task 'template', ['copy:temp', 'scripts', 'styles'], ->
-# 	files = []
-# 		.concat scripts
-# 		.concat styles
+gulp.task 'spa', ['includify'], ->
+	data =
+		appName: appName
+		scripts: scriptsToInclude
+		styles: stylesToInclude
 
-# 	gulp
-# 		.src files, cwd: './.temp/'
-# 		.pipe includify './.temp/index.html'
-# 		.on 'data', (data) ->
-# 			gulp
-# 				.src './.temp/index.html'
-# 				.pipe template data
-# 				.pipe gulp.dest './.temp/'
+	gulp
+		.src 'index.html', cwd: tempDirectory
+		.pipe template data
+		.pipe gulp.dest tempDirectory
+
+
+
 
 # gulp.task 'minifyHtml', ['jade', 'markdown'], ->
 # 	options =
