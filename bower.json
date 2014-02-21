@@ -12,16 +12,16 @@
 	},
 	"overrides": {
 		"angular": {
-			"main": "angular.min.js"
+			"main": "angular.min.js{,.map}"
 		},
 		"angular-animate": {
-			"main": "angular-animate.min.js"
+			"main": "angular-animate.min.js{,.map}"
 		},
 		"angular-mocks": {
 			"main": "angular-mocks.js"
 		},
 		"angular-route": {
-			"main": "angular-route.min.js"
+			"main": "angular-route.min.js{,.map}"
 		},
 		"bootstrap": {
 			"main": [

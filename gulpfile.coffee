@@ -27,6 +27,7 @@ normalizeComponentMap =
 	'.eot': 'fonts/'
 	'.js': 'scripts/vendor/'
 	'.less': 'styles/'
+	'.map': 'scripts/vendor/'
 	'.svg': 'fonts/'
 	'.ttf': 'fonts/'
 	'.woff': 'fonts/'
