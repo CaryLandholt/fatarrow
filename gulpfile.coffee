@@ -1,13 +1,13 @@
 appName = 'app'
 
 scripts = [
-	'scripts/libs/angular.min.js'
-	'scripts/libs/angular-mocks.js'
-	'scripts/libs/angular-animate.min.js'
-	'scripts/libs/angular-route.min.js'
+	'scripts/vendor/angular.min.js'
+	'scripts/vendor/angular-mocks.js'
+	'scripts/vendor/angular-animate.min.js'
+	'scripts/vendor/angular-route.min.js'
 	'scripts/app.js'
-	'!scripts/libs/html5shiv-printshiv.js'
-	'!scripts/libs/json3.min.js'
+	'!scripts/vendor/html5shiv-printshiv.js'
+	'!scripts/vendor/json3.min.js'
 	'**/*.js'
 ]
 
@@ -25,7 +25,7 @@ tempDirectory = './.temp/'
 normalizeComponentMap =
 	'.css': 'styles/'
 	'.eot': 'fonts/'
-	'.js': 'scripts/libs/'
+	'.js': 'scripts/vendor/'
 	'.less': 'styles/'
 	'.svg': 'fonts/'
 	'.ttf': 'fonts/'
@@ -116,7 +116,7 @@ gulp.task 'copy:dist', ['build'], ->
 	gulp
 		.src '**', cwd: tempDirectory
 		.pipe gulp.dest distDirectory
-
+		
 gulp.task 'copy:temp', ['clean:working', 'components'], ->
 	gulp
 		.src ["#{srcDirectory}**", "#{componentsDirectory}**"]
@@ -157,102 +157,6 @@ gulp.task 'ngClassify', ['copy:temp'], ->
 		.pipe gulp.dest tempDirectory
 
 gulp.task 'scripts', ['coffee']
-
-gulp.task 'styles', ['less']
-
-gulp.task 'views', ['jade', 'markdown']
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# files = []
-# 	.concat scripts
-# 	.concat styles
-
-# gulp
-# 	.src files, cwd: './.temp/'
-# 	.pipe includify './.temp/index.html'
-# 	.on 'data', (data) ->
-# 		gulp
-# 			.src './.temp/index.html'
-# 			.pipe template data
-# 			.pipe gulp.dest './.temp/'
-
-
-
-# filter = require 'gulp-filter'
-
-# minifyHtml = require 'gulp-minify-html'
-
-# template = require 'gulp-template'
-
-# scripts = [
-# 	'scripts/libs/angular.min.js'
-# 	'scripts/libs/angular-mocks.js'
-# 	'scripts/libs/angular-animate.min.js'
-# 	'scripts/libs/angular-route.min.js'
-# 	'scripts/app.js'
-# 	'!scripts/libs/html5shiv-printshiv.js'
-# 	'!scripts/libs/json3.min.js'
-# 	'**/*.js'
-# ]
-
-# styles = [
-# 	'styles/styles.css'
-# ]
-
-# fonts = ['**/*.{eot,svg,ttf,woff}']
-# assets = [].concat(scripts).concat(styles).concat(fonts)
-
-# # inject = require 'gulp-inject'
-
-# # gulp.task 'inject', ->
-# # 	gulp
-# # 		.src assets, {cwd: tempDirectory, read: false}
-# # 		.pipe inject './index.html', ignorePath: path.resolve tempDirectory
-# # 		.pipe gulp.dest tempDirectory
-
-# # bust = require 'gulp-buster'
-# # rename = require 'gulp-rename'
-
-# gulp.task 'bust', ->
-# 	bust.config
-# 		length: 10
-
-# 	gulp
-# 		.src assets, cwd: tempDirectory
-# 		.pipe bust 'busters.json'
-# 		.pipe gulp.dest '.'
-
-# gulp.task 'bustit', ['bust'], ->
-# 	busters = require './busters.json'
-
-# 	gulp
-# 		.src assets, cwd: tempDirectory
-# 		.pipe rename (filePath) ->
-# 			originalPath = path.join filePath.dirname, filePath.basename + filePath.extname
-# 			hash = busters[originalPath]
-# 			filePath.basename += ".#{hash}"
-
-# 			filePath
-# 		.pipe gulp.dest tempDirectory
-
-
-
-
-
-
-
 
 gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 	unixifyPath = (p) ->
@@ -316,36 +220,50 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 	getIncludes()
 		.then processTemplate
 
-# scriptsToInclude = []
-# stylesToInclude = []
-# gulp.task 'includify', ['scripts', 'styles', 'views'], ->
-# 	files = []
-# 		.concat scripts
-# 		.concat styles
+gulp.task 'styles', ['less']
+
+gulp.task 'views', ['jade', 'markdown']
+
+
+# filter = require 'gulp-filter'
+
+# minifyHtml = require 'gulp-minify-html'
+
+# fonts = ['**/*.{eot,svg,ttf,woff}']
+# assets = [].concat(scripts).concat(styles).concat(fonts)
+
+# # inject = require 'gulp-inject'
+
+# # gulp.task 'inject', ->
+# # 	gulp
+# # 		.src assets, {cwd: tempDirectory, read: false}
+# # 		.pipe inject './index.html', ignorePath: path.resolve tempDirectory
+# # 		.pipe gulp.dest tempDirectory
+
+# # bust = require 'gulp-buster'
+# # rename = require 'gulp-rename'
+
+# gulp.task 'bust', ->
+# 	bust.config
+# 		length: 10
 
 # 	gulp
-# 		.src files, cwd: tempDirectory
-# 		.pipe includify()
-# 		.on 'data', (data) ->
-# 			scriptsToInclude = data.scripts
-# 			stylesToInclude = data.styles
+# 		.src assets, cwd: tempDirectory
+# 		.pipe bust 'busters.json'
+# 		.pipe gulp.dest '.'
 
-# gulp.task 'spa', ['includify'], ->
-# 	data =
-# 		appName: appName
-# 		scripts: scriptsToInclude
-# 		styles: stylesToInclude
+# gulp.task 'bustit', ['bust'], ->
+# 	busters = require './busters.json'
 
 # 	gulp
-# 		.src 'index.html', cwd: tempDirectory
-# 		.pipe template data
+# 		.src assets, cwd: tempDirectory
+# 		.pipe rename (filePath) ->
+# 			originalPath = path.join filePath.dirname, filePath.basename + filePath.extname
+# 			hash = busters[originalPath]
+# 			filePath.basename += ".#{hash}"
+
+# 			filePath
 # 		.pipe gulp.dest tempDirectory
-
-
-
-
-
-
 
 # gulp.task 'minifyHtml', ['jade', 'markdown'], ->
 # 	options =
