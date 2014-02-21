@@ -32,6 +32,7 @@
 		"gulp-clean": "~0.2.4",
 		"gulp-coffee": "~1.4.1",
 		"gulp-coffeelint": "~0.2.1",
+		"gulp-connect": "~1.0.0",
 		"gulp-filter": "~0.3.0",
 		"gulp-jade": "~0.4.2",
 		"gulp-less": "~1.2.1",

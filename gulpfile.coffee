@@ -19,6 +19,8 @@ bowerDirectory = './bower_components/'
 changelog = './CHANGELOG.md'
 componentsDirectory = "#{bowerDirectory}flattened_components/"
 distDirectory = './dist/'
+devPort = 8181
+devServer = "http://localhost:#{devPort}"
 srcDirectory = './src/'
 tempDirectory = './.temp/'
 
@@ -37,6 +39,7 @@ bowerFiles = require 'gulp-bower-files'
 clean = require 'gulp-clean'
 coffee = require 'gulp-coffee'
 coffeelint = require 'gulp-coffeelint'
+connect = require 'gulp-connect'
 conventionalChangelog = require 'conventional-changelog'
 es = require 'event-stream'
 fs = require 'fs'
@@ -54,7 +57,7 @@ template = require 'gulp-template'
 gulp.task 'bower', ->
 	bower()
 
-gulp.task 'build', ['scripts', 'styles', 'views', 'spa'], ->
+gulp.task 'build', ['scripts', 'styles', 'views', 'spa']
 
 gulp.task 'changelog', ->
 	options =
@@ -274,3 +277,57 @@ gulp.task 'views', ['jade', 'markdown']
 # 		.src './.temp/**/*.html'
 # 		.pipe minifyHtml options
 # 		.pipe gulp.dest './.temp/'
+
+
+
+
+
+gulp.task 'serve', connect.server
+	root: [distDirectory]
+	port: devPort
+	livereload: true
+	open: true
+
+gulp.task 'dist', ->
+	gulp
+		.src "#{distDirectory}**"
+		.pipe connect.reload()
+
+gulp.task 'watch', ->
+	gulp
+		.watch "#{distDirectory}**", [
+			'dist'
+		]
+
+gulp.task 'go', ['serve', 'watch']
+
+# gulp.task 'serve', ['server'], ->
+# 	options =
+# 		url: devServer
+
+# 	gulp
+# 		.src 'index.html', cwd: distDirectory
+# 		.pipe open '', options
+
+
+# livereload = require 'gulp-livereload'
+
+# gulp.task 'server', serve
+# 	root: distDirectory
+# 	port: port
+
+# gulp.task 'serve', ['server'], ->
+# 	options =
+# 		url: devServer
+
+# 	gulp
+# 		.src 'index.html', cwd: distDirectory
+# 		.pipe open '', options
+		
+# gulp.task 'go', ['serve'], ->
+# 	server = livereload()
+
+# 	gulp
+# 		.watch './dist/**'
+# 		.on 'change', (file) ->
+# 			server.changed file.path
