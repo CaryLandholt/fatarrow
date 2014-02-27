@@ -9,34 +9,5 @@
 		"bootstrap": "3.1.1",
 		"html5shiv": "3.7.0",
 		"json3": "3.3.0"
-	},
-	"overrides": {
-		"angular": {
-			"main": "angular.min.js{,.map}"
-		},
-		"angular-animate": {
-			"main": "angular-animate.min.js{,.map}"
-		},
-		"angular-mocks": {
-			"main": "angular-mocks.js"
-		},
-		"angular-route": {
-			"main": "angular-route.min.js{,.map}"
-		},
-		"bootstrap": {
-			"main": [
-				"/dist/fonts/**/*.{eot,svg,ttf,woff}",
-				"/less/**/*.less"
-			]
-		},
-		"html5shiv": {
-			"main": "/dist/html5shiv-printshiv.js"
-		},
-		"jquery": {
-			"ignore": true
-		},
-		"json3": {
-			"main": "/lib/json3.min.js"
-		}
 	}
 }

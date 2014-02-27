@@ -24,24 +24,14 @@ devServer = "http://localhost:#{devPort}"
 srcDirectory = './src/'
 tempDirectory = './.temp/'
 
-normalizeComponentMap =
-	'.css': 'styles/'
-	'.eot': 'fonts/'
-	'.js': 'scripts/vendor/'
-	'.less': 'styles/'
-	'.map': 'scripts/vendor/'
-	'.svg': 'fonts/'
-	'.ttf': 'fonts/'
-	'.woff': 'fonts/'
-
 bower = require 'gulp-bower'
-bowerFiles = require 'gulp-bower-files'
 clean = require 'gulp-clean'
 coffee = require 'gulp-coffee'
 coffeelint = require 'gulp-coffeelint'
 connect = require 'gulp-connect'
 conventionalChangelog = require 'conventional-changelog'
 es = require 'event-stream'
+flatten = require 'gulp-flatten'
 fs = require 'fs'
 gulp = require 'gulp'
 gutil = require 'gulp-util'
@@ -104,29 +94,44 @@ gulp.task 'coffeelint', ->
 		.pipe coffeelint options
 		.pipe coffeelint.reporter()
 
-gulp.task 'components', ['bower', 'clean:working'], ->
-	bowerFiles()
-		.on 'data', (data) ->
-			fileName = path.basename data.path
-			ext = path.extname fileName
-			subPath = normalizeComponentMap[ext]
-			p = path.join data.base, subPath, fileName
-			data.path = p
-
-			data
-		.pipe gulp.dest componentsDirectory
-
 gulp.task 'copy:dist', ['build'], ->
 	gulp
 		.src '**', cwd: tempDirectory
 		.pipe gulp.dest distDirectory
 		
-gulp.task 'copy:temp', ['clean:working', 'components'], ->
+gulp.task 'copy:temp', ['clean:working', 'flatten'], ->
 	gulp
 		.src ["#{srcDirectory}**", "#{componentsDirectory}**"]
 		.pipe gulp.dest tempDirectory
 
-gulp.task 'default', ['copy:dist']
+# gulp.task 'default', ['copy:dist']
+
+gulp.task 'flatten', ['flatten:fonts', 'flatten:scripts', 'flatten:styles']
+
+gulp.task 'flatten:fonts', ['bower', 'clean:working'], ->
+	gulp
+		.src 'bootstrap/dist/fonts/**/*.{eot,svg,ttf,woff}', cwd: bowerDirectory
+		.pipe flatten()
+		.pipe gulp.dest "#{componentsDirectory}fonts/"
+
+gulp.task 'flatten:scripts', ['bower', 'clean:working'], ->
+	gulp
+		.src [
+			'angular/angular.min.js{,.map}'
+			'angular-animate/angular-animate.min.js{,.map}'
+			'angular-mocks/angular-mocks.js'
+			'angular-route/angular-route.min.js{,.map}'
+			'html5shiv/dist/html5shiv-printshiv.js'
+			'json3/lib/json3.min.js'
+		], cwd: bowerDirectory
+		.pipe flatten()
+		.pipe gulp.dest "#{componentsDirectory}scripts/vendor/"
+
+gulp.task 'flatten:styles', ['bower', 'clean:working'], ->
+	gulp
+		.src 'bootstrap/less/**/*.less', cwd: bowerDirectory
+		.pipe flatten()
+		.pipe gulp.dest "#{componentsDirectory}styles/"
 
 gulp.task 'jade', ['copy:temp'], ->
 	options =
@@ -229,77 +234,50 @@ gulp.task 'styles', ['less']
 gulp.task 'views', ['jade', 'markdown']
 
 
-# filter = require 'gulp-filter'
 
-# minifyHtml = require 'gulp-minify-html'
+# gulp.task 'serve', connect.server
+# 	root: [distDirectory]
+# 	port: devPort
+# 	livereload: true
+# 	open: true
 
-# fonts = ['**/*.{eot,svg,ttf,woff}']
-# assets = [].concat(scripts).concat(styles).concat(fonts)
-
-# # inject = require 'gulp-inject'
-
-# # gulp.task 'inject', ->
-# # 	gulp
-# # 		.src assets, {cwd: tempDirectory, read: false}
-# # 		.pipe inject './index.html', ignorePath: path.resolve tempDirectory
-# # 		.pipe gulp.dest tempDirectory
-
-# # bust = require 'gulp-buster'
-# # rename = require 'gulp-rename'
-
-# gulp.task 'bust', ->
-# 	bust.config
-# 		length: 10
-
+# gulp.task 'dist', ->
 # 	gulp
-# 		.src assets, cwd: tempDirectory
-# 		.pipe bust 'busters.json'
-# 		.pipe gulp.dest '.'
+# 		.src "#{distDirectory}**"
+# 		.pipe connect.reload()
 
-# gulp.task 'bustit', ['bust'], ->
-# 	busters = require './busters.json'
-
+# gulp.task 'watch', ->
 # 	gulp
-# 		.src assets, cwd: tempDirectory
-# 		.pipe rename (filePath) ->
-# 			originalPath = path.join filePath.dirname, filePath.basename + filePath.extname
-# 			hash = busters[originalPath]
-# 			filePath.basename += ".#{hash}"
+# 		.watch "#{distDirectory}**", [
+# 			'dist'
+# 		]
 
-# 			filePath
-# 		.pipe gulp.dest tempDirectory
-
-# gulp.task 'minifyHtml', ['jade', 'markdown'], ->
-# 	options =
-# 		quotes: true
-
-# 	gulp
-# 		.src './.temp/**/*.html'
-# 		.pipe minifyHtml options
-# 		.pipe gulp.dest './.temp/'
+# gulp.task 'go', ['serve', 'watch']
 
 
 
+gulp.task 'default', ['serve', 'watch', 'copy:dist']
 
+gulp.task 'serve', ['copy:dist'], ->
+	server = connect.server
+		root: [distDirectory]
+		port: devPort
+		livereload: true
+		open: true
 
-gulp.task 'serve', connect.server
-	root: [distDirectory]
-	port: devPort
-	livereload: true
-	open: true
+	server()
+
+gulp.task 'watch', ['copy:dist'], ->
+	gulp
+		.watch "#{srcDirectory}**", [
+			'copy:dist'
+			'dist'
+		]
 
 gulp.task 'dist', ->
 	gulp
 		.src "#{distDirectory}**"
 		.pipe connect.reload()
-
-gulp.task 'watch', ->
-	gulp
-		.watch "#{distDirectory}**", [
-			'dist'
-		]
-
-gulp.task 'go', ['serve', 'watch']
 
 # gulp.task 'serve', ['server'], ->
 # 	options =
