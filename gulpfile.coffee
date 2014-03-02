@@ -138,10 +138,16 @@ gulp.task 'jade', ['copy:temp'], ->
 		.pipe jade options
 		.pipe gulp.dest tempDirectory
 
+console.log path.resolve tempDirectory
+
 gulp.task 'less', ['copy:temp'], ->
+	options =
+		sourceMap: true
+		sourceMapBasepath: path.resolve path.join tempDirectory, 'styles'
+
 	gulp
 		.src 'styles/styles.less', cwd: tempDirectory
-		.pipe less()
+		.pipe less options
 		.pipe gulp.dest 'styles/', cwd: tempDirectory
 
 gulp.task 'markdown', ['copy:temp'], ->
