@@ -6,8 +6,6 @@ scripts = [
 	'scripts/vendor/angular-animate.min.js'
 	'scripts/vendor/angular-route.min.js'
 	'scripts/app.js'
-	'!scripts/vendor/html5shiv-printshiv.js'
-	'!scripts/vendor/json3.min.js'
 	'**/*.js'
 ]
 
@@ -121,8 +119,6 @@ gulp.task 'flatten:scripts', ['bower', 'clean:working'], ->
 			'angular-animate/angular-animate.min.js{,.map}'
 			'angular-mocks/angular-mocks.js'
 			'angular-route/angular-route.min.js{,.map}'
-			'html5shiv/dist/html5shiv-printshiv.js'
-			'json3/lib/json3.min.js'
 		], cwd: bowerDirectory
 		.pipe flatten()
 		.pipe gulp.dest "#{componentsDirectory}scripts/vendor/"

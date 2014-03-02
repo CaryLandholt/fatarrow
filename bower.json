@@ -2,12 +2,10 @@
 	"name": "app",
 	"version": "0.0.0",
 	"dependencies": {
-		"angular": "1.2.13",
-		"angular-animate": "1.2.13",
-		"angular-mocks": "1.2.13",
-		"angular-route": "1.2.13",
-		"bootstrap": "3.1.1",
-		"html5shiv": "3.7.0",
-		"json3": "3.3.0"
+		"angular": "1.2.14",
+		"angular-animate": "1.2.14",
+		"angular-mocks": "1.2.14",
+		"angular-route": "1.2.14",
+		"bootstrap": "3.1.1"
 	}
 }
