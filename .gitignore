@@ -1,6 +1,7 @@
 .temp/
 bower_components/
 dist/
+docs/
 node_modules/
 npm-debug.log
 test-results.xml

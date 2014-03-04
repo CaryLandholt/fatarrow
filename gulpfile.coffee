@@ -16,9 +16,10 @@ styles = [
 bowerDirectory = './bower_components/'
 changelog = './CHANGELOG.md'
 componentsDirectory = "#{bowerDirectory}flattened_components/"
-distDirectory = './dist/'
 devPort = 8181
 devServer = "http://localhost:#{devPort}"
+distDirectory = './dist/'
+docsDirectory = './docs/'
 srcDirectory = './src/'
 tempDirectory = './.temp/'
 
@@ -41,11 +42,15 @@ path = require 'path'
 pkg = require './package.json'
 Q = require 'q'
 template = require 'gulp-template'
+yuidoc = require 'gulp-yuidoc'
 
 gulp.task 'bower', ->
 	bower()
 
-gulp.task 'build', ['scripts', 'styles', 'views', 'spa']
+gulp.task 'build', ['scripts', 'styles', 'views', 'spa'], ->
+	gulp
+		.src '**', cwd: tempDirectory
+		.pipe gulp.dest distDirectory
 
 gulp.task 'changelog', ->
 	options =
@@ -64,7 +69,7 @@ gulp.task 'clean', ['clean:working'], ->
 
 gulp.task 'clean:working', ->
 	gulp
-		.src [componentsDirectory, tempDirectory, distDirectory]
+		.src [componentsDirectory, tempDirectory, distDirectory, docsDirectory]
 		.pipe clean()
 
 gulp.task 'coffee', ['coffeelint', 'ngClassify'], ->
@@ -92,17 +97,14 @@ gulp.task 'coffeelint', ->
 		.pipe coffeelint options
 		.pipe coffeelint.reporter()
 
-gulp.task 'copy:dist', ['build'], ->
-	gulp
-		.src '**', cwd: tempDirectory
-		.pipe gulp.dest distDirectory
-		
 gulp.task 'copy:temp', ['clean:working', 'flatten'], ->
 	gulp
 		.src ["#{srcDirectory}**", "#{componentsDirectory}**"]
 		.pipe gulp.dest tempDirectory
 
-# gulp.task 'default', ['copy:dist']
+gulp.task 'default', ['serve', 'watch', 'build']
+
+gulp.task 'docs', ['yuidoc']
 
 gulp.task 'flatten', ['flatten:fonts', 'flatten:scripts', 'flatten:styles']
 
@@ -137,8 +139,6 @@ gulp.task 'jade', ['copy:temp'], ->
 		.src '**/*.jade', cwd: tempDirectory
 		.pipe jade options
 		.pipe gulp.dest tempDirectory
-
-console.log path.resolve tempDirectory
 
 gulp.task 'less', ['copy:temp'], ->
 	options =
@@ -235,79 +235,31 @@ gulp.task 'styles', ['less']
 
 gulp.task 'views', ['jade', 'markdown']
 
+gulp.task 'yuidoc', ->
+	options =
+		syntaxtype: 'coffee'
 
+	gulp
+		.src '**/*.coffee', cwd: srcDirectory
+		.pipe yuidoc options
+		.pipe gulp.dest docsDirectory
 
-# gulp.task 'serve', connect.server
-# 	root: [distDirectory]
-# 	port: devPort
-# 	livereload: true
-# 	open: true
-
-# gulp.task 'dist', ->
-# 	gulp
-# 		.src "#{distDirectory}**"
-# 		.pipe connect.reload()
-
-# gulp.task 'watch', ->
-# 	gulp
-# 		.watch "#{distDirectory}**", [
-# 			'dist'
-# 		]
-
-# gulp.task 'go', ['serve', 'watch']
-
-
-
-gulp.task 'default', ['serve', 'watch', 'copy:dist']
-
-gulp.task 'serve', ['copy:dist'], ->
+###
+working on
+###
+gulp.task 'serve', ['build'], ->
 	server = connect.server
 		root: [distDirectory]
 		port: devPort
 		livereload: true
-		open: true
 
 	server()
 
-gulp.task 'watch', ['copy:dist'], ->
+gulp.task 'watch', ['build'], ->
 	gulp
-		.watch "#{srcDirectory}**", [
-			'copy:dist'
-			'dist'
-		]
+		.watch "#{srcDirectory}**", ['dist']
 
-gulp.task 'dist', ->
+gulp.task 'dist', ['build'], ->
 	gulp
 		.src "#{distDirectory}**"
 		.pipe connect.reload()
-
-# gulp.task 'serve', ['server'], ->
-# 	options =
-# 		url: devServer
-
-# 	gulp
-# 		.src 'index.html', cwd: distDirectory
-# 		.pipe open '', options
-
-
-# livereload = require 'gulp-livereload'
-
-# gulp.task 'server', serve
-# 	root: distDirectory
-# 	port: port
-
-# gulp.task 'serve', ['server'], ->
-# 	options =
-# 		url: devServer
-
-# 	gulp
-# 		.src 'index.html', cwd: distDirectory
-# 		.pipe open '', options
-		
-# gulp.task 'go', ['serve'], ->
-# 	server = livereload()
-
-# 	gulp
-# 		.watch './dist/**'
-# 		.on 'change', (file) ->
-# 			server.changed file.path
