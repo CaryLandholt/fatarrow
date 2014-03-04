@@ -175,8 +175,8 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 			p.replace regex, '/'
 
 	includify = ->
-		scripts = []
-		styles = []
+		js = []
+		css = []
 
 		bufferContents = (file) ->
 			return if file.isNull()
@@ -185,14 +185,15 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 			p = unixifyPath(path.join('/', path.relative(file.cwd, file.path)))
 
 			return if ext is '.js'
-				scripts.push p
+				js.push p
 
 			return if ext is '.css'
-				styles.push p
+				css.push p
 
 		endStream = ->
-			@emit 'data', {scripts, styles}
-			@emit 'end', {scripts, styles}
+			payload = {scripts: js, styles: css}
+			@emit 'data', payload
+			@emit 'end', payload
 
 		es.through bufferContents, endStream
 
@@ -260,6 +261,4 @@ gulp.task 'watch', ['build'], ->
 		.watch "#{srcDirectory}**", ['dist']
 
 gulp.task 'dist', ['build'], ->
-	gulp
-		.src "#{distDirectory}**"
-		.pipe connect.reload()
+	connect.reload()
