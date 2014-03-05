@@ -1,3 +1,4 @@
+### config begin ###
 appName = 'app'
 
 scripts = [
@@ -22,6 +23,7 @@ distDirectory = './dist/'
 docsDirectory = './docs/'
 srcDirectory = './src/'
 tempDirectory = './.temp/'
+### config end ###
 
 bower = require 'gulp-bower'
 clean = require 'gulp-clean'
@@ -93,13 +95,19 @@ gulp.task 'coffeelint', ->
 			level: 'ignore'
 
 	gulp
-		.src ['**/*.coffee', '!scripts/app.coffee'], cwd: srcDirectory
+		.src [
+			'**/*.coffee'
+			'!scripts/app.coffee'
+		], cwd: srcDirectory
 		.pipe coffeelint options
 		.pipe coffeelint.reporter()
 
 gulp.task 'copy:temp', ['clean:working', 'flatten'], ->
 	gulp
-		.src ["#{srcDirectory}**", "#{componentsDirectory}**"]
+		.src [
+			"#{srcDirectory}**"
+			"#{componentsDirectory}**"
+		]
 		.pipe gulp.dest tempDirectory
 
 gulp.task 'default', ['serve', 'watch', 'build']
@@ -167,7 +175,20 @@ gulp.task 'ngClassify', ['copy:temp'], ->
 		.pipe ngClassify options
 		.pipe gulp.dest tempDirectory
 
+gulp.task 'reload', ['build'], ->
+	gulp
+		.src 'index.html', cwd: distDirectory
+		.pipe connect.reload()
+
 gulp.task 'scripts', ['coffee']
+
+gulp.task 'serve', ['build'], ->
+	server = connect.server
+		root: [distDirectory]
+		port: devPort
+		livereload: true
+
+	server()
 
 gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 	unixifyPath = (p) ->
@@ -236,6 +257,10 @@ gulp.task 'styles', ['less']
 
 gulp.task 'views', ['jade', 'markdown']
 
+gulp.task 'watch', ['build'], ->
+	gulp
+		.watch "#{srcDirectory}**/*.{coffee,html,jade,less,markdown,md}", ['reload']
+
 gulp.task 'yuidoc', ->
 	options =
 		syntaxtype: 'coffee'
@@ -244,21 +269,3 @@ gulp.task 'yuidoc', ->
 		.src '**/*.coffee', cwd: srcDirectory
 		.pipe yuidoc options
 		.pipe gulp.dest docsDirectory
-
-###
-working on
-###
-gulp.task 'serve', ['build'], ->
-	server = connect.server
-		root: [distDirectory]
-		port: devPort
-		livereload: true
-
-	server()
-
-gulp.task 'watch', ['build'], ->
-	gulp
-		.watch "#{srcDirectory}**", ['dist']
-
-gulp.task 'dist', ['build'], ->
-	connect.reload()
