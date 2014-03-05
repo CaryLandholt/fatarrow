@@ -6,7 +6,7 @@ scripts = [
 	'scripts/vendor/angular-mocks.js'
 	'scripts/vendor/angular-animate.min.js'
 	'scripts/vendor/angular-route.min.js'
-	'scripts/App.js'
+	'app/App.js'
 	'**/*.js'
 ]
 
@@ -97,7 +97,7 @@ gulp.task 'coffeelint', ->
 	gulp
 		.src [
 			'**/*.coffee'
-			'!scripts/App.coffee'
+			'!app/App.coffee'
 		], cwd: srcDirectory
 		.pipe coffeelint options
 		.pipe coffeelint.reporter()
