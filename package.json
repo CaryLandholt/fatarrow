@@ -7,27 +7,16 @@
 		"email": "cary@landholt.com",
 		"url": "https://github.com/CaryLandholt"
 	},
-	"contributors": [
-		{
-			"name": "David Bochenski",
-			"email": "david@bochenski.co.uk",
-			"url": "https://github.com/Bochenski"
-		}, {
-			"name": "Jan Philipp",
-			"email": "knallisworld@googlemail.com",
-			"url": "https://github.com/knalli"
-		}
-	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/CaryLandholt/fatarrow"
 	},
 	"dependencies": {
+		"bower": "~1.2.8",
 		"coffee-script": "~1.7.1",
 		"conventional-changelog": "~0.0.6",
 		"event-stream": "~3.1.0",
 		"gulp": "~3.5.2",
-		"gulp-bower": "~0.0.2",
 		"gulp-clean": "~0.2.4",
 		"gulp-coffee": "~1.4.1",
 		"gulp-coffeelint": "~0.3.0",

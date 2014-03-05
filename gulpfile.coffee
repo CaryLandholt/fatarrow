@@ -25,7 +25,7 @@ srcDirectory = './src/'
 tempDirectory = './.temp/'
 ### config end ###
 
-bower = require 'gulp-bower'
+bower = require 'bower'
 clean = require 'gulp-clean'
 coffee = require 'gulp-coffee'
 coffeelint = require 'gulp-coffeelint'
@@ -47,7 +47,15 @@ template = require 'gulp-template'
 yuidoc = require 'gulp-yuidoc'
 
 gulp.task 'bower', ->
-	bower()
+	deferred = Q.defer()
+
+	bower
+		.commands
+		.install()
+		.on 'end', (results) ->
+			deferred.resolve results
+
+	deferred.promise
 
 gulp.task 'build', ['scripts', 'styles', 'views', 'spa'], ->
 	gulp
