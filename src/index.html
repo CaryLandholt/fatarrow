@@ -20,7 +20,6 @@
 	</head>
 	<body ng-cloak class="ng-cloak">
 		<ng:view></ng:view>
-		<ng:include src="'/views/site.html'"></ng:include>
 
 		<% _.forEach(scripts, function (script) { %><script src="<%= script %>"></script>
 		<% }); %>
