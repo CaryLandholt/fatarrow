@@ -15,7 +15,7 @@ STYLES = [
 ]
 
 BOWER_DIRECTORY = './bower_components/'
-CHANGELOG = './CHANGELOG.md'
+CHANGELOG_FILE = './CHANGELOG.md'
 COMPONENTS_DIRECTORY = "#{BOWER_DIRECTORY}flattened_components/"
 DEV_PORT = 8181
 DIST_DIRECTORY = './dist/'
@@ -65,11 +65,11 @@ gulp.task 'changelog', ->
 	options =
 		repository: pkg.repository.url
 		version: pkg.version
-		file: CHANGELOG
+		file: CHANGELOG_FILE
 		log: gutil.log
 
 	conventionalChangelog options, (err, log) ->
-		fs.writeFile CHANGELOG, log
+		fs.writeFile CHANGELOG_FILE, log
 
 gulp.task 'clean', ['clean:working'], ->
 	gulp
