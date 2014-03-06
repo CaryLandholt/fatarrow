@@ -192,9 +192,10 @@ gulp.task 'scripts', ['coffee']
 
 gulp.task 'serve', ['build'], ->
 	server = connect.server
-		root: [distDirectory]
-		port: devPort
 		livereload: true
+		open: true
+		port: devPort
+		root: [distDirectory]
 
 	server()
 
