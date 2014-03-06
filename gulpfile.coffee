@@ -1,7 +1,7 @@
 ### config begin ###
-appName = 'app'
+APP_NAME = 'app'
 
-scripts = [
+SCRIPTS = [
 	'scripts/vendor/angular.min.js'
 	'scripts/vendor/angular-mocks.js'
 	'scripts/vendor/angular-animate.min.js'
@@ -10,19 +10,18 @@ scripts = [
 	'**/*.js'
 ]
 
-styles = [
+STYLES = [
 	'styles/styles.css'
 ]
 
-bowerDirectory = './bower_components/'
-changelog = './CHANGELOG.md'
-componentsDirectory = "#{bowerDirectory}flattened_components/"
-devPort = 8181
-devServer = "http://localhost:#{devPort}"
-distDirectory = './dist/'
-docsDirectory = './docs/'
-srcDirectory = './src/'
-tempDirectory = './.temp/'
+BOWER_DIRECTORY = './bower_components/'
+CHANGELOG = './CHANGELOG.md'
+COMPONENTS_DIRECTORY = "#{BOWER_DIRECTORY}flattened_components/"
+DEV_PORT = 8181
+DIST_DIRECTORY = './dist/'
+DOCS_DIRECTORY = './docs/'
+SRC_DIRECTORY = './src/'
+TEMP_DIRECTORY = './.temp/'
 ### config end ###
 
 bower = require 'bower'
@@ -59,27 +58,27 @@ gulp.task 'bower', ->
 
 gulp.task 'build', ['scripts', 'styles', 'views', 'spa'], ->
 	gulp
-		.src '**', cwd: tempDirectory
-		.pipe gulp.dest distDirectory
+		.src '**', cwd: TEMP_DIRECTORY
+		.pipe gulp.dest DIST_DIRECTORY
 
 gulp.task 'changelog', ->
 	options =
 		repository: pkg.repository.url
 		version: pkg.version
-		file: changelog
+		file: CHANGELOG
 		log: gutil.log
 
 	conventionalChangelog options, (err, log) ->
-		fs.writeFile changelog, log
+		fs.writeFile CHANGELOG, log
 
 gulp.task 'clean', ['clean:working'], ->
 	gulp
-		.src bowerDirectory
+		.src BOWER_DIRECTORY
 		.pipe clean()
 
 gulp.task 'clean:working', ->
 	gulp
-		.src [componentsDirectory, tempDirectory, distDirectory, docsDirectory]
+		.src [COMPONENTS_DIRECTORY, TEMP_DIRECTORY, DIST_DIRECTORY, DOCS_DIRECTORY]
 		.pipe clean()
 
 gulp.task 'coffee', ['coffeelint', 'ngClassify'], ->
@@ -87,9 +86,9 @@ gulp.task 'coffee', ['coffeelint', 'ngClassify'], ->
 		sourceMap: true
 
 	gulp
-		.src '**/*.coffee', cwd: tempDirectory
+		.src '**/*.coffee', cwd: TEMP_DIRECTORY
 		.pipe coffee options
-		.pipe gulp.dest tempDirectory
+		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'coffeelint', ->
 	options =
@@ -106,17 +105,17 @@ gulp.task 'coffeelint', ->
 		.src [
 			'**/*.coffee'
 			'!app/App.coffee'
-		], cwd: srcDirectory
+		], cwd: SRC_DIRECTORY
 		.pipe coffeelint options
 		.pipe coffeelint.reporter()
 
 gulp.task 'copy:temp', ['clean:working', 'flatten'], ->
 	gulp
 		.src [
-			"#{srcDirectory}**"
-			"#{componentsDirectory}**"
+			"#{SRC_DIRECTORY}**"
+			"#{COMPONENTS_DIRECTORY}**"
 		]
-		.pipe gulp.dest tempDirectory
+		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'default', ['serve', 'watch', 'build']
 
@@ -126,9 +125,9 @@ gulp.task 'flatten', ['flatten:fonts', 'flatten:scripts', 'flatten:styles']
 
 gulp.task 'flatten:fonts', ['bower', 'clean:working'], ->
 	gulp
-		.src 'bootstrap/dist/fonts/**/*.{eot,svg,ttf,woff}', cwd: bowerDirectory
+		.src 'bootstrap/dist/fonts/**/*.{eot,svg,ttf,woff}', cwd: BOWER_DIRECTORY
 		.pipe flatten()
-		.pipe gulp.dest "#{componentsDirectory}fonts/"
+		.pipe gulp.dest "#{COMPONENTS_DIRECTORY}fonts/"
 
 gulp.task 'flatten:scripts', ['bower', 'clean:working'], ->
 	gulp
@@ -137,55 +136,55 @@ gulp.task 'flatten:scripts', ['bower', 'clean:working'], ->
 			'angular-animate/angular-animate.min.js{,.map}'
 			'angular-mocks/angular-mocks.js'
 			'angular-route/angular-route.min.js{,.map}'
-		], cwd: bowerDirectory
+		], cwd: BOWER_DIRECTORY
 		.pipe flatten()
-		.pipe gulp.dest "#{componentsDirectory}scripts/vendor/"
+		.pipe gulp.dest "#{COMPONENTS_DIRECTORY}scripts/vendor/"
 
 gulp.task 'flatten:styles', ['bower', 'clean:working'], ->
 	gulp
-		.src 'bootstrap/less/**/*.less', cwd: bowerDirectory
+		.src 'bootstrap/less/**/*.less', cwd: BOWER_DIRECTORY
 		.pipe flatten()
-		.pipe gulp.dest "#{componentsDirectory}styles/"
+		.pipe gulp.dest "#{COMPONENTS_DIRECTORY}styles/"
 
 gulp.task 'jade', ['copy:temp'], ->
 	options =
 		pretty: true
 
 	gulp
-		.src '**/*.jade', cwd: tempDirectory
+		.src '**/*.jade', cwd: TEMP_DIRECTORY
 		.pipe jade options
-		.pipe gulp.dest tempDirectory
+		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'less', ['copy:temp'], ->
 	options =
 		sourceMap: true
-		sourceMapBasepath: path.resolve path.join tempDirectory, 'styles'
+		sourceMapBasepath: path.resolve path.join TEMP_DIRECTORY, 'styles'
 
 	gulp
-		.src 'styles/styles.less', cwd: tempDirectory
+		.src 'styles/styles.less', cwd: TEMP_DIRECTORY
 		.pipe less options
-		.pipe gulp.dest 'styles/', cwd: tempDirectory
+		.pipe gulp.dest 'styles/', cwd: TEMP_DIRECTORY
 
 gulp.task 'markdown', ['copy:temp'], ->
 	gulp
-		.src '**/*.{md,markdown}', cwd: tempDirectory
+		.src '**/*.{md,markdown}', cwd: TEMP_DIRECTORY
 		.pipe markdown()
-		.pipe gulp.dest tempDirectory
+		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'ngClassify', ['copy:temp'], ->
 	options =
-		appName: appName or 'app'
+		appName: APP_NAME or 'app'
 		data:
 			environment: 'dev'
 
 	gulp
-		.src '**/*.coffee', cwd: tempDirectory
+		.src '**/*.coffee', cwd: TEMP_DIRECTORY
 		.pipe ngClassify options
-		.pipe gulp.dest tempDirectory
+		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'reload', ['build'], ->
 	gulp
-		.src 'index.html', cwd: distDirectory
+		.src 'index.html', cwd: DIST_DIRECTORY
 		.pipe connect.reload()
 
 gulp.task 'scripts', ['coffee']
@@ -194,8 +193,8 @@ gulp.task 'serve', ['build'], ->
 	server = connect.server
 		livereload: true
 		open: true
-		port: devPort
-		root: [distDirectory]
+		port: DEV_PORT
+		root: [DIST_DIRECTORY]
 
 	server()
 
@@ -205,8 +204,8 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 			p.replace regex, '/'
 
 	includify = ->
-		js = []
-		css = []
+		scripts = []
+		styles = []
 
 		bufferContents = (file) ->
 			return if file.isNull()
@@ -215,13 +214,13 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 			p = unixifyPath(path.join('/', path.relative(file.cwd, file.path)))
 
 			return if ext is '.js'
-				js.push p
+				scripts.push p
 
 			return if ext is '.css'
-				css.push p
+				styles.push p
 
 		endStream = ->
-			payload = {scripts: js, styles: css}
+			payload = {scripts, styles}
 			@emit 'data', payload
 			@emit 'end', payload
 
@@ -231,11 +230,11 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 		deferred = Q.defer()
 
 		files = []
-			.concat scripts
-			.concat styles
+			.concat SCRIPTS
+			.concat STYLES
 
 		gulp
-			.src files, cwd: tempDirectory
+			.src files, cwd: TEMP_DIRECTORY
 			.pipe includify()
 			.on 'end', (data) ->
 				deferred.resolve data
@@ -246,14 +245,14 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 		deferred = Q.defer()
 
 		data =
-			appName: appName
+			appName: APP_NAME
 			scripts: files.scripts
 			styles: files.styles
 
 		gulp
-			.src 'index.html', cwd: tempDirectory
+			.src 'index.html', cwd: TEMP_DIRECTORY
 			.pipe template data
-			.pipe gulp.dest tempDirectory
+			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'end', ->
 				deferred.resolve()
 
@@ -268,13 +267,13 @@ gulp.task 'views', ['jade', 'markdown']
 
 gulp.task 'watch', ['build'], ->
 	gulp
-		.watch "#{srcDirectory}**/*.{coffee,html,jade,less,markdown,md}", ['reload']
+		.watch "#{SRC_DIRECTORY}**/*.{coffee,html,jade,less,markdown,md}", ['reload']
 
 gulp.task 'yuidoc', ->
 	options =
 		syntaxtype: 'coffee'
 
 	gulp
-		.src '**/*.coffee', cwd: srcDirectory
+		.src '**/*.coffee', cwd: SRC_DIRECTORY
 		.pipe yuidoc options
-		.pipe gulp.dest docsDirectory
+		.pipe gulp.dest DOCS_DIRECTORY
