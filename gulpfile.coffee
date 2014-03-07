@@ -297,7 +297,7 @@ gulp.task 'minify:scripts', ['templateCache'], ->
 		.src SCRIPTS, cwd: TEMP_DIRECTORY
 		.pipe concat SCRIPTS_MIN_FILE
 		.pipe uglify()
-		.pipe gulp.dest "#{TEMP_DIRECTORY}_prod/scripts/"
+		.pipe gulp.dest "#{TEMP_DIRECTORY}scripts/"
 
 gulp.task 'minify:styles', ->
 	options =
@@ -307,7 +307,7 @@ gulp.task 'minify:styles', ->
 		.src STYLES, cwd: TEMP_DIRECTORY
 		.pipe concat STYLES_MIN_FILE
 		.pipe minifyCss options
-		.pipe gulp.dest "#{TEMP_DIRECTORY}_prod/styles/"
+		.pipe gulp.dest "#{TEMP_DIRECTORY}styles/"
 
 gulp.task 'minify:spa', ->
 	options =
@@ -317,7 +317,7 @@ gulp.task 'minify:spa', ->
 	gulp
 		.src 'index.html', cwd: TEMP_DIRECTORY
 		.pipe minifyHtml options
-		.pipe gulp.dest "#{TEMP_DIRECTORY}_prod/"
+		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'minify:views', ->
 	options =
@@ -346,7 +346,7 @@ gulp.task 'buster', ->
 	buster.config options
 
 	gulp
-		.src '**/*.{css,js}', cwd: "#{TEMP_DIRECTORY}_prod"
+		.src '**/*.{css,js}', cwd: TEMP_DIRECTORY
 		.pipe buster()
 		.pipe gulp.dest TEMP_DIRECTORY
 
@@ -355,12 +355,18 @@ gulp.task 'hashify', ['buster'], ->
 
 	renamer = (file) ->
 		originalFile = file.dirname + '/' + file.basename + file.extname
+		
+		gulp
+			.src originalFile, cwd: TEMP_DIRECTORY
+			.pipe clean()
+
+
 		hash = busters[originalFile]
 		file.basename += '.' + hash
 		
 		file
 
 	gulp
-		.src '**/*.{css,js}', cwd: "#{TEMP_DIRECTORY}_prod/"
+		.src '**/*.{css,js}', cwd: TEMP_DIRECTORY
 		.pipe rename renamer
-		.pipe gulp.dest "#{TEMP_DIRECTORY}_prod/"
+		.pipe gulp.dest TEMP_DIRECTORY
