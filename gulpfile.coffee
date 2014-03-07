@@ -20,14 +20,19 @@ COMPONENTS_DIRECTORY = "#{BOWER_DIRECTORY}flattened_components/"
 DEV_PORT = 8181
 DIST_DIRECTORY = './dist/'
 DOCS_DIRECTORY = './docs/'
+SCRIPTS_MIN_FILE = 'scripts.min.js'
 SRC_DIRECTORY = './src/'
+STYLES_MIN_FILE = 'styles.min.css'
 TEMP_DIRECTORY = './.temp/'
+VIEWS_FILE = 'views.js'
 ### config end ###
 
 bower = require 'bower'
+buster = require 'gulp-buster'
 clean = require 'gulp-clean'
 coffee = require 'gulp-coffee'
 coffeelint = require 'gulp-coffeelint'
+concat = require 'gulp-concat'
 connect = require 'gulp-connect'
 conventionalChangelog = require 'conventional-changelog'
 es = require 'event-stream'
@@ -38,15 +43,20 @@ gutil = require 'gulp-util'
 jade = require 'gulp-jade'
 less = require 'gulp-less'
 markdown = require 'gulp-markdown'
+minifyCss = require 'gulp-minify-css'
+minifyHtml = require 'gulp-minify-html'
 ngClassify = require 'gulp-ng-classify'
 path = require 'path'
 pkg = require './package.json'
-Q = require 'q'
+q = require 'q'
+rename = require 'gulp-rename'
 template = require 'gulp-template'
+templateCache = require 'gulp-angular-templatecache'
+uglify = require 'gulp-uglify'
 yuidoc = require 'gulp-yuidoc'
 
 gulp.task 'bower', ->
-	deferred = Q.defer()
+	deferred = q.defer()
 
 	bower
 		.commands
@@ -227,7 +237,7 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 		es.through bufferContents, endStream
 
 	getIncludes = ->
-		deferred = Q.defer()
+		deferred = q.defer()
 
 		files = []
 			.concat SCRIPTS
@@ -242,7 +252,7 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 		deferred.promise
 
 	processTemplate = (files) ->
-		deferred = Q.defer()
+		deferred = q.defer()
 
 		data =
 			appName: APP_NAME
@@ -277,3 +287,80 @@ gulp.task 'yuidoc', ->
 		.src '**/*.coffee', cwd: SRC_DIRECTORY
 		.pipe yuidoc options
 		.pipe gulp.dest DOCS_DIRECTORY
+
+
+### prod ###
+gulp.task 'minify', ['minify:scripts', 'minify:styles', 'minify:views', 'minify:spa']
+
+gulp.task 'minify:scripts', ['templateCache'], ->
+	gulp
+		.src SCRIPTS, cwd: TEMP_DIRECTORY
+		.pipe concat SCRIPTS_MIN_FILE
+		.pipe uglify()
+		.pipe gulp.dest "#{TEMP_DIRECTORY}_prod/scripts/"
+
+gulp.task 'minify:styles', ->
+	options =
+		keepSpecialComments: 0
+
+	gulp
+		.src STYLES, cwd: TEMP_DIRECTORY
+		.pipe concat STYLES_MIN_FILE
+		.pipe minifyCss options
+		.pipe gulp.dest "#{TEMP_DIRECTORY}_prod/styles/"
+
+gulp.task 'minify:spa', ->
+	options =
+		empty: true
+		quotes: true
+
+	gulp
+		.src 'index.html', cwd: TEMP_DIRECTORY
+		.pipe minifyHtml options
+		.pipe gulp.dest "#{TEMP_DIRECTORY}_prod/"
+
+gulp.task 'minify:views', ->
+	options =
+		empty: true
+		quotes: true
+
+	gulp
+		.src ['**/*.html', '!index.html'], cwd: TEMP_DIRECTORY
+		.pipe minifyHtml options
+		.pipe gulp.dest TEMP_DIRECTORY
+
+gulp.task 'templateCache', ['minify:views'], ->
+	options =
+		module: APP_NAME
+		root: '/'
+
+	gulp
+		.src ['**/*.html', '!index.html'], cwd: TEMP_DIRECTORY
+		.pipe templateCache VIEWS_FILE, options
+		.pipe gulp.dest "#{TEMP_DIRECTORY}scripts/"
+
+gulp.task 'buster', ->
+	options =
+		length: 10
+
+	buster.config options
+
+	gulp
+		.src '**/*.{css,js}', cwd: "#{TEMP_DIRECTORY}_prod"
+		.pipe buster()
+		.pipe gulp.dest TEMP_DIRECTORY
+
+gulp.task 'hashify', ['buster'], ->
+	busters = require "#{TEMP_DIRECTORY}busters.json"
+
+	renamer = (file) ->
+		originalFile = file.dirname + '/' + file.basename + file.extname
+		hash = busters[originalFile]
+		file.basename += '.' + hash
+		
+		file
+
+	gulp
+		.src '**/*.{css,js}', cwd: "#{TEMP_DIRECTORY}_prod/"
+		.pipe rename renamer
+		.pipe gulp.dest "#{TEMP_DIRECTORY}_prod/"
