@@ -1,8 +1,6 @@
-<ul class="nav nav-tabs">
-	<li class="active">
-		<a href="#">Home</a>
-	</li>
-	<li>
-		<a href="#/admin">Admin</a>
-	</li>
-</ul>
+<tabset>
+	<tab heading="Home" active="true">
+		<alert type="'success'">Welcome!</alert>
+	</tab>
+	<tab heading="Admin" select="homeCtrl.select('/admin')">Admin</tab>
+</tabset>

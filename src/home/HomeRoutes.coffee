@@ -3,4 +3,5 @@ class HomeRoutes extends Config
 		$routeProvider
 		.when '/',
 			controller: 'homeController'
+			controllerAs: 'homeCtrl'
 			templateUrl: '/home/home.html'

@@ -3,4 +3,5 @@ class AdminRoutes extends Config
 		$routeProvider
 		.when '/admin',
 			controller: 'adminController'
+			controllerAs: 'adminCtrl'
 			templateUrl: '/admin/admin.html'

@@ -1,2 +1,4 @@
 class Admin extends Controller
-	constructor: ->
+	constructor: ($location) ->
+		@select = (path) ->
+			$location.path path

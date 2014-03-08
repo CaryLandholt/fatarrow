@@ -6,12 +6,14 @@ SCRIPTS = [
 	'scripts/vendor/angular-mocks.js'
 	'scripts/vendor/angular-animate.min.js'
 	'scripts/vendor/angular-route.min.js'
+	'scripts/vendor/ui-bootstrap-tpls.min.js'
 	'app/App.js'
 	'**/*.js'
 ]
 
 STYLES = [
-	'styles/styles.css'
+	'styles/bootstrap.min.css'
+	'styles/bootstrap-theme.min.css'
 ]
 
 BOWER_DIRECTORY = './bower_components/'
@@ -146,13 +148,14 @@ gulp.task 'flatten:scripts', ['bower', 'clean:working'], ->
 			'angular-animate/angular-animate.min.js{,.map}'
 			'angular-mocks/angular-mocks.js'
 			'angular-route/angular-route.min.js{,.map}'
+			'angular-bootstrap/ui-bootstrap-tpls.min.js{,.map}'
 		], cwd: BOWER_DIRECTORY
 		.pipe flatten()
 		.pipe gulp.dest "#{COMPONENTS_DIRECTORY}scripts/vendor/"
 
 gulp.task 'flatten:styles', ['bower', 'clean:working'], ->
 	gulp
-		.src 'bootstrap/less/**/*.less', cwd: BOWER_DIRECTORY
+		.src 'bootstrap/dist/css/*.min.css', cwd: BOWER_DIRECTORY
 		.pipe flatten()
 		.pipe gulp.dest "#{COMPONENTS_DIRECTORY}styles/"
 
