@@ -1,5 +1,5 @@
+.components/
 .temp/
-bower_components/
 dist/
 docs/
 node_modules/

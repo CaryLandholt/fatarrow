@@ -1,6 +1,14 @@
 ### config begin ###
 APP_NAME = 'app'
 
+COMPONENTS =
+	'angular': '1.3.0-beta.1'
+	'angular-animate': '1.3.0-beta.1'
+	'angular-bootstrap': '0.10.0'
+	'angular-mocks': '1.3.0-beta.1'
+	'angular-route': '1.3.0-beta.1'
+	'bootstrap': '3.1.1'
+
 SCRIPTS = [
 	'scripts/vendor/angular.min.js'
 	'scripts/vendor/angular-mocks.js'
@@ -16,7 +24,7 @@ STYLES = [
 	'styles/bootstrap-theme.min.css'
 ]
 
-BOWER_DIRECTORY = './bower_components/'
+BOWER_DIRECTORY = './.components/'
 CHANGELOG_FILE = './CHANGELOG.md'
 COMPONENTS_DIRECTORY = "#{BOWER_DIRECTORY}flattened_components/"
 DEV_PORT = 8181
@@ -26,7 +34,6 @@ SCRIPTS_MIN_FILE = 'scripts.min.js'
 SRC_DIRECTORY = './src/'
 STYLES_MIN_FILE = 'styles.min.css'
 TEMP_DIRECTORY = './.temp/'
-VIEWS_FILE = 'views.js'
 ### config end ###
 
 bower = require 'bower'
@@ -59,10 +66,14 @@ yuidoc = require 'gulp-yuidoc'
 
 gulp.task 'bower', ->
 	deferred = q.defer()
+	components = []
+
+	for component, version of COMPONENTS
+		components.push "#{component}##{version}"
 
 	bower
 		.commands
-		.install()
+		.install components, {}, {directory: BOWER_DIRECTORY}
 		.on 'end', (results) ->
 			deferred.resolve results
 
@@ -300,7 +311,7 @@ gulp.task 'minify:scripts', ['templateCache'], ->
 		.src SCRIPTS, cwd: TEMP_DIRECTORY
 		.pipe concat SCRIPTS_MIN_FILE
 		.pipe uglify()
-		.pipe gulp.dest "#{TEMP_DIRECTORY}scripts/"
+		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'minify:styles', ->
 	options =
@@ -310,7 +321,7 @@ gulp.task 'minify:styles', ->
 		.src STYLES, cwd: TEMP_DIRECTORY
 		.pipe concat STYLES_MIN_FILE
 		.pipe minifyCss options
-		.pipe gulp.dest "#{TEMP_DIRECTORY}styles/"
+		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'minify:spa', ->
 	options =
@@ -339,7 +350,7 @@ gulp.task 'templateCache', ['minify:views'], ->
 
 	gulp
 		.src ['**/*.html', '!index.html'], cwd: TEMP_DIRECTORY
-		.pipe templateCache VIEWS_FILE, options
+		.pipe templateCache options
 		.pipe gulp.dest "#{TEMP_DIRECTORY}scripts/"
 
 gulp.task 'buster', ->
@@ -357,11 +368,11 @@ gulp.task 'hashify', ['buster'], ->
 	busters = require "#{TEMP_DIRECTORY}busters.json"
 
 	renamer = (file) ->
-		originalFile = file.dirname + '/' + file.basename + file.extname
+		originalFile = path.join file.dirname, file.basename + file.extname
 		
-		gulp
-			.src originalFile, cwd: TEMP_DIRECTORY
-			.pipe clean()
+		# gulp
+		# 	.src originalFile, cwd: TEMP_DIRECTORY
+		# 	.pipe clean()
 
 
 		hash = busters[originalFile]
