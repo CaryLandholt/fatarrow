@@ -2,11 +2,11 @@
 APP_NAME = 'app'
 
 COMPONENTS =
-	'angular': '1.3.0-beta.1'
-	'angular-animate': '1.3.0-beta.1'
+	'angular': '1.3.0-beta.2'
+	'angular-animate': '1.3.0-beta.2'
 	'angular-bootstrap': '0.10.0'
-	'angular-mocks': '1.3.0-beta.1'
-	'angular-route': '1.3.0-beta.1'
+	'angular-mocks': '1.3.0-beta.2'
+	'angular-route': '1.3.0-beta.2'
 	'bootstrap': '3.1.1'
 
 SCRIPTS = [
@@ -369,7 +369,7 @@ gulp.task 'hashify', ['buster'], ->
 
 	renamer = (file) ->
 		originalFile = path.join file.dirname, file.basename + file.extname
-		
+
 		# gulp
 		# 	.src originalFile, cwd: TEMP_DIRECTORY
 		# 	.pipe clean()
@@ -377,7 +377,7 @@ gulp.task 'hashify', ['buster'], ->
 
 		hash = busters[originalFile]
 		file.basename += '.' + hash
-		
+
 		file
 
 	gulp
