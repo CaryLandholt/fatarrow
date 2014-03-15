@@ -1,6 +1,6 @@
 {
 	"name": "fatarrow",
-	"version": "2.1.5",
+	"version": "0.0.1",
 	"description": "AngularJS Reference Architecture",
 	"author": {
 		"name": "Cary Landholt",
@@ -23,7 +23,7 @@
 		"gulp-coffee": "~1.4.1",
 		"gulp-coffeelint": "~0.3.1",
 		"gulp-concat": "~2.1.7",
-		"gulp-connect": "~1.0.5",
+		"gulp-connect": "~1.0.7",
 		"gulp-flatten": "~0.0.2",
 		"gulp-jade": "~0.4.2",
 		"gulp-less": "~1.2.3",
