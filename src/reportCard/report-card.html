@@ -20,7 +20,7 @@
 				<p>For more information, see <a ng-href="http://osrc.dfm.io/{{controller.username}}" target="_blank">osrc.dfm.io</a></p>
 				<p>
 					<form ng-submit="controller.getReportCard(controller.username)" class="form-group">
-						<input ng-model="controller.username" autofocus />
+						<input ng-model="controller.username" placeholder="GitHub username" autofocus />
 						<button type="submit" class="btn btn-success">Go</button>
 					</form>
 				</p>
@@ -78,8 +78,4 @@
 	</div>
 
 	<hr>
-
-	<footer>
-		<p>&copy; fatarrow 2014</p>
-	</footer>
 </div>
