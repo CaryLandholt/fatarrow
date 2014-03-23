@@ -4,7 +4,6 @@ APP_NAME = 'app'
 COMPONENTS =
 	'angular':           '1.3.0-beta.3'
 	'angular-animate':   '1.3.0-beta.3'
-	'angular-bootstrap': '0.10.0'
 	'angular-mocks':     '1.3.0-beta.3'
 	'angular-route':     '1.3.0-beta.3'
 	'bootstrap':         '3.1.1'
@@ -14,7 +13,6 @@ SCRIPTS = [
 	'scripts/vendor/angular-mocks.js'
 	'scripts/vendor/angular-animate.min.js'
 	'scripts/vendor/angular-route.min.js'
-	'scripts/vendor/ui-bootstrap-tpls.min.js'
 	'app/App.js'
 	'**/*.js'
 ]
@@ -22,6 +20,7 @@ SCRIPTS = [
 STYLES = [
 	'styles/bootstrap.min.css'
 	'styles/bootstrap-theme.min.css'
+	'**/*.css'
 ]
 
 BOWER_DIRECTORY      = './.components/'

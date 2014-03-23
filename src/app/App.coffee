@@ -3,5 +3,4 @@ class App extends App
 		'ngAnimate'
 		<% if (environment === 'dev') { %>'ngMockE2E'<% } %>
 		'ngRoute'
-		'ui.bootstrap'
 	]
