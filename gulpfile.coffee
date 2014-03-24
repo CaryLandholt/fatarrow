@@ -126,7 +126,7 @@ gulp.task 'coffeelint', ->
 	gulp
 		.src [
 			'**/*.coffee'
-			'!app/App.coffee'
+			'!app/app.coffee'
 		], cwd: SRC_DIRECTORY
 		.pipe coffeelint options
 		.pipe coffeelint.reporter()

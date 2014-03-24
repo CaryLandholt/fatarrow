@@ -1,4 +1,4 @@
-class Routes extends Config
+class AppRoutes extends Config
 	constructor: ($routeProvider) ->
 		$routeProvider
 		.otherwise
