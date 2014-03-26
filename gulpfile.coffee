@@ -165,7 +165,9 @@ gulp.task 'flatten:scripts', ['bower', 'clean:working'], ->
 
 gulp.task 'flatten:styles', ['bower', 'clean:working'], ->
 	gulp
-		.src 'bootstrap/dist/css/*.min.css', cwd: BOWER_DIRECTORY
+		.src [
+			'bootstrap/dist/css/*.min.css'
+		], cwd: BOWER_DIRECTORY
 		.pipe flatten()
 		.pipe gulp.dest "#{COMPONENTS_DIRECTORY}styles/"
 

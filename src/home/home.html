@@ -1,26 +1,50 @@
-<div class="site-wrapper">
-	<div class="site-wrapper-inner">
-		<div class="cover-container">
-			<div class="masthead clearfix">
-				<div class="inner">
-					<h3 class="masthead-brand">fatarrow</h3>
-					<ul class="nav masthead-nav">
-						<li>
-							<a href="#/reportcard">Report Card</a>
-						</li>
-					</ul>
-				</div>
-			</div>
-			<div class="inner cover">
-				<h1 class="cover-heading">Cover your page.</h1>
-				<p class="lead">Cover is a one-page template for building simple and beautiful home pages. Download, edit the text, and add your own fullscreen background photo to make it your own.</p>
-				<p class="lead">
-					<a href="#" class="btn btn-lg btn-default">Learn more</a>
-				</p>
-			</div>
-			<div class="mastfoot">
-				<div class="inner"></div>
-			</div>
+<div class="container">
+	<div class="masthead">
+		<h3 class="text-muted">fatarrow</h3>
+		<ul class="nav nav-justified">
+			<li>
+				<a class="pull-right" href="#/reportcard">Your Open Source Report Card</a>
+			</li>
+		</ul>
+	</div>
+
+	<div class="jumbotron">
+		<h1>AngularJS Reference Architecture</h1>
+		<p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet.</p>
+	</div>
+
+	<div class="row">
+		<div class="col-lg-4">
+			<h2>Safari bug warning!</h2>
+			<p class="text-danger">As of v7.0.1, Safari exhibits a bug in which resizing your browser horizontally causes rendering errors in the justified nav that are cleared upon refreshing.</p>
+			<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+			<p>
+				<a class="btn btn-primary" href="#" role="button">View details &raquo;</a>
+			</p>
+		</div>
+
+		<div class="col-lg-4">
+			<h2>Heading</h2>
+<syntax language="coffeescript">
+class ReportCard extends Controller
+	constructor: ($log, reportCardService) ->
+		@getReportCard = (username) =>
+			reportCardService.get(username).then (results) =>
+				$log.debug results
+				@reportCard = results
+</syntax>
+			<p>Donec id elit non mi porta gravida at eget metus. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus. Etiam porta sem malesuada magna mollis euismod. Donec sed odio dui. </p>
+			<p>
+				<a class="btn btn-primary" href="#" role="button">View details &raquo;</a>
+			</p>
+		</div>
+
+		<div class="col-lg-4">
+			<h2>Heading</h2>
+			<p>Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas eget quam. Vestibulum id ligula porta felis euismod semper. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa.</p>
+			<p>
+				<a class="btn btn-primary" href="#" role="button">View details &raquo;</a>
+			</p>
 		</div>
 	</div>
 </div>
