@@ -1,9 +1,6 @@
 class SyntaxHighlighter extends Service
 	constructor: ($window) ->
-		@hljs = $window.hljs
+		@process = $window.prettyPrintOne
 
-	highlight: (code, language) ->
-		return if language
-			@hljs.highlight language, code
-
-		@hljs.highlightAuto code
+	highlight: (code, language, lineNumbers = true) ->
+		@process code, language, lineNumbers

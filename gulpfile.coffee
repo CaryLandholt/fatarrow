@@ -2,11 +2,12 @@
 APP_NAME = 'app'
 
 COMPONENTS =
-	'angular':           '1.3.0-beta.3'
-	'angular-animate':   '1.3.0-beta.3'
-	'angular-mocks':     '1.3.0-beta.3'
-	'angular-route':     '1.3.0-beta.3'
-	'bootstrap':         '3.1.1'
+	'angular'              : '1.3.0-beta.3'
+	'angular-animate'      : '1.3.0-beta.3'
+	'angular-mocks'        : '1.3.0-beta.3'
+	'angular-route'        : '1.3.0-beta.3'
+	'bootstrap'            : '3.1.1'
+	'google-code-prettify' : '1.0.1'
 
 SCRIPTS = [
 	'scripts/vendor/angular.min.js'
@@ -159,6 +160,7 @@ gulp.task 'flatten:scripts', ['bower', 'clean:working'], ->
 			'angular-mocks/angular-mocks.js'
 			'angular-route/angular-route.min.js{,.map}'
 			'angular-bootstrap/ui-bootstrap-tpls.min.js{,.map}'
+			'google-code-prettify/src/prettify.js'
 		], cwd: BOWER_DIRECTORY
 		.pipe flatten()
 		.pipe gulp.dest "#{COMPONENTS_DIRECTORY}scripts/vendor/"
@@ -167,6 +169,7 @@ gulp.task 'flatten:styles', ['bower', 'clean:working'], ->
 	gulp
 		.src [
 			'bootstrap/dist/css/*.min.css'
+			'google-code-prettify/styles/sons-of-obsidian.css'
 		], cwd: BOWER_DIRECTORY
 		.pipe flatten()
 		.pipe gulp.dest "#{COMPONENTS_DIRECTORY}styles/"
