@@ -2,7 +2,7 @@ class SyntaxDirective extends Controller
 	constructor: ($scope, $transclude, $sce, syntaxHighlighterService) ->
 		language = $scope.language
 		lineNumbers = $scope.lineNumbers isnt 'false'
-		code = $transclude().text().replace(/\t/gm, '    ')
+		code = $transclude().text().replace(/\t/gm, '  ')
 		newlineCharCode = '\n'.charCodeAt 0
 
 		if code.charCodeAt(0) is newlineCharCode
