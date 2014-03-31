@@ -1,0 +1,5 @@
+/* allow for horizontal scrolling within code examples */
+pre code {
+	white-space: pre;
+	word-wrap: normal;
+}

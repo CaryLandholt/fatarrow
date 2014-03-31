@@ -9,6 +9,4 @@ class Syntax extends Directive
 			scope:
 				language: '@'
 				lineNumbers: '@'
-			templateUrl: '/syntaxHighlighter/syntax.html'
-			transclude: true
 		}

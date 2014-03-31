@@ -1,8 +1,13 @@
 class SyntaxDirective extends Controller
-	constructor: ($scope, $transclude, $sce, syntaxHighlighterService) ->
-		language = $scope.language
-		lineNumbers = $scope.lineNumbers isnt 'false'
-		code = $transclude().text().replace(/\t/gm, '  ')
+	constructor: ($element, syntaxHighlighterService) ->
+		language = @language
+		lineNumbers = @lineNumbers isnt 'false'
+
+		code = $element.html()
+			.replace /</gm, '&lt;'
+			.replace />/gm, '&gt;'
+			.replace /\t/gm, '  '
+
 		newlineCharCode = '\n'.charCodeAt 0
 
 		if code.charCodeAt(0) is newlineCharCode
@@ -13,5 +18,6 @@ class SyntaxDirective extends Controller
 		if code.charCodeAt(last) is newlineCharCode
 			code = code.substr 0, last
 
-		syntax = syntaxHighlighterService.highlight code, language, lineNumbers
-		$scope.syntax = $sce.trustAsHtml syntax
+		html = syntaxHighlighterService.highlight code, language, lineNumbers
+
+		$element.html html

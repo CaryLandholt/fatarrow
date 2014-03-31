@@ -295,7 +295,7 @@ gulp.task 'views', ['jade', 'markdown']
 
 gulp.task 'watch', ['build'], ->
 	gulp
-		.watch "#{SRC_DIRECTORY}**/*.{coffee,html,jade,less,markdown,md}", ['reload']
+		.watch "#{SRC_DIRECTORY}**/*.{coffee,css,html,jade,less,markdown,md}", ['reload']
 
 gulp.task 'yuidoc', ->
 	options =

@@ -1,5 +1,5 @@
 class ReportCard extends Service
-	constructor: (@$log, @$http) ->
+	constructor: (@$http) ->
 
 	get: (username) =>
 		@$http.get "http://osrc.dfm.io/#{username}.json"

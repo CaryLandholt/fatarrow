@@ -1,5 +1,5 @@
 class ReportCardInterceptor extends Factory
-	constructor: ($log) ->
+	constructor: ->
 		return {
 			response: (response) ->
 				url = response.config.url

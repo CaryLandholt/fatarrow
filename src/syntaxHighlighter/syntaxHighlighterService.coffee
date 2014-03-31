@@ -3,4 +3,5 @@ class SyntaxHighlighter extends Service
 		@process = $window.prettyPrintOne
 
 	highlight: (code, language, lineNumbers = true) ->
-		@process code, language, lineNumbers
+		syntax = @process code, language, lineNumbers
+		html = "<pre class=\"prettyprint\"><code>#{syntax}</code></pre>"

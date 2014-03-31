@@ -1,6 +1,5 @@
 class ReportCard extends Controller
-	constructor: ($log, reportCardService) ->
+	constructor: (reportCardService) ->
 		@getReportCard = (username) ->
 			reportCardService.get(username).then (results) =>
-				$log.debug results
 				@reportCard = results
