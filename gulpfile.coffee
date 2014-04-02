@@ -2,10 +2,10 @@
 APP_NAME = 'app'
 
 COMPONENTS =
-	'angular'              : '1.3.0-beta.3'
-	'angular-animate'      : '1.3.0-beta.3'
-	'angular-mocks'        : '1.3.0-beta.3'
-	'angular-route'        : '1.3.0-beta.3'
+	'angular'              : '1.3.0-beta.4'
+	'angular-animate'      : '1.3.0-beta.4'
+	'angular-mocks'        : '1.3.0-beta.4'
+	'angular-route'        : '1.3.0-beta.4'
 	'bootstrap'            : '3.1.1'
 	'google-code-prettify' : '1.0.1'
 
