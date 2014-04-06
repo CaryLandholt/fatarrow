@@ -1,11 +1,12 @@
 ### config begin ###
 APP_NAME = 'app'
+ANGULAR_VERSION = '1.3.0-beta.5'
 
 BOWER_COMPONENTS =
-	'angular'              : '1.3.0-beta.5'
-	'angular-animate'      : '1.3.0-beta.5'
-	'angular-mocks'        : '1.3.0-beta.5'
-	'angular-route'        : '1.3.0-beta.5'
+	'angular'              : ANGULAR_VERSION
+	'angular-animate'      : ANGULAR_VERSION
+	'angular-mocks'        : ANGULAR_VERSION
+	'angular-route'        : ANGULAR_VERSION
 	'bootstrap'            : '3.1.1'
 	'google-code-prettify' : '1.0.1'
 
@@ -36,7 +37,7 @@ SCRIPTS = [
 	"#{VENDOR_SCRIPTS_DIRECTORY}angular-mocks.js"
 	"#{VENDOR_SCRIPTS_DIRECTORY}angular-animate.min.js"
 	"#{VENDOR_SCRIPTS_DIRECTORY}angular-route.min.js"
-	'app/App.js'
+	'app/app.js'
 	'**/*.js'
 ]
 
