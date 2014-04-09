@@ -1,0 +1,14 @@
+pre {
+	/* allow for horizontal scrolling within code examples */
+	code {
+		white-space: pre;
+		word-wrap: normal;
+	}
+
+	/* fix missing line number bug */
+	&.prettyprint {
+		li {
+			list-style-type: inherit;
+		}
+	}
+}

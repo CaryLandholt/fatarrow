@@ -24,7 +24,7 @@ BOWER_COMPONENTS_SCRIPTS = [
 
 BOWER_COMPONENTS_STYLES = [
 	'bootstrap/dist/css/*.min.css'
-	'google-code-prettify/styles/sons-of-obsidian.css'
+	'google-code-prettify/src/prettify.css'
 ]
 
 VENDOR_DIRECTORY         = 'vendor/'
@@ -200,12 +200,12 @@ gulp.task 'jade', ['copy:temp'], ->
 gulp.task 'less', ['copy:temp'], ->
 	options =
 		sourceMap: true
-		sourceMapBasepath: path.resolve path.join TEMP_DIRECTORY, 'styles'
+		sourceMapBasepath: TEMP_DIRECTORY
 
 	gulp
-		.src 'styles/styles.less', cwd: TEMP_DIRECTORY
+		.src '**/*.less', cwd: TEMP_DIRECTORY
 		.pipe less options
-		.pipe gulp.dest 'styles/', cwd: TEMP_DIRECTORY
+		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'markdown', ['copy:temp'], ->
 	gulp
