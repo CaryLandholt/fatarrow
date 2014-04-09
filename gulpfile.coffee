@@ -1,31 +1,38 @@
 ### config begin ###
 APP_NAME = 'app'
-ANGULAR_VERSION = '1.3.0-beta.5'
+
+# BOWER_COMPONENTS_FONTS = [
+# 	'bootstrap/dist/fonts/**/*.{eot,svg,ttf,woff}'
+# ]
+#
+# BOWER_COMPONENTS_SCRIPTS = [
+# 	'angular/angular.min.js'
+# 	'angular-animate/angular-animate.min.js'
+# 	'angular-mocks/angular-mocks.js'
+# 	'angular-route/angular-route.min.js'
+# 	'google-code-prettify/src/prettify.js'
+# ]
+#
+# BOWER_COMPONENTS_STYLES = [
+# 	'bootstrap/dist/css/*.min.css'
+# 	'google-code-prettify/src/prettify.css'
+# ]
 
 BOWER_COMPONENTS =
-	'angular'              : ANGULAR_VERSION
-	'angular-animate'      : ANGULAR_VERSION
-	'angular-mocks'        : ANGULAR_VERSION
-	'angular-route'        : ANGULAR_VERSION
-	'bootstrap'            : '3.1.1'
-	'google-code-prettify' : '1.0.1'
-
-BOWER_COMPONENTS_FONTS = [
-	'bootstrap/dist/fonts/**/*.{eot,svg,ttf,woff}'
-]
-
-BOWER_COMPONENTS_SCRIPTS = [
-	'angular/angular.min.js'
-	'angular-animate/angular-animate.min.js'
-	'angular-mocks/angular-mocks.js'
-	'angular-route/angular-route.min.js'
-	'google-code-prettify/src/prettify.js'
-]
-
-BOWER_COMPONENTS_STYLES = [
-	'bootstrap/dist/css/*.min.css'
-	'google-code-prettify/src/prettify.css'
-]
+	'angular': '1.3.0-beta.5':
+		scripts: 'angular.min.js'
+	'angular-animate': '1.3.0-beta.5':
+		scripts: 'angular-animate.min.js'
+	'angular-mocks': '1.3.0-beta.5':
+		scripts: 'angular-mocks.js'
+	'angular-route': '1.3.0-beta.5':
+		scripts: 'angular-route.min.js'
+	'bootstrap': '3.1.1':
+		fonts: 'dist/fonts/**/*.{eot,svg,ttf,woff}'
+		styles: 'dist/css/*.min.css'
+	'google-code-prettify': '1.0.1':
+		scripts: 'src/prettify.js'
+		styles: 'src/prettify.css'
 
 VENDOR_DIRECTORY         = 'vendor/'
 VENDOR_FONTS_DIRECTORY   = "#{VENDOR_DIRECTORY}fonts/"
@@ -58,6 +65,27 @@ SRC_DIRECTORY        = './src/'
 STYLES_MIN_FILE      = 'styles.min.css'
 TEMP_DIRECTORY       = './.temp/'
 ### config end ###
+
+
+BOWER_COMPONENTS_FONTS   = []
+BOWER_COMPONENTS_SCRIPTS = []
+BOWER_COMPONENTS_STYLES  = []
+
+for component, value of BOWER_COMPONENTS
+	for version, componentTypes of value
+		for componentType, files of componentTypes
+			isArray = Array.isArray files
+			filesToAdd = if isArray then files else [files]
+
+			filesToAdd = filesToAdd.map (file) ->
+				"#{component}/#{file}"
+
+			switch componentType
+				when 'fonts' then BOWER_COMPONENTS_FONTS = BOWER_COMPONENTS_FONTS.concat filesToAdd
+				when 'scripts' then BOWER_COMPONENTS_SCRIPTS = BOWER_COMPONENTS_SCRIPTS.concat filesToAdd
+				when 'styles' then BOWER_COMPONENTS_STYLES = BOWER_COMPONENTS_STYLES.concat filesToAdd
+
+
 
 bower                 = require 'bower'
 buster                = require 'gulp-buster'
@@ -92,8 +120,9 @@ gulp.task 'bower', ->
 	deferred = q.defer()
 	components = []
 
-	for component, version of BOWER_COMPONENTS
-		components.push "#{component}##{version}"
+	for component, value of BOWER_COMPONENTS
+		for version, files of value
+			components.push "#{component}##{version}"
 
 	bower
 		.commands
