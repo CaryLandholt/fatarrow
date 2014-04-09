@@ -200,7 +200,7 @@ gulp.task 'jade', ['copy:temp'], ->
 gulp.task 'less', ['copy:temp'], ->
 	options =
 		sourceMap: true
-		sourceMapBasepath: TEMP_DIRECTORY
+		sourceMapBasepath: path.resolve TEMP_DIRECTORY
 
 	gulp
 		.src '**/*.less', cwd: TEMP_DIRECTORY
