@@ -36,7 +36,7 @@
 		"gulp-template": "~0.1.1",
 		"gulp-uglify": "~0.2.1",
 		"gulp-util": "~2.2.14",
-		"gulp-yuidoc": "~0.1.1",
+		"gulp-watch": "~0.5.3",
 		"q": "~2.0.1"
 	},
 	"engines": {
