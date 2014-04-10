@@ -1,91 +1,19 @@
-### config begin ###
-APP_NAME = 'app'
+{APP_NAME, BOWER_COMPONENTS, SCRIPTS, STYLES} = require './config.coffee'
 
-# BOWER_COMPONENTS_FONTS = [
-# 	'bootstrap/dist/fonts/**/*.{eot,svg,ttf,woff}'
-# ]
-#
-# BOWER_COMPONENTS_SCRIPTS = [
-# 	'angular/angular.min.js'
-# 	'angular-animate/angular-animate.min.js'
-# 	'angular-mocks/angular-mocks.js'
-# 	'angular-route/angular-route.min.js'
-# 	'google-code-prettify/src/prettify.js'
-# ]
-#
-# BOWER_COMPONENTS_STYLES = [
-# 	'bootstrap/dist/css/*.min.css'
-# 	'google-code-prettify/src/prettify.css'
-# ]
-
-BOWER_COMPONENTS =
-	'angular': '1.3.0-beta.5':
-		scripts: 'angular.min.js'
-	'angular-animate': '1.3.0-beta.5':
-		scripts: 'angular-animate.min.js'
-	'angular-mocks': '1.3.0-beta.5':
-		scripts: 'angular-mocks.js'
-	'angular-route': '1.3.0-beta.5':
-		scripts: 'angular-route.min.js'
-	'bootstrap': '3.1.1':
-		fonts: 'dist/fonts/**/*.{eot,svg,ttf,woff}'
-		styles: 'dist/css/*.min.css'
-	'google-code-prettify': '1.0.1':
-		scripts: 'src/prettify.js'
-		styles: 'src/prettify.css'
-
+BOWER_DIRECTORY          = './.components/'
+CHANGELOG_FILE           = './CHANGELOG.md'
+COMPONENTS_DIRECTORY     = "#{BOWER_DIRECTORY}_/"
+DEV_PORT                 = 8181
+DIST_DIRECTORY           = './dist/'
+DOCS_DIRECTORY           = './docs/'
+SCRIPTS_MIN_FILE         = 'scripts.min.js'
+SRC_DIRECTORY            = './src/'
+STYLES_MIN_FILE          = 'styles.min.css'
+TEMP_DIRECTORY           = './.temp/'
 VENDOR_DIRECTORY         = 'vendor/'
 VENDOR_FONTS_DIRECTORY   = "#{VENDOR_DIRECTORY}fonts/"
 VENDOR_SCRIPTS_DIRECTORY = "#{VENDOR_DIRECTORY}scripts/"
 VENDOR_STYLES_DIRECTORY  = "#{VENDOR_DIRECTORY}styles/"
-
-SCRIPTS = [
-	"#{VENDOR_SCRIPTS_DIRECTORY}angular.min.js"
-	"#{VENDOR_SCRIPTS_DIRECTORY}angular-mocks.js"
-	"#{VENDOR_SCRIPTS_DIRECTORY}angular-animate.min.js"
-	"#{VENDOR_SCRIPTS_DIRECTORY}angular-route.min.js"
-	'app/app.js'
-	'**/*.js'
-]
-
-STYLES = [
-	"#{VENDOR_STYLES_DIRECTORY}bootstrap.min.css"
-	"#{VENDOR_STYLES_DIRECTORY}bootstrap-theme.min.css"
-	'**/*.css'
-]
-
-BOWER_DIRECTORY      = './.components/'
-CHANGELOG_FILE       = './CHANGELOG.md'
-COMPONENTS_DIRECTORY = "#{BOWER_DIRECTORY}flattened_components/"
-DEV_PORT             = 8181
-DIST_DIRECTORY       = './dist/'
-DOCS_DIRECTORY       = './docs/'
-SCRIPTS_MIN_FILE     = 'scripts.min.js'
-SRC_DIRECTORY        = './src/'
-STYLES_MIN_FILE      = 'styles.min.css'
-TEMP_DIRECTORY       = './.temp/'
-### config end ###
-
-
-BOWER_COMPONENTS_FONTS   = []
-BOWER_COMPONENTS_SCRIPTS = []
-BOWER_COMPONENTS_STYLES  = []
-
-for component, value of BOWER_COMPONENTS
-	for version, componentTypes of value
-		for componentType, files of componentTypes
-			isArray = Array.isArray files
-			filesToAdd = if isArray then files else [files]
-
-			filesToAdd = filesToAdd.map (file) ->
-				"#{component}/#{file}"
-
-			switch componentType
-				when 'fonts' then BOWER_COMPONENTS_FONTS = BOWER_COMPONENTS_FONTS.concat filesToAdd
-				when 'scripts' then BOWER_COMPONENTS_SCRIPTS = BOWER_COMPONENTS_SCRIPTS.concat filesToAdd
-				when 'styles' then BOWER_COMPONENTS_STYLES = BOWER_COMPONENTS_STYLES.concat filesToAdd
-
-
 
 bower                 = require 'bower'
 buster                = require 'gulp-buster'
@@ -115,6 +43,28 @@ template              = require 'gulp-template'
 templateCache         = require 'gulp-angular-templatecache'
 uglify                = require 'gulp-uglify'
 yuidoc                = require 'gulp-yuidoc'
+
+bowerComponents = do ->
+	components =
+		fonts: []
+		scripts: []
+		styles: []
+
+	for component, value of BOWER_COMPONENTS
+		for version, componentTypes of value
+			for componentType, files of componentTypes
+				isArray = Array.isArray files
+				filesToAdd = if isArray then files else [files]
+
+				filesToAdd = filesToAdd.map (file) ->
+					"#{component}/#{file}"
+
+				switch componentType
+					when 'fonts' then components.fonts = components.fonts.concat filesToAdd
+					when 'scripts' then components.scripts = components.scripts.concat filesToAdd
+					when 'styles' then components.styles = components.styles.concat filesToAdd
+
+	components
 
 gulp.task 'bower', ->
 	deferred = q.defer()
@@ -201,19 +151,19 @@ gulp.task 'flatten', ['flatten:fonts', 'flatten:scripts', 'flatten:styles']
 
 gulp.task 'flatten:fonts', ['bower', 'clean:working'], ->
 	gulp
-		.src BOWER_COMPONENTS_FONTS, cwd: BOWER_DIRECTORY
+		.src bowerComponents.fonts, cwd: BOWER_DIRECTORY
 		.pipe flatten()
 		.pipe gulp.dest "#{COMPONENTS_DIRECTORY}#{VENDOR_FONTS_DIRECTORY}"
 
 gulp.task 'flatten:scripts', ['bower', 'clean:working'], ->
 	gulp
-		.src BOWER_COMPONENTS_SCRIPTS, cwd: BOWER_DIRECTORY
+		.src bowerComponents.scripts, cwd: BOWER_DIRECTORY
 		.pipe flatten()
 		.pipe gulp.dest "#{COMPONENTS_DIRECTORY}#{VENDOR_SCRIPTS_DIRECTORY}"
 
 gulp.task 'flatten:styles', ['bower', 'clean:working'], ->
 	gulp
-		.src BOWER_COMPONENTS_STYLES, cwd: BOWER_DIRECTORY
+		.src bowerComponents.styles, cwd: BOWER_DIRECTORY
 		.pipe flatten()
 		.pipe gulp.dest "#{COMPONENTS_DIRECTORY}#{VENDOR_STYLES_DIRECTORY}"
 
