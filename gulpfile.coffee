@@ -1,15 +1,15 @@
 {APP_NAME, BOWER_COMPONENTS, SCRIPTS, STYLES} = require './config.coffee'
 
-BOWER_DIRECTORY          = './.components/'
-CHANGELOG_FILE           = './CHANGELOG.md'
+BOWER_DIRECTORY          = '.components/'
+CHANGELOG_FILE           = 'CHANGELOG.md'
 COMPONENTS_DIRECTORY     = "#{BOWER_DIRECTORY}_/"
 DEV_PORT                 = 8181
-DIST_DIRECTORY           = './dist/'
-DOCS_DIRECTORY           = './docs/'
+DIST_DIRECTORY           = 'dist/'
+DOCS_DIRECTORY           = 'docs/'
 SCRIPTS_MIN_FILE         = 'scripts.min.js'
-SRC_DIRECTORY            = './src/'
+SRC_DIRECTORY            = 'src/'
 STYLES_MIN_FILE          = 'styles.min.css'
-TEMP_DIRECTORY           = './.temp/'
+TEMP_DIRECTORY           = '.temp/'
 VENDOR_DIRECTORY         = 'vendor/'
 VENDOR_FONTS_DIRECTORY   = "#{VENDOR_DIRECTORY}fonts/"
 VENDOR_SCRIPTS_DIRECTORY = "#{VENDOR_DIRECTORY}scripts/"
