@@ -42,7 +42,6 @@ rename                = require 'gulp-rename'
 template              = require 'gulp-template'
 templateCache         = require 'gulp-angular-templatecache'
 uglify                = require 'gulp-uglify'
-watch                 = require 'gulp-watch'
 # yuidoc                = require 'gulp-yuidoc'
 
 bowerComponents = do ->
