@@ -1,5 +1,7 @@
 {APP_NAME, BOWER_COMPONENTS, SCRIPTS, STYLES} = require './config.coffee'
 
+SCRIPTS.push '!**/*.spec.js'
+
 BOWER_DIRECTORY          = '.components/'
 CHANGELOG_FILE           = 'CHANGELOG.md'
 COMPONENTS_DIRECTORY     = "#{BOWER_DIRECTORY}_/"
@@ -29,6 +31,7 @@ fs                    = require 'fs'
 gulp                  = require 'gulp'
 gutil                 = require 'gulp-util'
 jade                  = require 'gulp-jade'
+karma                 = require 'karma'
 less                  = require 'gulp-less'
 markdown              = require 'gulp-markdown'
 minifyCss             = require 'gulp-minify-css'
@@ -289,11 +292,43 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 
 gulp.task 'styles', ['less']
 
+gulp.task 'test', ['build'], ->
+	scripts = SCRIPTS.slice 0
+
+	# remove *.spec exclusion
+	scripts.pop()
+
+	options =
+		background: true
+		basePath: DIST_DIRECTORY
+		browsers: [
+			'PhantomJS'
+		]
+		colors: true
+		files: scripts
+		frameworks: [
+			'jasmine'
+		]
+		keepalive: false
+		logLevel: 'INFO'
+		reporters: [
+			'dots'
+			'progress'
+		]
+		singleRun: true
+
+	deferred = q.defer()
+
+	karma.server.start options, (exitCode) ->
+		deferred.resolve exitCode
+
+	deferred.promise
+
 gulp.task 'views', ['jade', 'markdown']
 
 gulp.task 'watch', ['build'], ->
 	gulp
-		.watch "#{SRC_DIRECTORY}**/*.{coffee,css,html,jade,less,markdown,md}", ['reload']
+		.watch "#{SRC_DIRECTORY}**/*.{coffee,css,html,jade,less,markdown,md}", ['test', 'reload']
 
 gulp.task 'yuidoc', ->
 	options =

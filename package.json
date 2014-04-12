@@ -36,6 +36,9 @@
 		"gulp-template": "~0.1.1",
 		"gulp-uglify": "~0.2.1",
 		"gulp-util": "~2.2.14",
+		"karma": "~0.12.6",
+		"karma-jasmine": "~0.1.5",
+		"karma-phantomjs-launcher": "~0.1.4",
 		"q": "~2.0.1"
 	},
 	"engines": {
