@@ -1,7 +1,7 @@
 class SyntaxDirective extends Controller
-	constructor: ($element, syntaxHighlighterService) ->
-		language = @language
-		lineNumbers = @lineNumbers isnt 'false'
+	constructor: ($scope, $element, syntaxHighlighterService) ->
+		language = $scope.language
+		lineNumbers = $scope.lineNumbers isnt 'false'
 
 		code = $element.html()
 			.replace /</gm, '&lt;'

@@ -1,21 +1,13 @@
 describe 'syntax', ->
-	$compile                 = undefined
-	controller               = undefined
-	scope                    = undefined
-	syntaxHighlighterService = undefined
-
 	beforeEach module 'app'
 
-	beforeEach inject (_$compile_, $rootScope, _syntaxHighlighterService_) ->
-		$compile = _$compile_
-		scope = $rootScope.$new()
-		syntaxHighlighterService = _syntaxHighlighterService_
+	beforeEach inject (@$compile, $rootScope) ->
+		@scope = $rootScope.$new()
 
 	it 'should start with <pre> tag', ->
 		html = "<syntax>name = 'Cary'</syntax>"
-		element = $compile(html)(scope)
-		parameters = {$element: element, syntaxHighlighterService}
-		controller = element.controller 'syntaxDirectiveController', parameters
+		element = @$compile(html)(@scope)
+		controller = element.controller 'syntaxDirectiveController'
 		output = element.html()
 
 		expect(output.indexOf('<pre')).toEqual(0)
