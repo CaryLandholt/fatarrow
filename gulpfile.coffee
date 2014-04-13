@@ -19,6 +19,7 @@ VENDOR_STYLES_DIRECTORY  = "#{VENDOR_DIRECTORY}styles/"
 
 bower                 = require 'bower'
 buster                = require 'gulp-buster'
+childProcess          = require 'child_process'
 clean                 = require 'gulp-clean'
 coffee                = require 'gulp-coffee'
 coffeelint            = require 'gulp-coffeelint'
@@ -146,7 +147,7 @@ gulp.task 'copy:temp', ['clean:working', 'flatten'], ->
 		]
 		.pipe gulp.dest TEMP_DIRECTORY
 
-gulp.task 'default', ['open', 'watch', 'build']
+gulp.task 'default', ['open', 'watch', 'build', 'test']
 
 gulp.task 'docs', ['yuidoc']
 
@@ -178,6 +179,39 @@ gulp.task 'jade', ['copy:temp'], ->
 		.src '**/*.jade', cwd: TEMP_DIRECTORY
 		.pipe jade options
 		.pipe gulp.dest TEMP_DIRECTORY
+
+gulp.task 'karma', ->
+	scripts = SCRIPTS.slice 0
+
+	# remove *.spec exclusion
+	scripts.pop()
+
+	options =
+		autoWatch: false
+		background: true
+		basePath: DIST_DIRECTORY
+		browsers: [
+			'PhantomJS'
+		]
+		colors: true
+		files: scripts
+		frameworks: [
+			'jasmine'
+		]
+		keepalive: false
+		logLevel: 'WARN'
+		reporters: [
+			'dots'
+		]
+		singleRun: true
+		transports: [
+			# 'websocket' # removed due to excessive socket connections
+			'flashsocket'
+			'xhr-polling'
+			'jsonp-polling'
+		]
+
+	karma.server.start options
 
 gulp.task 'less', ['copy:temp'], ->
 	options =
@@ -293,36 +327,8 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 gulp.task 'styles', ['less']
 
 gulp.task 'test', ['build'], ->
-	scripts = SCRIPTS.slice 0
-
-	# remove *.spec exclusion
-	scripts.pop()
-
-	options =
-		background: true
-		basePath: DIST_DIRECTORY
-		browsers: [
-			'PhantomJS'
-		]
-		colors: true
-		files: scripts
-		frameworks: [
-			'jasmine'
-		]
-		keepalive: false
-		logLevel: 'INFO'
-		reporters: [
-			'dots'
-			'progress'
-		]
-		singleRun: true
-
-	deferred = q.defer()
-
-	karma.server.start options, (exitCode) ->
-		deferred.resolve exitCode
-
-	deferred.promise
+	# don't allow karma to block gulp
+	spawn = childProcess.spawn 'gulp', ['karma'], {stdio: 'inherit'}
 
 gulp.task 'views', ['jade', 'markdown']
 
