@@ -11,6 +11,7 @@ Build large [AngularJS](http://angularjs.org/) applications with minimal boilerp
 * [Running](#running)
 * [Issues](#issues)
 * [Contributing](#contributing)
+* [Commit Message Guidelines](#commit-message-guidelines)
 * [Release History](#release-history)
 * [License](#license)
 
@@ -24,7 +25,6 @@ Before you can run, you must install and configure the following dependencies on
 * [gulp.js](http://gulpjs.com/) - `npm install -g gulp`
 
 Once the dependencies have been installed, enter the following commands in the terminal:
-
 ```bash
 $ git clone git@github.com:CaryLandholt/fatarrow.git
 $ cd fatarrow
@@ -35,7 +35,6 @@ $ npm install
 ## Running
 
 Enter the following in the terminal:
-
 ```bash
 $ gulp
 ```
@@ -61,9 +60,133 @@ Help to maximize the effort we can spend fixing issues and adding new features, 
 
 ## Contributing
 
-In lieu of a formal styleguide, take care to maintain the existing coding style.  Add unit tests for any new or changed functionality. Lint and test your code.
+Before you submit your pull request, consider the following guidelines:
 
-[Pull Requests](https://github.com/CaryLandholt/fatarrow/pulls) are welcome!
+* Search for an open or closed [Pull Request](https://github.com/CaryLandholt/fatarrow/pulls) that relates to your submission.  You don't want to duplicate effort.
+* Make your changes in a new git branch
+```bash
+$ git checkout -b my-fix-branch master
+```
+* Create your patch, **including appropriate test cases**
+* In lieu of a formal styleguide, take care to maintain the existing coding style.  Lint your code.
+* Run the full test suite, and ensure that all tests pass
+* Commit your changes using a descriptive commit message that follows the [Commit Message Guidelines](#commit-message-guidelines) and passes the commit message presubmit hook `validate-commit-msg.js`.  Adherence to the [Commit Message Guidelines](#commit-message-guidelines) is required, because release notes are automatically generated from these messages.
+```bash
+$ git commit -a
+```
+  Note: the optional commit `-a` command line option will automatically "add" and "rm" edited files
+* Build your changes locally to ensure all the tests pass
+```bash
+$ grunt test
+```
+* Push your branch
+```bash
+$ git push origin my-fix-branch
+```
+* Send a pull request to `fatarrow:master`
+* If changes are suggested then:
+	- Make the required updates
+	- Re-run the test suite to ensure tests are still passing
+	- Rebase your branch and force push to your repository (this will update your Pull Request):
+```bash
+$ git rebase master -i
+$ git push -f
+```
+
+**Thank you for your contribution!**
+
+After your pull request is merged, you can safely delete your branch, and pull the changes from the main (upstream) repository:
+
+* Delete the remote branch on GitHub either through the GitHub web UI or your local shell as follows:
+```bash
+$ git push origin --delete my-fix-branch
+```
+* Check out the master branch:
+```bash
+$ git checkout master -f
+```
+* Delete the local branch:
+```bash
+$ git branch -D my-fix-branch
+```
+* Update your master with the latest upstream version:
+```bash
+$ git pull --ff upstream master
+```
+
+
+## Commit Message Guidelines
+
+We have very precise rules over how our git commit messages can be formatted.  This leads to **more readable messages** that are easy to follow when looking through the **project history**.  But also, we use the git commit messages to [Changelog](CHANGELOG.md).
+
+### Commit Message Format
+
+Each commit message consists of a **header**, a **body** and a **footer**.  The header has a special format that includes a **[Type](#type)**, a **[Scope](#scope)**, and a **[Subject](#subject)**:
+```
+<type>(<scope>): <subject>
+<BLANK LINE>
+<body>
+<BLANK LINE>
+<footer>
+```
+
+Any line of the commit message cannot be longer than 100 characters!  This allows the message to be easier to read using various git tools.
+
+#### Type
+
+Must be one of the following:
+
+* **feat**:  A new feature
+* **fix**:  A bug fix
+* **docs**:  Documentation only changes
+* **style**:  Changes that do not affect the meaning of the code (white-space, formatting, etc.)
+* **refactor**:  A code change that neither fixes a bug or adds a feature
+* **perf**:  A code change that improves performance
+* **test**:  Adding missing tests
+* **chore**:  Changes to the build process or auxiliary tools and libraries such as documentation generation
+
+#### Scope
+
+The scope could be anything specifying place of the commit change.  For example `build`, `ci`, etc...
+
+#### Subject
+
+The subject contains a succinct description of the change:
+
+* use the imperative, present tense: "change" not "changed" nor "changes"
+* don't capitalize the first letter
+* no dot (.) at the end
+
+#### Body
+
+Just as in the **[Subject](#subject)**, use the imperative, present tense: "change" not "changed" nor "changes".  The body should include the motivation for the change and contrast this with previous behavior.
+
+#### Footer
+
+The footer should contain any information about **[Breaking Changes](#breaking-changes)** and is also the place to reference issues that this commit **[Closes](#referencing-issues)**
+
+##### Breaking Changes
+
+All breaking changes have to be mentioned in the footer with the description of the change, justification, and migration notes
+```
+BREAKING CHANGE: gulp dev task has been deprecated
+
+gulp dev was superfluous
+
+Before:
+gulp dev
+
+After:
+gulp
+```
+
+##### Referencing Issues
+
+Closed bugs should be listed on a separate line in the footer prefixed with the "Closes" keyword like:
+```
+Closes #123
+Closes #589
+```
 
 
 ## Release History
