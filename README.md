@@ -47,7 +47,7 @@ If you find a bug in the source code or a mistake in the documentation, you can 
 Before you submit your issue, search the [archive](https://github.com/CaryLandholt/fatarrow/issues).  Maybe your question was already answered.
 
 If your issue appears to be a bug, and hasn't been reported, open a new issue.
-Help to maximize the effort we can spend fixing issues and adding new features, by not reporting duplicate issues.  Providing the following information will increase the chances of your issue being dealt with quickly:
+Help to maximize the effort spent fixing issues and adding new features, by not reporting duplicate issues.  Providing the following information will increase the chances of your issue being dealt with quickly:
 
 * **Overview of the issue** - if an error is being thrown a non-minified stack trace helps
 * **Motivation for or Use Case** - explain why this is a bug for you
@@ -117,7 +117,7 @@ $ git pull --ff upstream master
 
 ## Commit Message Guidelines
 
-We have very precise rules over how our git commit messages can be formatted.  This leads to **more readable messages** that are easy to follow when looking through the **project history**.  But also, we use the git commit messages to [Changelog](CHANGELOG.md).
+There are very precise rules over how our git commit messages can be formatted.  This leads to **more readable messages** that are easy to follow when looking through the **project history**.  But also, the git commit messages are used to generate the [Changelog](CHANGELOG.md).
 
 ### Commit Message Format
 
