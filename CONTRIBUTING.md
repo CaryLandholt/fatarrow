@@ -14,13 +14,13 @@ Before you submit your issue, search the [archive](https://github.com/CaryLandho
 
 If your issue appears to be a bug, and hasn't been reported, open a new issue.  Help to maximize the effort spent fixing issues and adding new features, by not reporting duplicate issues.  Providing the following information will increase the chances of your issue being dealt with quickly:
 
-* **Overview of the issue** - if an error is being thrown a non-minified stack trace helps
+* **Overview of the issue**      - if an error is being thrown a non-minified stack trace helps
 * **Motivation for or Use Case** - explain why this is a bug for you
-* **Version(s)** - is it a regression?
-* **Operating System** - is this a problem with only Windows?
-* **Reproduce the error** - provide a live example (using [Plunker](http://plnkr.co/edit) or [JSFiddle](http://jsfiddle.net/)) or an unambiguous set of steps.
-* **Related issues** - has a similar issue been reported before?
-* **Suggest a Fix** - if you can't fix the bug yourself, perhaps you can point to what might be causing the problem (line of code or commit)
+* **Version(s)**                 - is it a regression?
+* **Operating System**           - is this a problem with only Windows?
+* **Reproduce the error**        - provide a live example (using [Plunker](http://plnkr.co/edit) or [JSFiddle](http://jsfiddle.net/)) or an unambiguous set of steps.
+* **Related issues**             - has a similar issue been reported before?
+* **Suggest a Fix**              - if you can't fix the bug yourself, perhaps you can point to what might be causing the problem (line of code or commit)
 
 
 ## Pull Requests
@@ -82,6 +82,13 @@ $ git pull --ff upstream master
 ## Commit Message Guidelines
 There are very precise rules over how our git commit messages can be formatted.  This leads to **more readable messages** that are easy to follow when looking through the **project history**.  But also, the git commit messages are used to generate the [Changelog](CHANGELOG.md).
 
+Install the pre-commit git hook to ensure compliance.
+
+```bash
+$ sh init-repo.sh
+```
+
+
 ### Commit Message Format
 Each commit message consists of a **header**, a **body** and a **footer**.  The header has a special format that includes a **[Type](#type)**, a **[Scope](#scope)**, and a **[Subject](#subject)**:
 
@@ -98,14 +105,14 @@ Any line of the commit message cannot be longer than 100 characters!  This allow
 #### Type
 Must be one of the following:
 
-* **feat**:  A new feature
-* **fix**:  A bug fix
-* **docs**:  Documentation only changes
-* **style**:  Changes that do not affect the meaning of the code (white-space, formatting, etc.)
+* **feat**:      A new feature
+* **fix**:       A bug fix
+* **docs**:      Documentation only changes
+* **style**:     Changes that do not affect the meaning of the code (white-space, formatting, etc.)
 * **refactor**:  A code change that neither fixes a bug or adds a feature
-* **perf**:  A code change that improves performance
-* **test**:  Adding missing tests
-* **chore**:  Changes to the build process or auxiliary tools and libraries such as documentation generation
+* **perf**:      A code change that improves performance
+* **test**:      Adding missing tests
+* **chore**:     Changes to the build process or auxiliary tools and libraries such as documentation generation
 
 #### Scope
 The scope could be anything specifying place of the commit change.  For example `build`, `ci`, etc...

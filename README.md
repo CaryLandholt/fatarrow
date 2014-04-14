@@ -17,7 +17,10 @@ Before you can run, you must install and configure the following dependencies on
 
 * [Git](http://git-scm.com/)
 * [Node.js](http://nodejs.org/)
-* [gulp.js](http://gulpjs.com/) - `npm install -g gulp`
+* [gulp.js](http://gulpjs.com/) - use the terminal command below
+```bash
+$ npm install -g gulp
+```
 
 Once the dependencies have been installed, enter the following commands in the terminal:
 ```bash
