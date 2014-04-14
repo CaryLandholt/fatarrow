@@ -328,7 +328,9 @@ gulp.task 'styles', ['less']
 
 gulp.task 'test', ['build'], ->
 	# don't allow karma to block gulp
-	spawn = childProcess.spawn 'gulp', ['karma'], {stdio: 'inherit'}
+	isWindows = process.platform is 'win32'
+	command = if isWindows then '.\\node_modules\\.bin\\gulp.cmd' else 'gulp'
+	spawn = childProcess.spawn command, ['karma'], {stdio: 'inherit'}
 
 gulp.task 'views', ['jade', 'markdown']
 
