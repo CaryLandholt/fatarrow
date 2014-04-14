@@ -64,55 +64,55 @@ Before you submit your pull request, consider the following guidelines:
 
 * Search for an open or closed [Pull Request](https://github.com/CaryLandholt/fatarrow/pulls) that relates to your submission.  You don't want to duplicate effort.
 * Make your changes in a new git branch
-```bash
-$ git checkout -b my-fix-branch master
-```
+  ```bash
+  $ git checkout -b my-fix-branch master
+  ```
 * Create your patch, **including appropriate test cases**
 * In lieu of a formal styleguide, take care to maintain the existing coding style.  Lint your code.
 * Run the full test suite, and ensure that all tests pass
 * Commit your changes using a descriptive commit message that follows the [Commit Message Guidelines](#commit-message-guidelines) and passes the commit message presubmit hook `validate-commit-msg.js`.  Adherence to the [Commit Message Guidelines](#commit-message-guidelines) is required, because release notes are automatically generated from these messages.
-```bash
-$ git commit -a
-```
+  ```bash
+  $ git commit -a
+  ```
   Note: the optional commit `-a` command line option will automatically "add" and "rm" edited files
 * Build your changes locally to ensure all the tests pass
-```bash
-$ grunt test
-```
+  ```bash
+  $ grunt test
+  ```
 * Push your branch
-```bash
-$ git push origin my-fix-branch
-```
+  ```bash
+  $ git push origin my-fix-branch
+  ```
 * Send a pull request to `fatarrow:master`
 * If changes are suggested then:
 	- Make the required updates
 	- Re-run the test suite to ensure tests are still passing
 	- Rebase your branch and force push to your repository (this will update your Pull Request):
-```bash
-$ git rebase master -i
-$ git push -f
-```
+	```bash
+	$ git rebase master -i
+	$ git push -f
+	```
 
 **Thank you for your contribution!**
 
 After your pull request is merged, you can safely delete your branch, and pull the changes from the main (upstream) repository:
 
 * Delete the remote branch on GitHub either through the GitHub web UI or your local shell as follows:
-```bash
-$ git push origin --delete my-fix-branch
-```
+  ```bash
+  $ git push origin --delete my-fix-branch
+  ```
 * Check out the master branch:
-```bash
-$ git checkout master -f
-```
+  ```bash
+  $ git checkout master -f
+  ```
 * Delete the local branch:
-```bash
-$ git branch -D my-fix-branch
-```
+  ```bash
+  $ git branch -D my-fix-branch
+  ```
 * Update your master with the latest upstream version:
-```bash
-$ git pull --ff upstream master
-```
+  ```bash
+  $ git pull --ff upstream master
+  ```
 
 
 ## Commit Message Guidelines
