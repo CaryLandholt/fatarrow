@@ -39,7 +39,9 @@ $ gulp
 
 
 ## Writing Your App
-Stop writing your controllers like this:
+fatarrow takes advantage of [ng-classify](https://github.com/CaryLandholt/ng-classify), allowing you to write AngularJS modules as CoffeeScript classes.
+
+Instead of writing your controllers like this:
 ```javascript
 angular.module('app').controller('todoController', ['todoService', function (todoService) {
 	this.todos = todoService.get();
@@ -62,6 +64,7 @@ class Todo extends Controller
 
 
 ### Structure
+**Source**
 ```
 /src
    |-app
@@ -72,6 +75,27 @@ class Todo extends Controller
    |---home.html
    |---homeController.coffee
    |---homeRoutes.coffee
+   index.html
+```
+
+**Distribution**
+```
+/dist
+   |-app
+   |---app.js
+   |---appRoutes.js
+   |---views.backend.js
+   |-home
+   |---home.html
+   |---homeController.js
+   |---homeRoutes.js
+   |-vendor
+   |---fonts
+   |------glyphicons-halflings-regular.eot
+   |---scripts
+   |------angular.min.js
+   |---styles
+   |------bootstrap.min.css
    index.html
 ```
 
