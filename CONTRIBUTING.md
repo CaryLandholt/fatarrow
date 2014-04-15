@@ -82,12 +82,6 @@ $ git pull --ff upstream master
 ## Commit Message Guidelines
 There are very precise rules over how our git commit messages can be formatted.  This leads to **more readable messages** that are easy to follow when looking through the **project history**.  But also, the git commit messages are used to generate the [Changelog](CHANGELOG.md).
 
-Install the pre-commit git hook to ensure compliance.
-
-```bash
-$ sh init-repo.sh
-```
-
 
 ### Commit Message Format
 Each commit message consists of a **header**, a **body** and a **footer**.  The header has a special format that includes a **[Type](#type)**, a **[Scope](#scope)**, and a **[Subject](#subject)**:
