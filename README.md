@@ -1,7 +1,7 @@
 # fatarrow [![Build Status][build-image]][build-url] [![Dependency Status][dependencies-image]][dependencies-url] [![devDependency Status][dev-dependencies-image]][dev-dependencies-url]
 > An [AngularJS](http://angularjs.org/) large application Reference Architecture
 
-Build large [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http://coffeescript.org/) and minimal ceremony.
+Build large [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http://coffeescript.org/) - **without the ceremony**.
 
 
 ## Table of Contents
@@ -39,7 +39,18 @@ $ gulp
 
 
 ## Writing Your App
-### Controllers
+Stop writing your controllers like this:
+```javascript
+angular.module('app').controller('todoController', ['todoService', function (todoService) {
+	this.todos = todoService.get();
+
+	this.add = function (todo) {
+		todoService.add(todo);
+	};
+}]);
+```
+
+Write them like this:
 ```coffee
 class Todo extends Controller
 	constructor: (@todoService) ->
@@ -50,16 +61,18 @@ class Todo extends Controller
 ```
 
 
-### Services
-```coffee
-class Todo extends Service
-	constructor: (@$http) ->
-
-	add: (todo) ->
-		@$http.post '/todos', todo
-
-	get: ->
-		@$http.get '/todos'
+### Structure
+```
+/src
+   |-app
+   |---app.coffee
+   |---appRoutes.coffee
+   |---views.backend.coffee
+   |-home
+   |---home.html
+   |---homeController.coffee
+   |---homeRoutes.coffee
+   index.html
 ```
 
 
