@@ -1,12 +1,13 @@
 # fatarrow [![Build Status][build-image]][build-url] [![Dependency Status][dependencies-image]][dependencies-url] [![devDependency Status][dev-dependencies-image]][dev-dependencies-url]
 > An [AngularJS](http://angularjs.org/) large application Reference Architecture
 
-Build large [AngularJS](http://angularjs.org/) applications with minimal boilerplate setup and ceremony.
+Build large [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http://coffeescript.org/) and minimal ceremony.
 
 
 ## Table of Contents
 * [Installing](#installing)
 * [Running](#running)
+* [Writing Your App](#writing-your-app)
 * [Contributing](#contributing)
 * [Changelog](#changelog)
 * [License](#license)
@@ -34,6 +35,18 @@ $ npm install
 Enter the following in the terminal:
 ```bash
 $ gulp
+```
+
+
+## Writing Your App
+### Controllers
+```coffee
+class Todo extends Controller
+	constructor: (@todoService) ->
+		@todos = @todoService.get()
+
+	add: (todo) ->
+		@todoService.add todo
 ```
 
 
