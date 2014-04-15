@@ -50,6 +50,19 @@ class Todo extends Controller
 ```
 
 
+### Services
+```coffee
+class Todo extends Service
+	constructor: (@$http) ->
+
+	add: (todo) ->
+		@$http.post '/todos', todo
+
+	get: ->
+		@$http.get '/todos'
+```
+
+
 ## Contributing
 See [CONTRIBUTING.md](CONTRIBUTING.md)
 
