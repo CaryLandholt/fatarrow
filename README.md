@@ -66,37 +66,61 @@ class Todo extends Controller
 ### Structure
 **Source**
 ```
-/src
-   |-app
-   |---app.coffee
-   |---appRoutes.coffee
-   |---views.backend.coffee
-   |-home
-   |---home.html
-   |---homeController.coffee
-   |---homeRoutes.coffee
-   index.html
+src/
+	app/
+		app.coffee
+		appRoutes.coffee
+		views.backend.coffee
+	home/
+		home.html
+		homeController.coffee
+		homeRoutes.coffee
+	index.html
 ```
 
-**Distribution**
+**Distribution (Dev)**
 ```
-/dist
-   |-app
-   |---app.js
-   |---appRoutes.js
-   |---views.backend.js
-   |-home
-   |---home.html
-   |---homeController.js
-   |---homeRoutes.js
-   |-vendor
-   |---fonts
-   |------glyphicons-halflings-regular.eot
-   |---scripts
-   |------angular.min.js
-   |---styles
-   |------bootstrap.min.css
-   index.html
+dist/
+	app/
+		app.js
+		appRoutes.js
+		views.backend.js
+	home/
+		home.html
+		homeController.js
+		homeRoutes.js
+	vendor/
+		fonts/
+			glyphicons-halflings-regular.eot
+			glyphicons-halflings-regular.svg
+			glyphicons-halflings-regular.ttf
+			glyphicons-halflings-regular.woff
+		scripts/
+			angular-animate.min.js
+			angular-mocks.js
+			angular-route.min.js
+			angular.min.js
+			prettify.js
+		styles/
+			bootstrap-theme.min.css
+			bootstrap.min.css
+			prettify.css
+	index.html
+```
+
+**Distribution (Prod)**
+```
+dist/
+	fonts/
+		glyphicons-halflings-regular.eot
+		glyphicons-halflings-regular.svg
+		glyphicons-halflings-regular.ttf
+		glyphicons-halflings-regular.woff
+	scripts/
+		scripts.min.js
+	styles/
+		styles.min.css
+	index.html
 ```
 
 
