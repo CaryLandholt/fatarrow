@@ -1,4 +1,4 @@
-# fatarrow [![Build Status][build-image]][build-url] [![Dependency Status][dependencies-image]][dependencies-url] [![devDependency Status][dev-dependencies-image]][dev-dependencies-url]
+# fatarrow [![Version][version-image]][version-url] [![Build Status][build-image]][build-url] [![Dependency Status][dependencies-image]][dependencies-url] [![devDependency Status][dev-dependencies-image]][dev-dependencies-url]
 > An [AngularJS](http://angularjs.org/) large application Reference Architecture
 
 Build large [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http://coffeescript.org/) - **without the ceremony**.  By the way, you can write JavaScript too.
@@ -139,8 +139,11 @@ See [LICENSE](LICENSE)
 [build-image]:            https://secure.travis-ci.org/CaryLandholt/fatarrow.svg
 [build-url]:              http://travis-ci.org/CaryLandholt/fatarrow
 
-[dependencies-image]:     https://david-dm.org/CaryLandholt/fatarrow.svg?theme=shields.io
+[dependencies-image]:     https://david-dm.org/CaryLandholt/fatarrow.svg
 [dependencies-url]:       https://david-dm.org/CaryLandholt/fatarrow
 
-[dev-dependencies-image]: https://david-dm.org/CaryLandholt/fatarrow/dev-status.svg?theme=shields.io
+[dev-dependencies-image]: https://david-dm.org/CaryLandholt/fatarrow/dev-status.svg
 [dev-dependencies-url]:   https://david-dm.org/CaryLandholt/fatarrow#info=devDependencies
+
+[version-image]:          https://badge.fury.io/gh/CaryLandholt%2FAngularFun.svg
+[version-url]:            http://badge.fury.io/gh/CaryLandholt%2FAngularFun
