@@ -1,7 +1,7 @@
 # fatarrow [![Build Status][build-image]][build-url] [![Dependency Status][dependencies-image]][dependencies-url] [![devDependency Status][dev-dependencies-image]][dev-dependencies-url]
 > An [AngularJS](http://angularjs.org/) large application Reference Architecture
 
-Build large [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http://coffeescript.org/) - **without the ceremony**.
+Build large [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http://coffeescript.org/) - **without the ceremony**.  By the way, you can write JavaScript too.
 
 
 ## Table of Contents
@@ -14,7 +14,7 @@ Build large [AngularJS](http://angularjs.org/) applications with [CoffeeScript](
 
 
 ## Installing
-Before you can run, you must install and configure the following dependencies one time:
+Before running, you must install and configure the following one-time dependencies:
 
 * [Git](http://git-scm.com/)
 * [Node.js](http://nodejs.org/)
@@ -39,7 +39,7 @@ $ gulp
 
 
 ## Writing Your App
-fatarrow takes advantage of [ng-classify](https://github.com/CaryLandholt/ng-classify), allowing you to write AngularJS modules as CoffeeScript classes.
+fatarrow takes advantage of **[ng-classify](https://github.com/CaryLandholt/ng-classify)**, allowing you to write AngularJS modules as CoffeeScript classes.
 
 Instead of writing your controllers like this:
 ```javascript
