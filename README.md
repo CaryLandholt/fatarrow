@@ -145,5 +145,5 @@ See [LICENSE](LICENSE)
 [dev-dependencies-image]: https://david-dm.org/CaryLandholt/fatarrow/dev-status.svg
 [dev-dependencies-url]:   https://david-dm.org/CaryLandholt/fatarrow#info=devDependencies
 
-[version-image]:          https://badge.fury.io/gh/CaryLandholt%2FAngularFun.svg
-[version-url]:            http://badge.fury.io/gh/CaryLandholt%2FAngularFun
+[version-image]:          https://badge.fury.io/gh/CaryLandholt%2Ffatarrow.svg
+[version-url]:            http://badge.fury.io/gh/CaryLandholt%2Ffatarrow
