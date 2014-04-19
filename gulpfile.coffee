@@ -2,20 +2,17 @@
 
 SCRIPTS.push '!**/*.spec.js'
 
-BOWER_DIRECTORY          = '.components/'
-CHANGELOG_FILE           = 'CHANGELOG.md'
-COMPONENTS_DIRECTORY     = "#{BOWER_DIRECTORY}_/"
-DEV_PORT                 = 8181
-DIST_DIRECTORY           = 'dist/'
-DOCS_DIRECTORY           = 'docs/'
-SCRIPTS_MIN_FILE         = 'scripts.min.js'
-SRC_DIRECTORY            = 'src/'
-STYLES_MIN_FILE          = 'styles.min.css'
-TEMP_DIRECTORY           = '.temp/'
-VENDOR_DIRECTORY         = 'vendor/'
-VENDOR_FONTS_DIRECTORY   = "#{VENDOR_DIRECTORY}fonts/"
-VENDOR_SCRIPTS_DIRECTORY = "#{VENDOR_DIRECTORY}scripts/"
-VENDOR_STYLES_DIRECTORY  = "#{VENDOR_DIRECTORY}styles/"
+BOWER_DIRECTORY       = '.components/'
+CHANGELOG_FILE        = 'CHANGELOG.md'
+COMPONENTS_DIRECTORY  = "#{BOWER_DIRECTORY}_/"
+DEV_PORT              = 8181
+DIST_DIRECTORY        = 'dist/'
+DOCS_DIRECTORY        = 'docs/'
+SCRIPTS_MIN_FILE      = 'scripts.min.js'
+SRC_DIRECTORY         = 'src/'
+STYLES_MIN_FILE       = 'styles.min.css'
+TEMP_DIRECTORY        = '.temp/'
+VENDOR_DIRECTORY      = 'vendor/'
 
 bower                 = require 'bower'
 buster                = require 'gulp-buster'
@@ -27,7 +24,6 @@ concat                = require 'gulp-concat'
 connect               = require 'gulp-connect'
 conventionalChangelog = require 'conventional-changelog'
 es                    = require 'event-stream'
-flatten               = require 'gulp-flatten'
 fs                    = require 'fs'
 gulp                  = require 'gulp'
 gutil                 = require 'gulp-util'
@@ -46,13 +42,9 @@ rename                = require 'gulp-rename'
 template              = require 'gulp-template'
 templateCache         = require 'gulp-angular-templatecache'
 uglify                = require 'gulp-uglify'
-# yuidoc                = require 'gulp-yuidoc'
 
 bowerComponents = do ->
-	components =
-		fonts: []
-		scripts: []
-		styles: []
+	components = {}
 
 	for component, value of BOWER_COMPONENTS
 		for version, componentTypes of value
@@ -61,12 +53,14 @@ bowerComponents = do ->
 				filesToAdd = if isArray then files else [files]
 
 				filesToAdd = filesToAdd.map (file) ->
-					"#{component}/#{file}"
+					path.join component, file
 
-				switch componentType
-					when 'fonts' then components.fonts = components.fonts.concat filesToAdd
-					when 'scripts' then components.scripts = components.scripts.concat filesToAdd
-					when 'styles' then components.styles = components.styles.concat filesToAdd
+				key = path.join component, componentType
+
+				if not components[key]
+					components[key] = []
+
+				components[key] = components[key].concat filesToAdd
 
 	components
 
@@ -139,7 +133,7 @@ gulp.task 'coffeelint', ->
 		.pipe coffeelint options
 		.pipe coffeelint.reporter()
 
-gulp.task 'copy:temp', ['clean:working', 'flatten'], ->
+gulp.task 'copy:temp', ['clean:working', 'normalizeComponents'], ->
 	gulp
 		.src [
 			"#{SRC_DIRECTORY}**"
@@ -150,26 +144,6 @@ gulp.task 'copy:temp', ['clean:working', 'flatten'], ->
 gulp.task 'default', ['open', 'watch', 'build', 'test']
 
 gulp.task 'docs', ['yuidoc']
-
-gulp.task 'flatten', ['flatten:fonts', 'flatten:scripts', 'flatten:styles']
-
-gulp.task 'flatten:fonts', ['bower', 'clean:working'], ->
-	gulp
-		.src bowerComponents.fonts, cwd: BOWER_DIRECTORY
-		.pipe flatten()
-		.pipe gulp.dest "#{COMPONENTS_DIRECTORY}#{VENDOR_FONTS_DIRECTORY}"
-
-gulp.task 'flatten:scripts', ['bower', 'clean:working'], ->
-	gulp
-		.src bowerComponents.scripts, cwd: BOWER_DIRECTORY
-		.pipe flatten()
-		.pipe gulp.dest "#{COMPONENTS_DIRECTORY}#{VENDOR_SCRIPTS_DIRECTORY}"
-
-gulp.task 'flatten:styles', ['bower', 'clean:working'], ->
-	gulp
-		.src bowerComponents.styles, cwd: BOWER_DIRECTORY
-		.pipe flatten()
-		.pipe gulp.dest "#{COMPONENTS_DIRECTORY}#{VENDOR_STYLES_DIRECTORY}"
 
 gulp.task 'jade', ['copy:temp'], ->
 	options =
@@ -239,6 +213,25 @@ gulp.task 'ngClassify', ['copy:temp'], ->
 		.src '**/*.coffee', cwd: TEMP_DIRECTORY
 		.pipe ngClassify options
 		.pipe gulp.dest TEMP_DIRECTORY
+
+gulp.task 'normalizeComponents', ['bower', 'clean:working'], ->
+	promises = []
+
+	for componentType, files of bowerComponents
+		promise = do (files, componentType) ->
+			deferred = q.defer()
+
+			gulp
+				.src files, cwd: BOWER_DIRECTORY
+				.pipe gulp.dest path.join COMPONENTS_DIRECTORY, VENDOR_DIRECTORY, componentType
+				.on 'end', ->
+					deferred.resolve()
+
+			deferred.promise
+
+		promises.push promise
+
+	q.all promises
 
 gulp.task 'open', ['serve'], ->
 	options =
@@ -338,14 +331,7 @@ gulp.task 'watch', ['build'], ->
 	gulp
 		.watch "#{SRC_DIRECTORY}**/*.{coffee,css,html,jade,less,markdown,md}", ['test', 'reload']
 
-gulp.task 'yuidoc', ->
-	options =
-		syntaxtype: 'coffee'
 
-	gulp
-		.src '**/*.coffee', cwd: SRC_DIRECTORY
-		.pipe yuidoc options
-		.pipe gulp.dest DOCS_DIRECTORY
 
 
 ### prod ###

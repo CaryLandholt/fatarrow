@@ -67,60 +67,71 @@ class Todo extends Controller
 **Source**
 ```
 src/
-	app/
-		app.coffee
-		appRoutes.coffee
-		views.backend.coffee
-	home/
-		home.html
-		homeController.coffee
-		homeRoutes.coffee
-	index.html
+├── app/
+│   ├── app.coffee
+│   ├── appRoutes.coffee
+│   └── views.backend.coffee
+├── home/
+│   ├── home.html
+│   ├── homeController.coffee
+│   └── homeRoutes.coffee
+└── index.html
 ```
 
 **Distribution (Dev)**
 ```
 dist/
-	app/
-		app.js
-		appRoutes.js
-		views.backend.js
-	home/
-		home.html
-		homeController.js
-		homeRoutes.js
-	vendor/
-		fonts/
-			glyphicons-halflings-regular.eot
-			glyphicons-halflings-regular.svg
-			glyphicons-halflings-regular.ttf
-			glyphicons-halflings-regular.woff
-		scripts/
-			angular-animate.min.js
-			angular-mocks.js
-			angular-route.min.js
-			angular.min.js
-			prettify.js
-		styles/
-			bootstrap-theme.min.css
-			bootstrap.min.css
-			prettify.css
-	index.html
+├── app/
+│   ├── app.js
+│   ├── appRoutes.js
+│   └── views.backend.js
+├── home/
+│   ├── home.html
+│   ├── homeController.js
+│   └── homeRoutes.js
+├── vendor/
+│   ├── angular/
+│   │   └── scripts/
+|   |       └── angular.min.js
+│   ├── angular-animate/
+│   │   └── scripts/
+|   |       └── angular-animate.min.js
+│   ├── angular-mocks/
+│   │   └── scripts/
+|   |       └── angular-mocks.js
+│   ├── angular-route/
+│   │   └── scripts/
+|   |       └── angular-route.min.js
+│   ├── bootstrap/
+│   │   ├── fonts/
+|   |   |   ├── glyphicons-halflings-regular.eot
+|   |   |   ├── glyphicons-halflings-regular.svg
+|   |   |   ├── glyphicons-halflings-regular.ttf
+|   |   |   └── glyphicons-halflings-regular.woff
+│   │   └── styles/
+|   |       ├── bootstrap-theme.min.css
+|   |       └── bootstrap.min.css
+│   ├── google-code-prettify/
+│   │   ├── scripts/
+|   |   |   └── prettify.js
+│   │   └── styles/
+|   |       └── prettify.css
+└── index.html
 ```
 
 **Distribution (Prod)**
 ```
 dist/
-	fonts/
-		glyphicons-halflings-regular.eot
-		glyphicons-halflings-regular.svg
-		glyphicons-halflings-regular.ttf
-		glyphicons-halflings-regular.woff
-	scripts/
-		scripts.min.js
-	styles/
-		styles.min.css
-	index.html
+├── fonts/
+│   ├── glyphicons-halflings-regular.eot
+│   ├── glyphicons-halflings-regular.svg
+│   ├── glyphicons-halflings-regular.ttf
+│   └── glyphicons-halflings-regular.woff
+├── scripts/
+│   └── scripts.min.js
+├── styles/
+│   └── styles.min.css
+└── index.html
 ```
 
 
