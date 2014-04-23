@@ -1,4 +1,4 @@
-# fatarrow [![Version][version-image]][version-url] [![Build Status][build-image]][build-url] [![Dependency Status][dependencies-image]][dependencies-url] [![devDependency Status][dev-dependencies-image]][dev-dependencies-url]
+# fatarrow [![Version][version-image]][version-url] [![Build Status][build-image]][build-url] [![Dependency Status][dependencies-image]][dependencies-url] [![License][license-image]][license-url]
 > An [AngularJS](http://angularjs.org/) large application Reference Architecture
 
 Build large [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http://coffeescript.org/) - **without the ceremony**.  By the way, you can write JavaScript too.
@@ -147,14 +147,14 @@ See [CHANGELOG.md](CHANGELOG.md)
 See [LICENSE](LICENSE)
 
 
-[build-image]:            https://secure.travis-ci.org/CaryLandholt/fatarrow.svg
+[build-image]:            http://img.shields.io/travis/CaryLandholt/fatarrow.svg?style=flat
 [build-url]:              http://travis-ci.org/CaryLandholt/fatarrow
 
-[dependencies-image]:     https://david-dm.org/CaryLandholt/fatarrow.svg
-[dependencies-url]:       https://david-dm.org/CaryLandholt/fatarrow
+[dependencies-image]:     http://img.shields.io/gemnasium/CaryLandholt/fatarrow.svg?style=flat
+[dependencies-url]:       https://gemnasium.com/CaryLandholt/fatarrow
 
-[dev-dependencies-image]: https://david-dm.org/CaryLandholt/fatarrow/dev-status.svg
-[dev-dependencies-url]:   https://david-dm.org/CaryLandholt/fatarrow#info=devDependencies
+[license-image]:          http://img.shields.io/badge/license-MIT-blue.svg?style=flat
+[license-url]:            LICENSE
 
-[version-image]:          https://badge.fury.io/gh/CaryLandholt%2Ffatarrow.svg
-[version-url]:            http://badge.fury.io/gh/CaryLandholt%2Ffatarrow
+[version-image]:          http://img.shields.io/github/tag/CaryLandholt/fatarrow.svg?style=flat
+[version-url]:            https://github.com/CaryLandholt/fatarrow/tags
