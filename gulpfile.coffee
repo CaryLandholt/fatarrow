@@ -8,6 +8,7 @@ COMPONENTS_DIRECTORY  = "#{BOWER_DIRECTORY}_/"
 DEV_PORT              = 8181
 DIST_DIRECTORY        = 'dist/'
 DOCS_DIRECTORY        = 'docs/'
+E2E_DIRECTORY         = 'e2e/'
 SCRIPTS_MIN_FILE      = 'scripts.min.js'
 SRC_DIRECTORY         = 'src/'
 STYLES_MIN_FILE       = 'styles.min.css'
@@ -149,7 +150,8 @@ gulp.task 'docs', ['yuidoc']
 
 gulp.task 'e2e', ->
 	options =
-		configFile: 'e2e/config.js'
+		# configFile: 'e2e/config.js'
+		configFile: path.join E2E_DIRECTORY, 'config.js'
 		args: [
 			'--baseUrl', "http://localhost:#{DEV_PORT}",
 			'--browser', 'phantomjs'
@@ -160,7 +162,7 @@ gulp.task 'e2e', ->
 		]
 
 	gulp
-		.src '**/*.spec.{coffee,js}', cwd: 'e2e/'
+		.src '**/*.spec.{coffee,js}', cwd: E2E_DIRECTORY
 		.pipe protractor.protractor options
 		.on 'error', (e) ->
 			gutil.log gutil.colors.red 'Be sure e2e-driver is running.  \'gulp e2e-driver\' first'
