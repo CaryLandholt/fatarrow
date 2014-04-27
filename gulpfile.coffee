@@ -41,6 +41,7 @@ q                     = require 'q'
 rename                = require 'gulp-rename'
 template              = require 'gulp-template'
 templateCache         = require 'gulp-angular-templatecache'
+typeScript            = require 'gulp-typescript'
 uglify                = require 'gulp-uglify'
 
 bowerComponents = do ->
@@ -246,7 +247,7 @@ gulp.task 'reload', ['build'], ->
 		.src 'index.html', cwd: DIST_DIRECTORY
 		.pipe connect.reload()
 
-gulp.task 'scripts', ['coffee']
+gulp.task 'scripts', ['coffee', 'typeScript']
 
 gulp.task 'serve', ['build'], ->
 	connect.server
@@ -325,11 +326,17 @@ gulp.task 'test', ['build'], ->
 	command = if isWindows then '.\\node_modules\\.bin\\gulp.cmd' else 'gulp'
 	spawn = childProcess.spawn command, ['karma'], {stdio: 'inherit'}
 
+gulp.task 'typeScript', ['copy:temp'], ->
+	gulp
+		.src '**/*.ts', cwd: TEMP_DIRECTORY
+		.pipe typeScript()
+		.pipe gulp.dest TEMP_DIRECTORY
+
 gulp.task 'views', ['jade', 'markdown']
 
 gulp.task 'watch', ['build'], ->
 	gulp
-		.watch "#{SRC_DIRECTORY}**/*.{coffee,css,html,jade,less,markdown,md}", ['test', 'reload']
+		.watch "#{SRC_DIRECTORY}**/*.{coffee,css,html,jade,less,markdown,md,ts}", ['test', 'reload']
 
 
 
