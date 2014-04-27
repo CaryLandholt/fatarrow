@@ -9,7 +9,6 @@ DEV_PORT              = 8181
 DIST_DIRECTORY        = 'dist/'
 DOCS_DIRECTORY        = 'docs/'
 E2E_DIRECTORY         = 'e2e/'
-E2E_CONFIG_FILE       = 'e2e-config'
 SCRIPTS_MIN_FILE      = 'scripts.min.js'
 SRC_DIRECTORY         = 'src/'
 STYLES_MIN_FILE       = 'styles.min.css'
@@ -67,6 +66,8 @@ bowerComponents = do ->
 				components[key] = components[key].concat filesToAdd
 
 	components
+
+appUrl = "http://localhost:#{DEV_PORT}"
 
 gulp.task 'bower', ->
 	deferred = q.defer()
@@ -151,14 +152,23 @@ gulp.task 'docs', ['yuidoc']
 
 gulp.task 'e2e', ->
 	e2eConfigFile = path.join './', TEMP_DIRECTORY, 'e2e-config.coffee'
-	contents = 'exports.config = {}'
 
-	fs.writeFileSync e2eConfigFile, contents
+	# create temporary e2e-config file to avoid an additional config file
+	# currently gulp-protractor requires one the existence of an e2e-config file
+	do (e2eConfigFile) ->
+		doesExist = fs.existsSync TEMP_DIRECTORY
+
+		if !doesExist
+			throw new Error 'The app must be currently running (gulp).'
+
+		contents = 'exports.config = {}'
+
+		fs.writeFileSync e2eConfigFile, contents
 
 	options =
 		configFile: e2eConfigFile
 		args: [
-			'--baseUrl', "http://localhost:#{DEV_PORT}",
+			'--baseUrl', appUrl,
 			'--browser', 'phantomjs'
 			'--capabilities.phantomjs.binary.path', './node_modules/phantomjs/bin/phantomjs'
 		]
@@ -261,7 +271,7 @@ gulp.task 'normalizeComponents', ['bower', 'clean:working'], ->
 
 gulp.task 'open', ['serve'], ->
 	options =
-		url: "http://localhost:#{DEV_PORT}"
+		url: appUrl
 
 	gulp
 		.src 'index.html', cwd: DIST_DIRECTORY
