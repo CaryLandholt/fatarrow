@@ -150,7 +150,6 @@ gulp.task 'docs', ['yuidoc']
 
 gulp.task 'e2e', ->
 	options =
-		# configFile: 'e2e/config.js'
 		configFile: path.join E2E_DIRECTORY, 'config.js'
 		args: [
 			'--baseUrl', "http://localhost:#{DEV_PORT}",
@@ -164,8 +163,6 @@ gulp.task 'e2e', ->
 	gulp
 		.src '**/*.spec.{coffee,js}', cwd: E2E_DIRECTORY
 		.pipe protractor.protractor options
-		.on 'error', (e) ->
-			gutil.log gutil.colors.red 'Be sure e2e-driver is running.  \'gulp e2e-driver\' first'
 
 gulp.task 'e2e-driver', protractor.webdriver_standalone
 
@@ -366,6 +363,11 @@ gulp.task 'watch', ['build'], ->
 
 
 
+
+
+
+
+
 ### prod ###
 gulp.task 'minify', ['minify:scripts', 'minify:styles', 'minify:views', 'minify:spa']
 
@@ -447,43 +449,3 @@ gulp.task 'hashify', ['buster'], ->
 		.src '**/*.{css,js}', cwd: TEMP_DIRECTORY
 		.pipe rename renamer
 		.pipe gulp.dest TEMP_DIRECTORY
-
-
-
-
-
-
-# gulp.task 'runWebDriver', ->
-# 	deferred = q.defer()
-# 	# don't allow karma to block gulp
-# 	isWindows = process.platform is 'win32'
-# 	command = if isWindows then '.\\node_modules\\.bin\\gulp.cmd' else 'gulp'
-# 	spawn = childProcess.spawn command, ['webDriver'], {stdio: 'inherit'}
-#
-# 	spawn.once 'connection', (stream) ->
-# 		console.log 'connection'
-# 		deferred.resolve stream
-#
-#
-# 	deferred.promise
-#
-# gulp.task 'e2e', ->
-# 	deferred = q.defer()
-# 	# don't allow karma to block gulp
-# 	isWindows = process.platform is 'win32'
-# 	command = if isWindows then '.\\node_modules\\.bin\\gulp.cmd' else 'gulp'
-# 	spawn = childProcess.spawn command, ['runE2e'], {stdio: 'inherit'}
-#
-# 	spawn.once 'connection', (stream) ->
-# 		console.log 'connection'
-# 		deferred.resolve stream
-#
-#
-# 	deferred.promise
-
-
-
-
-
-
-
