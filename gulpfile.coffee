@@ -37,6 +37,7 @@ ngClassify            = require 'gulp-ng-classify'
 open                  = require 'gulp-open'
 path                  = require 'path'
 pkg                   = require './package.json'
+protractor            = require 'gulp-protractor'
 q                     = require 'q'
 rename                = require 'gulp-rename'
 template              = require 'gulp-template'
@@ -145,6 +146,34 @@ gulp.task 'copy:temp', ['clean:working', 'normalizeComponents'], ->
 gulp.task 'default', ['open', 'watch', 'build', 'test']
 
 gulp.task 'docs', ['yuidoc']
+
+gulp.task 'e2e', ->
+	# jasmineNodeOpts: {
+	# 	onComplete: null,
+	# 	isVerbose: false,
+	# 	showColors: true,
+	# 	includeStackTrace: false
+	# }
+
+
+	options =
+		configFile: 'e2e/config.js'
+		args: [
+			'--baseUrl', "http://localhost:#{DEV_PORT}",
+			'--browser', 'phantomjs'
+			'--capabilities.phantomjs.binary.path', './node_modules/phantomjs/bin/phantomjs'
+			'--seleniumAddress', 'http://localhost:4444/wd/hub'
+			'--seleniumPort', null
+			'--seleniumArgs', []
+		]
+
+	gulp
+		.src '**/*.spec.{coffee,js}', cwd: 'e2e/'
+		.pipe protractor.protractor options
+		.on 'error', (e) ->
+			gutil.log gutil.colors.red 'Be sure e2e-driver is running.  \'gulp e2e-driver\' first'
+
+gulp.task 'e2e-driver', protractor.webdriver_standalone
 
 gulp.task 'jade', ['copy:temp'], ->
 	options =
@@ -422,3 +451,43 @@ gulp.task 'hashify', ['buster'], ->
 		.src '**/*.{css,js}', cwd: TEMP_DIRECTORY
 		.pipe rename renamer
 		.pipe gulp.dest TEMP_DIRECTORY
+
+
+
+
+
+
+# gulp.task 'runWebDriver', ->
+# 	deferred = q.defer()
+# 	# don't allow karma to block gulp
+# 	isWindows = process.platform is 'win32'
+# 	command = if isWindows then '.\\node_modules\\.bin\\gulp.cmd' else 'gulp'
+# 	spawn = childProcess.spawn command, ['webDriver'], {stdio: 'inherit'}
+#
+# 	spawn.once 'connection', (stream) ->
+# 		console.log 'connection'
+# 		deferred.resolve stream
+#
+#
+# 	deferred.promise
+#
+# gulp.task 'e2e', ->
+# 	deferred = q.defer()
+# 	# don't allow karma to block gulp
+# 	isWindows = process.platform is 'win32'
+# 	command = if isWindows then '.\\node_modules\\.bin\\gulp.cmd' else 'gulp'
+# 	spawn = childProcess.spawn command, ['runE2e'], {stdio: 'inherit'}
+#
+# 	spawn.once 'connection', (stream) ->
+# 		console.log 'connection'
+# 		deferred.resolve stream
+#
+#
+# 	deferred.promise
+
+
+
+
+
+
+
