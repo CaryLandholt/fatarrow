@@ -148,14 +148,6 @@ gulp.task 'default', ['open', 'watch', 'build', 'test']
 gulp.task 'docs', ['yuidoc']
 
 gulp.task 'e2e', ->
-	# jasmineNodeOpts: {
-	# 	onComplete: null,
-	# 	isVerbose: false,
-	# 	showColors: true,
-	# 	includeStackTrace: false
-	# }
-
-
 	options =
 		configFile: 'e2e/config.js'
 		args: [
@@ -174,6 +166,8 @@ gulp.task 'e2e', ->
 			gutil.log gutil.colors.red 'Be sure e2e-driver is running.  \'gulp e2e-driver\' first'
 
 gulp.task 'e2e-driver', protractor.webdriver_standalone
+
+gulp.task 'e2e-driver-update', protractor.webdriver_update
 
 gulp.task 'jade', ['copy:temp'], ->
 	options =
