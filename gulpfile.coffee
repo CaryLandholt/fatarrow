@@ -9,6 +9,7 @@ DEV_PORT              = 8181
 DIST_DIRECTORY        = 'dist/'
 DOCS_DIRECTORY        = 'docs/'
 E2E_DIRECTORY         = 'e2e/'
+E2E_CONFIG_FILE       = 'e2e-config'
 SCRIPTS_MIN_FILE      = 'scripts.min.js'
 SRC_DIRECTORY         = 'src/'
 STYLES_MIN_FILE       = 'styles.min.css'
@@ -149,15 +150,17 @@ gulp.task 'default', ['open', 'watch', 'build', 'test']
 gulp.task 'docs', ['yuidoc']
 
 gulp.task 'e2e', ->
+	e2eConfigFile = path.join './', TEMP_DIRECTORY, 'e2e-config.coffee'
+	contents = 'exports.config = {}'
+
+	fs.writeFileSync e2eConfigFile, contents
+
 	options =
-		configFile: path.join E2E_DIRECTORY, 'config.js'
+		configFile: e2eConfigFile
 		args: [
 			'--baseUrl', "http://localhost:#{DEV_PORT}",
 			'--browser', 'phantomjs'
 			'--capabilities.phantomjs.binary.path', './node_modules/phantomjs/bin/phantomjs'
-			'--seleniumAddress', 'http://localhost:4444/wd/hub'
-			'--seleniumPort', null
-			'--seleniumArgs', []
 		]
 
 	gulp
