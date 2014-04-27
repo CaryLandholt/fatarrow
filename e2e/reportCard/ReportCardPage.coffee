@@ -14,5 +14,3 @@ module.exports = class
 
 		@visitPage = ->
 			browser.get '/#/reportcard'
-
-# module.exports = ReportCardPage
