@@ -46,5 +46,8 @@
 		"phantomjs": "~1.9.7-4",
 		"protractor": "~0.22.0",
 		"q": "~1.0.1"
+	},
+	"scripts": {
+		"postinstall": "gulp e2e-driver-update"
 	}
 }
