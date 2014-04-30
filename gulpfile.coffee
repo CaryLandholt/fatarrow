@@ -211,7 +211,7 @@ gulp.task 'karma', ->
 		keepalive: false
 		logLevel: 'WARN'
 		reporters: [
-			'dots'
+			'spec'
 		]
 		singleRun: true
 		transports: [

@@ -11,7 +11,7 @@ describe 'reportCard', ->
 		expect(strippedUsernameFromRepo).toEqual('AngularFun')
 		expect(strippedUsernameFromRepo).not.toEqual(repo)
 
-	it 'doesn not strip the username from the repo, if the repo by another user', ->
+	it 'does not strip the username from the repo, if the repo by another user', ->
 		repo = 'angular/angular.js'
 		username = 'CaryLandholt'
 		strippedUsernameFromRepo = @stripUsernameFilter repo, username
