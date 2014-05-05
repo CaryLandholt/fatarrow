@@ -154,7 +154,7 @@ gulp.task 'docs', ['yuidoc']
 
 gulp.task 'e2e', ->
 	e2eConfigFile       = path.join './', TEMP_DIRECTORY, 'e2e-config.coffee'
-	phantomjsBinaryPath = './node_modules/.bin/phantomjs' + if isWindows then '.cmd'
+	phantomjsBinaryPath = if isWindows then './node_modules/.bin/phantomjs.cmd' else './node_modules/phantomjs/bin/phantomjs'
 
 	# create temporary e2e-config file to avoid an additional config file
 	# currently gulp-protractor requires one the existence of an e2e-config file
