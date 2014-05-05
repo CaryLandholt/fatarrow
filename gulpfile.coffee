@@ -46,6 +46,8 @@ templateCache         = require 'gulp-angular-templatecache'
 typeScript            = require 'gulp-typescript'
 uglify                = require 'gulp-uglify'
 
+appUrl = "http://localhost:#{DEV_PORT}"
+
 bowerComponents = do ->
 	components = {}
 
@@ -67,7 +69,7 @@ bowerComponents = do ->
 
 	components
 
-appUrl = "http://localhost:#{DEV_PORT}"
+isWindows = /^win/.test(process.platform)
 
 gulp.task 'bower', ->
 	deferred = q.defer()
@@ -151,7 +153,8 @@ gulp.task 'default', ['open', 'watch', 'build', 'test']
 gulp.task 'docs', ['yuidoc']
 
 gulp.task 'e2e', ->
-	e2eConfigFile = path.join './', TEMP_DIRECTORY, 'e2e-config.coffee'
+	e2eConfigFile       = path.join './', TEMP_DIRECTORY, 'e2e-config.coffee'
+	phantomjsBinaryPath = './node_modules/.bin/phantomjs' + if isWindows then '.cmd'
 
 	# create temporary e2e-config file to avoid an additional config file
 	# currently gulp-protractor requires one the existence of an e2e-config file
@@ -168,9 +171,10 @@ gulp.task 'e2e', ->
 	options =
 		configFile: e2eConfigFile
 		args: [
+
 			'--baseUrl', appUrl,
 			'--browser', 'phantomjs'
-			'--capabilities.phantomjs.binary.path', './node_modules/phantomjs/bin/phantomjs'
+			'--capabilities.phantomjs.binary.path', phantomjsBinaryPath
 		]
 
 	gulp
@@ -357,7 +361,6 @@ gulp.task 'styles', ['less']
 
 gulp.task 'test', ['build'], ->
 	# don't allow karma to block gulp
-	isWindows = process.platform is 'win32'
 	command = if isWindows then '.\\node_modules\\.bin\\gulp.cmd' else 'gulp'
 	spawn = childProcess.spawn command, ['karma'], {stdio: 'inherit'}
 
