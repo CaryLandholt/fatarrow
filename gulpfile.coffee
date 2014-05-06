@@ -171,8 +171,7 @@ gulp.task 'e2e', ->
 	options =
 		configFile: e2eConfigFile
 		args: [
-
-			'--baseUrl', appUrl,
+			'--baseUrl', appUrl
 			'--browser', 'phantomjs'
 			'--capabilities.phantomjs.binary.path', phantomjsBinaryPath
 		]

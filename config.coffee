@@ -15,6 +15,8 @@ BOWER_COMPONENTS =
 	'google-code-prettify': '1.0.1':
 		scripts: 'src/prettify.js'
 		styles:  'src/prettify.css'
+	'showdown': '0.3.1':
+		scripts: 'src/showdown.js'
 
 SCRIPTS = [
 	'**/angular.min.js'

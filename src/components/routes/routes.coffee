@@ -7,5 +7,5 @@ class Routes extends Directive
 			link
 			replace: true
 			restrict: 'E'
-			templateUrl: '/routes/routes.html'
+			templateUrl: '/components/routes/routes.html'
 		}
