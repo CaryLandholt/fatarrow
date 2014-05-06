@@ -1,17 +1,5 @@
 class Syntax extends Directive
 	constructor: ($http, $templateCache, syntaxHighlighterService) ->
-		# prefix = if $location.$$absUrl[-3..] is '/#/' then $location.$$absUrl[..-4] else $location.$$absUrl
-		# scripts = $document[0].getElementsByTagName 'script'
-		#
-		# angular.forEach scripts, (script) ->
-		# 	return if not script.src
-		#
-		# 	trimmedScript = script.src.replace prefix, ''
-		#
-		# 	return if trimmedScript[0] isnt '/'
-		#
-		# 	console.log script.src.replace prefix, ''
-
 		link = (scope, element, attrs) ->
 			language        = scope.language
 			lineNumbers     = scope.lineNumbers isnt 'false'

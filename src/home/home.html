@@ -6,6 +6,41 @@
 		<p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet.</p>
 	</div>
 
+	<div class="row" ng-repeat="script in controller.scripts | filter:'/home/'">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{script | toExtension:''}}</h3>
+			</div>
+			<div class="panel-body">
+				<div class="col-md-6">
+					<syntax src="{{script | toExtension:'.coffee'}}"></syntax>
+				</div>
+
+				<div class="col-md-6">
+					<syntax src="{{script}}"></syntax>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row" ng-init="script = '/home/home.html'">
+		<div class="panel panel-primary">
+			<div class="panel-heading">
+				<h3 class="panel-title">{{script}}</h3>
+			</div>
+			<div class="panel-body">
+				<div class="col-md-12">
+					<syntax src="{{script}}"></syntax>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+
+
 	<div class="row">
 		<div class="col-md-12">
 			<blockquote>
