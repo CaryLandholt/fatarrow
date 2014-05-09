@@ -28,11 +28,11 @@ class Syntax extends Directive
 						comment  = getComment src
 						response = "#{comment}\n" + response if comment isnt ''
 
-					if isCoffeeScript
-						lines              = response.split '\n'
-						moduleDeclarations = (i for line, i in lines when line.indexOf('angular.module') isnt -1)
-						lines              = if moduleDeclarations > -1 then lines[..moduleDeclarations - 1] else lines
-						response           = lines.join '\n'
+					# if isCoffeeScript
+					# 	lines              = response.split '\n'
+					# 	moduleDeclarations = (i for line, i in lines when line.indexOf('angular.module') isnt -1)
+					# 	lines              = if moduleDeclarations > -1 then lines[..moduleDeclarations - 1] else lines
+					# 	response           = lines.join '\n'
 
 					code = sanitize response
 
