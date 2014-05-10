@@ -16,7 +16,7 @@ class Syntax extends Directive
 				$http.get src, {cache: $templateCache}
 				.success (response) ->
 					includeFilename = scope.includeFilename isnt 'false'
-					isCoffeeScript = src.indexOf('.coffee') isnt -1
+					isCoffeeScript  = src.indexOf('.coffee') isnt -1
 
 					if includeFilename
 						getComment = (src) ->
