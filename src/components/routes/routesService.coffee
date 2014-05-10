@@ -10,7 +10,5 @@ class Routes extends Service
 
 			continue if not v.caption
 
-			route = @routes[k]
-
-			if route isnt -1
-				@routes[k] = v.caption
+			route      = @routes[k]
+			@routes[k] = v.caption if route isnt -1

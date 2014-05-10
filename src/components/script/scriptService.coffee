@@ -3,20 +3,15 @@ class Script extends Service
 		url        = $location.$$absUrl
 		prefix     = if url[-3..] is '/#/' then url[..-4] else url
 		document   = $document[0]
-		scriptTags = document.getElementsByTagName 'script'
 
 		@getScripts = ->
-			scripts = []
+			scriptTags = document.getElementsByTagName 'script'
 
-			angular.forEach scriptTags, (scriptTag) ->
-				return if not scriptTag.src
+			scripts = for scriptTag in scriptTags
+				continue if not scriptTag.src
 
 				trimmedScript = scriptTag.src.replace prefix, ''
 
-				return if trimmedScript[0] isnt '/'
+				continue if trimmedScript[0] isnt '/'
 
 				script = scriptTag.src.replace prefix, ''
-
-				scripts.push script
-
-			scripts
