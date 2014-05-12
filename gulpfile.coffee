@@ -46,6 +46,15 @@ templateCache         = require 'gulp-angular-templatecache'
 typeScript            = require 'gulp-typescript'
 uglify                = require 'gulp-uglify'
 
+onError = (e) ->
+	isArray  = Array.isArray e
+	err      = e.message or e
+	errors   = if isArray then err else [err]
+	messages = (error for error in errors)
+
+	gutil.log gutil.colors.red message for message in messages
+	@emit 'end'
+
 appUrl = "http://localhost:#{DEV_PORT}"
 
 bowerComponents = do ->
@@ -82,6 +91,7 @@ gulp.task 'bower', ->
 	bower
 		.commands
 		.install components, {}, {directory: BOWER_DIRECTORY}
+		.on 'error', onError
 		.on 'end', (results) ->
 			deferred.resolve results
 
@@ -106,11 +116,13 @@ gulp.task 'clean', ['clean:working'], ->
 	gulp
 		.src BOWER_DIRECTORY
 		.pipe clean()
+		.on 'error', onError
 
 gulp.task 'clean:working', ->
 	gulp
 		.src [COMPONENTS_DIRECTORY, TEMP_DIRECTORY, DIST_DIRECTORY, DOCS_DIRECTORY]
 		.pipe clean()
+		.on 'error', onError
 
 gulp.task 'coffee', ['coffeelint', 'ngClassify'], ->
 	options =
@@ -119,6 +131,7 @@ gulp.task 'coffee', ['coffeelint', 'ngClassify'], ->
 	gulp
 		.src '**/*.coffee', cwd: TEMP_DIRECTORY
 		.pipe coffee options
+		.on 'error', onError
 		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'coffeelint', ->
@@ -138,7 +151,9 @@ gulp.task 'coffeelint', ->
 			'!app/app.coffee'
 		], cwd: SRC_DIRECTORY
 		.pipe coffeelint options
+		.on 'error', onError
 		.pipe coffeelint.reporter()
+		.on 'error', onError
 
 gulp.task 'copy:temp', ['clean:working', 'normalizeComponents'], ->
 	gulp
@@ -179,6 +194,7 @@ gulp.task 'e2e', ->
 	gulp
 		.src '**/*.spec.{coffee,js}', cwd: E2E_DIRECTORY
 		.pipe protractor.protractor options
+		.on 'error', onError
 
 gulp.task 'e2e-driver', protractor.webdriver_standalone
 
@@ -191,6 +207,7 @@ gulp.task 'jade', ['copy:temp'], ->
 	gulp
 		.src '**/*.jade', cwd: TEMP_DIRECTORY
 		.pipe jade options
+		.on 'error', onError
 		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'karma', ->
@@ -234,12 +251,14 @@ gulp.task 'less', ['copy:temp'], ->
 	gulp
 		.src '**/*.less', cwd: TEMP_DIRECTORY
 		.pipe less options
+		.on 'error', onError
 		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'markdown', ['copy:temp'], ->
 	gulp
 		.src '**/*.{md,markdown}', cwd: TEMP_DIRECTORY
 		.pipe markdown()
+		.on 'error', onError
 		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'ngClassify', ['copy:temp'], ->
@@ -251,6 +270,7 @@ gulp.task 'ngClassify', ['copy:temp'], ->
 	gulp
 		.src '**/*.coffee', cwd: TEMP_DIRECTORY
 		.pipe ngClassify options
+		.on 'error', onError
 		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'normalizeComponents', ['bower', 'clean:working'], ->
@@ -279,11 +299,13 @@ gulp.task 'open', ['serve'], ->
 	gulp
 		.src 'index.html', cwd: DIST_DIRECTORY
 		.pipe open '', options
+		.on 'error', onError
 
 gulp.task 'reload', ['build'], ->
 	gulp
 		.src 'index.html', cwd: DIST_DIRECTORY
 		.pipe connect.reload()
+		.on 'error', onError
 
 gulp.task 'scripts', ['coffee', 'typeScript']
 
@@ -331,6 +353,7 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 		gulp
 			.src files, cwd: TEMP_DIRECTORY
 			.pipe includify()
+			.on 'error', onError
 			.on 'end', (data) ->
 				deferred.resolve data
 
@@ -347,6 +370,7 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 		gulp
 			.src 'index.html', cwd: TEMP_DIRECTORY
 			.pipe template data
+			.on 'error', onError
 			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'end', ->
 				deferred.resolve()
@@ -367,6 +391,7 @@ gulp.task 'typeScript', ['copy:temp'], ->
 	gulp
 		.src '**/*.ts', cwd: TEMP_DIRECTORY
 		.pipe typeScript()
+		.on 'error', onError
 		.pipe gulp.dest TEMP_DIRECTORY
 
 gulp.task 'views', ['jade', 'markdown']
