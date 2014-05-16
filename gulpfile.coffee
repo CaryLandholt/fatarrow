@@ -3,11 +3,11 @@
 BOWER_DIRECTORY       = '.components/'
 CHANGELOG_FILE        = 'CHANGELOG.md'
 COMPONENTS_DIRECTORY  = "#{BOWER_DIRECTORY}_/"
-DEV_PORT              = 8181
 DIST_DIRECTORY        = 'dist/'
 DOCS_DIRECTORY        = 'docs/'
 E2E_DIRECTORY         = 'e2e/'
 FONTS_DIRECTORY       = 'fonts/'
+PORT                  = 8181
 SCRIPTS_MIN_DIRECTORY = 'scripts/'
 SCRIPTS_MIN_FILE      = 'scripts.min.js'
 SRC_DIRECTORY         = 'src/'
@@ -54,7 +54,7 @@ templateCache         = require 'gulp-angular-templatecache'
 typeScript            = require 'gulp-typescript'
 uglify                = require 'gulp-uglify'
 
-appUrl = "http://localhost:#{DEV_PORT}"
+appUrl = "http://localhost:#{PORT}"
 
 bowerComponents = do ->
 	components = {}
@@ -517,7 +517,7 @@ gulp.task 'scripts', ['copy:temp', 'templateCache'], ->
 gulp.task 'serve', ['build'], ->
 	connect.server
 		livereload: !isProd
-		port: DEV_PORT
+		port: PORT
 		root: DIST_DIRECTORY
 
 gulp.task 'spa', ['scripts', 'styles', 'views', 'fonts'], ->
