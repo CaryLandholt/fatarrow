@@ -23,7 +23,7 @@ SCRIPTS = [
 	'**/angular-mocks.js'
 	'**/angular-animate.min.js'
 	'**/angular-route.min.js'
-	'app/app.js'
+	'**/app.js'
 	'**/*.js'
 ]
 

@@ -1,7 +1,5 @@
 {APP_NAME, BOWER_COMPONENTS, SCRIPTS, STYLES} = require './config.coffee'
 
-SCRIPTS.push '!**/*.spec.js'
-
 BOWER_DIRECTORY       = '.components/'
 CHANGELOG_FILE        = 'CHANGELOG.md'
 COMPONENTS_DIRECTORY  = "#{BOWER_DIRECTORY}_/"
@@ -9,22 +7,32 @@ DEV_PORT              = 8181
 DIST_DIRECTORY        = 'dist/'
 DOCS_DIRECTORY        = 'docs/'
 E2E_DIRECTORY         = 'e2e/'
+FONTS_DIRECTORY       = 'fonts/'
+SCRIPTS_MIN_DIRECTORY = 'scripts/'
 SCRIPTS_MIN_FILE      = 'scripts.min.js'
 SRC_DIRECTORY         = 'src/'
+STYLES_MIN_DIRECTORY  = 'styles/'
 STYLES_MIN_FILE       = 'styles.min.css'
 TEMP_DIRECTORY        = '.temp/'
 VENDOR_DIRECTORY      = 'vendor/'
+
+VIEWS =  [
+	'**/*.html'
+	'!index.html'
+]
 
 bower                 = require 'bower'
 buster                = require 'gulp-buster'
 childProcess          = require 'child_process'
 clean                 = require 'gulp-clean'
 coffee                = require 'gulp-coffee'
-coffeelint            = require 'gulp-coffeelint'
+coffeeLint            = require 'gulp-coffeelint'
 concat                = require 'gulp-concat'
 connect               = require 'gulp-connect'
 conventionalChangelog = require 'conventional-changelog'
 es                    = require 'event-stream'
+filter                = require 'gulp-filter'
+flatten               = require 'gulp-flatten'
 fs                    = require 'fs'
 gulp                  = require 'gulp'
 gutil                 = require 'gulp-util'
@@ -40,20 +48,11 @@ path                  = require 'path'
 pkg                   = require './package.json'
 protractor            = require 'gulp-protractor'
 q                     = require 'q'
-rename                = require 'gulp-rename'
+rev                   = require 'gulp-rev'
 template              = require 'gulp-template'
 templateCache         = require 'gulp-angular-templatecache'
 typeScript            = require 'gulp-typescript'
 uglify                = require 'gulp-uglify'
-
-onError = (e) ->
-	isArray  = Array.isArray e
-	err      = e.message or e
-	errors   = if isArray then err else [err]
-	messages = (error for error in errors)
-
-	gutil.log gutil.colors.red message for message in messages
-	@emit 'end'
 
 appUrl = "http://localhost:#{DEV_PORT}"
 
@@ -78,10 +77,266 @@ bowerComponents = do ->
 
 	components
 
+env       = gutil.env
+isProd    = env.prod? or env.production?
 isWindows = /^win/.test(process.platform)
+
+onError = (e) ->
+	isArray  = Array.isArray e
+	err      = e.message or e
+	errors   = if isArray then err else [err]
+	messages = (error for error in errors)
+
+	gutil.log gutil.colors.red message for message in messages
+	@emit 'end'
+
+processCoffeeScript = ->
+	deferred = q.defer()
+
+	options =
+		coffeeScript:
+			sourceMap: true
+		coffeeLint:
+			arrow_spacing:
+				level: 'error'
+			indentation:
+				value: 1
+			max_line_length:
+				level: 'ignore'
+			no_tabs:
+				level: 'ignore'
+		ngClassify:
+			appName: APP_NAME or 'app'
+			data:
+				isProd: isProd
+
+	sources = ['**/*.coffee']
+
+	if isProd
+		sources.push '!**/*.spec.coffee'
+		sources.push '!**/*.backend.coffee'
+
+	gulp
+		.src sources, cwd: TEMP_DIRECTORY
+		.pipe coffeeLint options.coffeeLint
+		.on 'error', onError
+		.pipe coffeeLint.reporter()
+		.on 'error', onError
+		.on 'end', -> gutil.log 'scripts: CoffeeScript linting complete'
+		.pipe ngClassify options.ngClassify
+		.on 'error', onError
+		.on 'end', -> gutil.log 'scripts: ng-classify complete'
+		.pipe coffee options.coffeeScript
+		.on 'error', onError
+		.pipe gulp.dest TEMP_DIRECTORY
+		.on 'end', ->
+			gutil.log 'scripts: CoffeeScript compilation complete'
+			deferred.resolve()
+
+	deferred.promise
+
+processCss = ->
+	deferred = q.defer()
+
+	options =
+		keepSpecialComments: 0
+
+	sources = STYLES
+
+	optimizedStylesSource = if isProd then sources else []
+	optimizedStylesFilter = filter optimizedStylesSource
+
+	destinationDirectory = if isProd then path.join(DIST_DIRECTORY, STYLES_MIN_DIRECTORY) else DIST_DIRECTORY
+
+	gulp
+		.src sources, cwd: TEMP_DIRECTORY
+
+		.pipe optimizedStylesFilter
+		.pipe concat STYLES_MIN_FILE
+		.on 'error', onError
+		.on 'end', -> gutil.log 'styles: Concatenation complete' if isProd
+		.pipe minifyCss options
+		.on 'error', onError
+		.on 'end', -> gutil.log 'styles: Minification complete' if isProd
+		.pipe rev()
+		.on 'error', onError
+		.on 'end', -> gutil.log 'styles: Hashing complete'
+		.pipe optimizedStylesFilter.restore()
+
+		.pipe gulp.dest destinationDirectory
+		.on 'end', ->
+			gutil.log 'styles: CSS processing complete'
+			deferred.resolve()
+
+	deferred.promise
+
+processJade = ->
+	deferred = q.defer()
+
+	options =
+		pretty: true
+
+	gulp
+		.src '**/*.jade', cwd: TEMP_DIRECTORY
+		.pipe jade options
+		.on 'error', onError
+		.pipe gulp.dest TEMP_DIRECTORY
+		.on 'end', ->
+			gutil.log 'views: Jade compilation complete'
+			deferred.resolve()
+
+	deferred.promise
+
+processJavaScript = ->
+	deferred = q.defer()
+
+	sources = SCRIPTS
+
+	if isProd
+		sources.push '!**/*.spec.js'
+		sources.push '!**/*.backend.js'
+		sources.push '!**/angular-mocks.js'
+
+	optimizedScriptsSource = if isProd then sources else []
+	optimizedScriptsFilter = filter optimizedScriptsSource
+
+	destinationDirectory = if isProd then path.join(DIST_DIRECTORY, SCRIPTS_MIN_DIRECTORY) else DIST_DIRECTORY
+
+	gulp
+		.src sources, cwd: TEMP_DIRECTORY
+
+		.pipe optimizedScriptsFilter
+		.pipe concat SCRIPTS_MIN_FILE
+		.on 'error', onError
+		.on 'end', -> gutil.log 'scripts: Concatenation complete' if isProd
+		.pipe uglify()
+		.on 'error', onError
+		.on 'end', -> gutil.log 'scripts: Minification complete' if isProd
+		.pipe rev()
+		.on 'error', onError
+		.on 'end', -> gutil.log 'scripts: Hashing complete'
+		.pipe optimizedScriptsFilter.restore()
+		.pipe gulp.dest destinationDirectory
+		.on 'end', ->
+			gutil.log 'scripts: JavaScript processing complete'
+			deferred.resolve()
+
+	deferred.promise
+
+processLess = ->
+	deferred = q.defer()
+
+	options =
+		sourceMap: true
+		sourceMapBasepath: path.resolve TEMP_DIRECTORY
+
+	gulp
+		.src '**/*.less', cwd: TEMP_DIRECTORY
+		.pipe less options
+		.on 'error', onError
+		.pipe gulp.dest TEMP_DIRECTORY
+		.on 'end', ->
+			gutil.log 'styles: Less compilation complete'
+			deferred.resolve()
+
+	deferred.promise
+
+processMarkdown = ->
+	deferred = q.defer()
+
+	gulp
+		.src '**/*.{md,markdown}', cwd: TEMP_DIRECTORY
+		.pipe markdown()
+		.on 'error', onError
+		.pipe gulp.dest TEMP_DIRECTORY
+		.on 'end', ->
+			gutil.log 'views: Markdown compilation complete'
+			deferred.resolve()
+
+	deferred.promise
+
+processSourceScripts = ->
+	deferred = q.defer()
+
+	return deferred.resolve() if isProd
+
+	gulp
+		.src '**/*.{coffee,ts,js.map}', cwd: TEMP_DIRECTORY
+		.pipe gulp.dest DIST_DIRECTORY
+		.on 'end', ->
+			gutil.log 'scripts: source files moved'
+			deferred.resolve()
+
+	deferred.promise
+
+processSourceStyles = ->
+	deferred = q.defer()
+
+	return deferred.resolve() if isProd
+
+	gulp
+		.src '**/*.less', cwd: TEMP_DIRECTORY
+		.pipe gulp.dest DIST_DIRECTORY
+		.on 'end', ->
+			gutil.log 'styles: source files moved'
+			deferred.resolve()
+
+	deferred.promise
+
+processSourceViews = ->
+	deferred = q.defer()
+
+	return deferred.resolve() if isProd
+
+	gulp
+		.src '**/*.{jade,md,markdown}', cwd: TEMP_DIRECTORY
+		.pipe gulp.dest DIST_DIRECTORY
+		.on 'end', ->
+			gutil.log 'scripts: source files moved'
+			deferred.resolve()
+
+	deferred.promise
+
+processTypeScript = ->
+	deferred = q.defer()
+
+	sources = ['**/*.ts']
+
+	if isProd
+		sources.push '!**/*.spec.ts'
+		sources.push '!**/*.backend.ts'
+
+	gulp
+		.src sources, cwd: TEMP_DIRECTORY
+		.pipe typeScript()
+		.on 'error', onError
+		.pipe gulp.dest TEMP_DIRECTORY
+		.on 'end', ->
+			gutil.log 'scripts: TypeScript compilation complete'
+			deferred.resolve()
+
+	deferred.promise
+
+processViews = ->
+	deferred = q.defer()
+
+	return deferred.resolve() if isProd
+
+	gulp
+		.src VIEWS, cwd: TEMP_DIRECTORY
+		.pipe gulp.dest DIST_DIRECTORY
+		.on 'end', ->
+			gutil.log 'views: processing complete'
+			deferred.resolve()
+
+	deferred.promise
 
 gulp.task 'bower', ->
 	deferred = q.defer()
+
+	options =
+		directory: BOWER_DIRECTORY
+
 	components = []
 
 	for component, value of BOWER_COMPONENTS
@@ -90,17 +345,14 @@ gulp.task 'bower', ->
 
 	bower
 		.commands
-		.install components, {}, {directory: BOWER_DIRECTORY}
+		.install components, {}, options
 		.on 'error', onError
 		.on 'end', (results) ->
 			deferred.resolve results
 
 	deferred.promise
 
-gulp.task 'build', ['scripts', 'styles', 'views', 'spa'], ->
-	gulp
-		.src '**', cwd: TEMP_DIRECTORY
-		.pipe gulp.dest DIST_DIRECTORY
+gulp.task 'build', ['scripts', 'styles', 'views', 'fonts', 'spa']
 
 gulp.task 'changelog', ->
 	options =
@@ -124,37 +376,6 @@ gulp.task 'clean:working', ->
 		.pipe clean()
 		.on 'error', onError
 
-gulp.task 'coffee', ['coffeelint', 'ngClassify'], ->
-	options =
-		sourceMap: true
-
-	gulp
-		.src '**/*.coffee', cwd: TEMP_DIRECTORY
-		.pipe coffee options
-		.on 'error', onError
-		.pipe gulp.dest TEMP_DIRECTORY
-
-gulp.task 'coffeelint', ->
-	options =
-		arrow_spacing:
-			level: 'error'
-		indentation:
-			value: 1
-		max_line_length:
-			level: 'ignore'
-		no_tabs:
-			level: 'ignore'
-
-	gulp
-		.src [
-			'**/*.coffee'
-			'!app/app.coffee'
-		], cwd: SRC_DIRECTORY
-		.pipe coffeelint options
-		.on 'error', onError
-		.pipe coffeelint.reporter()
-		.on 'error', onError
-
 gulp.task 'copy:temp', ['clean:working', 'normalizeComponents'], ->
 	gulp
 		.src [
@@ -163,9 +384,7 @@ gulp.task 'copy:temp', ['clean:working', 'normalizeComponents'], ->
 		]
 		.pipe gulp.dest TEMP_DIRECTORY
 
-gulp.task 'default', ['open', 'watch', 'build', 'test']
-
-gulp.task 'docs', ['yuidoc']
+gulp.task 'default', if isProd then ['open'] else ['open', 'watch', 'build', 'test']
 
 gulp.task 'e2e', ->
 	e2eConfigFile       = path.join './', TEMP_DIRECTORY, 'e2e-config.coffee'
@@ -200,22 +419,21 @@ gulp.task 'e2e-driver', protractor.webdriver_standalone
 
 gulp.task 'e2e-driver-update', protractor.webdriver_update
 
-gulp.task 'jade', ['copy:temp'], ->
-	options =
-		pretty: true
+gulp.task 'fonts', ['copy:temp'], ->
+	src = gulp.src '**/*.{eot,svg,ttf,woff}', cwd: TEMP_DIRECTORY
 
-	gulp
-		.src '**/*.jade', cwd: TEMP_DIRECTORY
-		.pipe jade options
-		.on 'error', onError
-		.pipe gulp.dest TEMP_DIRECTORY
+	return if isProd
+		src
+			.pipe flatten()
+			.on 'error', onError
+			.on 'end', ->
+				gutil.log 'fonts: flattened'
+			.pipe gulp.dest path.join DIST_DIRECTORY, FONTS_DIRECTORY
+
+	src
+		.pipe gulp.dest DIST_DIRECTORY
 
 gulp.task 'karma', ->
-	scripts = SCRIPTS.slice 0
-
-	# remove *.spec exclusion
-	scripts.pop()
-
 	options =
 		autoWatch: false
 		background: true
@@ -224,7 +442,7 @@ gulp.task 'karma', ->
 			'PhantomJS'
 		]
 		colors: true
-		files: scripts
+		files: SCRIPTS
 		frameworks: [
 			'jasmine'
 		]
@@ -243,35 +461,18 @@ gulp.task 'karma', ->
 
 	karma.server.start options
 
-gulp.task 'less', ['copy:temp'], ->
+gulp.task 'minify:views', ['copy:temp'],->
+	return true if not isProd
+
 	options =
-		sourceMap: true
-		sourceMapBasepath: path.resolve TEMP_DIRECTORY
+		empty: true
+		quotes: true
 
 	gulp
-		.src '**/*.less', cwd: TEMP_DIRECTORY
-		.pipe less options
+		.src VIEWS, cwd: TEMP_DIRECTORY
+		.pipe minifyHtml options
 		.on 'error', onError
-		.pipe gulp.dest TEMP_DIRECTORY
-
-gulp.task 'markdown', ['copy:temp'], ->
-	gulp
-		.src '**/*.{md,markdown}', cwd: TEMP_DIRECTORY
-		.pipe markdown()
-		.on 'error', onError
-		.pipe gulp.dest TEMP_DIRECTORY
-
-gulp.task 'ngClassify', ['copy:temp'], ->
-	options =
-		appName: APP_NAME or 'app'
-		data:
-			environment: 'dev'
-
-	gulp
-		.src '**/*.coffee', cwd: TEMP_DIRECTORY
-		.pipe ngClassify options
-		.on 'error', onError
-		.pipe gulp.dest TEMP_DIRECTORY
+		.pipe gulp.dest path.join TEMP_DIRECTORY
 
 gulp.task 'normalizeComponents', ['bower', 'clean:working'], ->
 	promises = []
@@ -307,28 +508,31 @@ gulp.task 'reload', ['build'], ->
 		.pipe connect.reload()
 		.on 'error', onError
 
-gulp.task 'scripts', ['coffee', 'typeScript']
+gulp.task 'scripts', ['copy:temp', 'templateCache'], ->
+	processCoffeeScript()
+		.then processTypeScript
+		.then processJavaScript
+		.then processSourceScripts
 
 gulp.task 'serve', ['build'], ->
 	connect.server
-		livereload: true
+		livereload: !isProd
 		port: DEV_PORT
 		root: DIST_DIRECTORY
 
-gulp.task 'spa', ['scripts', 'styles', 'views'], ->
+gulp.task 'spa', ['scripts', 'styles', 'views', 'fonts'], ->
 	unixifyPath = (p) ->
-			regex = /\\/g
-			p.replace regex, '/'
+		p.replace /\\/g, '/'
 
 	includify = ->
 		scripts = []
-		styles = []
+		styles  = []
 
 		bufferContents = (file) ->
 			return if file.isNull()
 
 			ext = path.extname file.path
-			p = unixifyPath(path.join('/', path.relative(file.cwd, file.path)))
+			p   = unixifyPath(path.join('/', path.relative(file.cwd, file.path)))
 
 			return if ext is '.js'
 				scripts.push p
@@ -348,10 +552,11 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 
 		files = []
 			.concat SCRIPTS
+			.concat ['!**/*.spec.js']
 			.concat STYLES
 
 		gulp
-			.src files, cwd: TEMP_DIRECTORY
+			.src files, cwd: DIST_DIRECTORY
 			.pipe includify()
 			.on 'error', onError
 			.on 'end', (data) ->
@@ -362,16 +567,32 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 	processTemplate = (files) ->
 		deferred = q.defer()
 
+		options =
+			empty: true
+			quotes: true
+
 		data =
 			appName: APP_NAME
 			scripts: files.scripts
 			styles: files.styles
 
+		source          = 'index.html'
+		optimizedSource = if isProd then source else []
+		optimizedFilter = filter optimizedSource
+
 		gulp
-			.src 'index.html', cwd: TEMP_DIRECTORY
+			.src source, cwd: TEMP_DIRECTORY
 			.pipe template data
 			.on 'error', onError
-			.pipe gulp.dest TEMP_DIRECTORY
+			.on 'end', -> gutil.log 'spa: Templating complete'
+
+			.pipe optimizedFilter
+			.pipe minifyHtml options
+			.on 'error', onError
+			.on 'end', -> gutil.log 'spa: Minification complete' if isProd
+			.pipe optimizedFilter.restore()
+
+			.pipe gulp.dest DIST_DIRECTORY
 			.on 'end', ->
 				deferred.resolve()
 
@@ -380,112 +601,39 @@ gulp.task 'spa', ['scripts', 'styles', 'views'], ->
 	getIncludes()
 		.then processTemplate
 
-gulp.task 'styles', ['less']
+gulp.task 'styles', ['copy:temp'], ->
+	processLess()
+		.then processCss
+		.then processSourceStyles
 
-gulp.task 'test', ['build'], ->
-	# don't allow karma to block gulp
-	command = if isWindows then '.\\node_modules\\.bin\\gulp.cmd' else 'gulp'
-	spawn = childProcess.spawn command, ['karma'], {stdio: 'inherit'}
+gulp.task 'templateCache', ['copy:temp', 'minify:views'], ->
+	return true if not isProd
 
-gulp.task 'typeScript', ['copy:temp'], ->
-	gulp
-		.src '**/*.ts', cwd: TEMP_DIRECTORY
-		.pipe typeScript()
-		.on 'error', onError
-		.pipe gulp.dest TEMP_DIRECTORY
-
-gulp.task 'views', ['jade', 'markdown']
-
-gulp.task 'watch', ['build'], ->
-	gulp
-		.watch "#{SRC_DIRECTORY}**/*.{coffee,css,html,jade,less,markdown,md,ts}", ['test', 'reload']
-
-
-
-
-
-
-
-
-
-### prod ###
-gulp.task 'minify', ['minify:scripts', 'minify:styles', 'minify:views', 'minify:spa']
-
-gulp.task 'minify:scripts', ['templateCache'], ->
-	gulp
-		.src SCRIPTS, cwd: TEMP_DIRECTORY
-		.pipe concat SCRIPTS_MIN_FILE
-		.pipe uglify()
-		.pipe gulp.dest TEMP_DIRECTORY
-
-gulp.task 'minify:styles', ->
-	options =
-		keepSpecialComments: 0
-
-	gulp
-		.src STYLES, cwd: TEMP_DIRECTORY
-		.pipe concat STYLES_MIN_FILE
-		.pipe minifyCss options
-		.pipe gulp.dest TEMP_DIRECTORY
-
-gulp.task 'minify:spa', ->
-	options =
-		empty: true
-		quotes: true
-
-	gulp
-		.src 'index.html', cwd: TEMP_DIRECTORY
-		.pipe minifyHtml options
-		.pipe gulp.dest TEMP_DIRECTORY
-
-gulp.task 'minify:views', ->
-	options =
-		empty: true
-		quotes: true
-
-	gulp
-		.src ['**/*.html', '!index.html'], cwd: TEMP_DIRECTORY
-		.pipe minifyHtml options
-		.pipe gulp.dest TEMP_DIRECTORY
-
-gulp.task 'templateCache', ['minify:views'], ->
 	options =
 		module: APP_NAME
 		root: '/'
 
 	gulp
-		.src ['**/*.html', '!index.html'], cwd: TEMP_DIRECTORY
+		.src VIEWS, cwd: TEMP_DIRECTORY
 		.pipe templateCache options
-		.pipe gulp.dest "#{TEMP_DIRECTORY}scripts/"
+		.on 'error', onError
+		.pipe gulp.dest path.join TEMP_DIRECTORY, SCRIPTS_MIN_DIRECTORY
 
-gulp.task 'buster', ->
-	options =
-		length: 10
+gulp.task 'test', ['build'], ->
+	return true if isProd
 
-	buster.config options
+	# don't allow karma to block gulp
+	command = if isWindows then '.\\node_modules\\.bin\\gulp.cmd' else 'gulp'
+	spawn = childProcess.spawn command, ['karma'], {stdio: 'inherit'}
 
-	gulp
-		.src '**/*.{css,js}', cwd: TEMP_DIRECTORY
-		.pipe buster()
-		.pipe gulp.dest TEMP_DIRECTORY
+gulp.task 'views', ['copy:temp'], ->
+	processJade()
+		.then processMarkdown
+		.then processViews
+		.then processSourceViews
 
-gulp.task 'hashify', ['buster'], ->
-	busters = require "#{TEMP_DIRECTORY}busters.json"
-
-	renamer = (file) ->
-		originalFile = path.join file.dirname, file.basename + file.extname
-
-		# gulp
-		# 	.src originalFile, cwd: TEMP_DIRECTORY
-		# 	.pipe clean()
-
-
-		hash = busters[originalFile]
-		file.basename += '.' + hash
-
-		file
+gulp.task 'watch', ['build'], ->
+	return true if isProd
 
 	gulp
-		.src '**/*.{css,js}', cwd: TEMP_DIRECTORY
-		.pipe rename renamer
-		.pipe gulp.dest TEMP_DIRECTORY
+		.watch "#{SRC_DIRECTORY}**/*.{coffee,css,html,jade,less,markdown,md,ts}", ['test', 'reload']
