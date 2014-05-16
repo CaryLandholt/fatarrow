@@ -1,13 +1,11 @@
 APP_NAME = 'app'
 
 BOWER_COMPONENTS =
-	'angular': '1.3.0-beta.7':
+	'angular': '1.3.0-beta.8':
 		scripts: 'angular.min.js'
-	'angular-animate': '1.3.0-beta.7':
-		scripts: 'angular-animate.min.js'
-	'angular-mocks': '1.3.0-beta.7':
+	'angular-mocks': '1.3.0-beta.8':
 		scripts: 'angular-mocks.js'
-	'angular-route': '1.3.0-beta.7':
+	'angular-route': '1.3.0-beta.8':
 		scripts: 'angular-route.min.js'
 	'bootstrap': '3.1.1':
 		fonts:   'dist/fonts/**/*.{eot,svg,ttf,woff}'
@@ -21,7 +19,6 @@ BOWER_COMPONENTS =
 SCRIPTS = [
 	'**/angular.min.js'
 	'**/angular-mocks.js'
-	'**/angular-animate.min.js'
 	'**/angular-route.min.js'
 	'**/app.js'
 	'**/*.js'
