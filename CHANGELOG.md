@@ -1,3 +1,12 @@
+<a name="0.1.1"></a>
+### 0.1.1  (2014-05-16)
+
+
+#### Bug Fixes
+
+* **ngAnimate:** remove ngAnimate ([3fbf7991](https://github.com/CaryLandholt/fatarrow/commit/3fbf79917ab0f7012003e67e8e6dd56d67e54ab1))
+
+
 <a name="0.1.0"></a>
 ## 0.1.0  (2014-05-16)
 
