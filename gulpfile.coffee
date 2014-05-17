@@ -606,7 +606,7 @@ gulp.task 'styles', ['copy:temp'], ->
 		.then processCss
 		.then processSourceStyles
 
-gulp.task 'templateCache', ['copy:temp', 'minify:views'], ->
+gulp.task 'templateCache', ['copy:temp'], ->
 	return true if not isProd
 
 	options =
