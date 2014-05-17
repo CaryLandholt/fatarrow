@@ -1,11 +1,11 @@
 APP_NAME = 'app'
 
 BOWER_COMPONENTS =
-	'angular': '1.3.0-beta.8':
+	'angular': '1.2.16':
 		scripts: 'angular.min.js'
-	'angular-mocks': '1.3.0-beta.8':
+	'angular-mocks': '1.2.16':
 		scripts: 'angular-mocks.js'
-	'angular-route': '1.3.0-beta.8':
+	'angular-route': '1.2.16':
 		scripts: 'angular-route.min.js'
 	'bootstrap': '3.1.1':
 		fonts:   'dist/fonts/**/*.{eot,svg,ttf,woff}'
