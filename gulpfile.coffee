@@ -15,14 +15,9 @@ STYLES_MIN_DIRECTORY  = 'styles/'
 STYLES_MIN_FILE       = 'styles.min.css'
 TEMP_DIRECTORY        = '.temp/'
 VENDOR_DIRECTORY      = 'vendor/'
-
-VIEWS =  [
-	'**/*.html'
-	'!index.html'
-]
+VIEWS                 =  ['**/*.html', '!index.html']
 
 bower                 = require 'bower'
-buster                = require 'gulp-buster'
 childProcess          = require 'child_process'
 clean                 = require 'gulp-clean'
 coffee                = require 'gulp-coffee'
@@ -87,9 +82,13 @@ bowerComponents = do ->
 
 fs.writeFile 'bower.json', JSON.stringify bowerJson, {}, '\t'
 
-env       = gutil.env
-isProd    = env.prod? or env.production?
-isWindows = /^win/.test(process.platform)
+env         = gutil.env
+isProd      = env.prod? or env.production?
+isVerbose   = env.verb? or env.verbose?
+isWindows   = /^win/.test(process.platform)
+log         = gutil.log
+logger      = if isVerbose then (title, args...) -> log gutil.colors.yellow(title), gutil.colors.green('✓'), gutil.colors.white(args) else ->
+unixifyPath = (p) -> p.replace /\\/g, '/'
 
 onError = (e) ->
 	isArray  = Array.isArray e
@@ -97,11 +96,13 @@ onError = (e) ->
 	errors   = if isArray then err else [err]
 	messages = (error for error in errors)
 
-	gutil.log gutil.colors.red message for message in messages
+	log gutil.colors.red message for message in messages
 	@emit 'end'
 
 processCoffeeScript = ->
-	deferred = q.defer()
+	deferred     = q.defer()
+	sources      = ['**/*.coffee'].concat if isProd then ['!**/*.spec.coffee', '!**/*.backend.coffee'] else []
+	moduleLogger = (args...) -> logger 'CoffeeScript', args
 
 	options =
 		coffeeScript:
@@ -120,229 +121,292 @@ processCoffeeScript = ->
 			data:
 				isProd: isProd
 
-	sources = ['**/*.coffee']
-
-	if isProd
-		sources.push '!**/*.spec.coffee'
-		sources.push '!**/*.backend.coffee'
-
 	gulp
 		.src sources, cwd: TEMP_DIRECTORY
+
+		# coffeeLint
 		.pipe coffeeLint options.coffeeLint
 		.on 'error', onError
+		.on 'end', -> moduleLogger 'coffeeLint'
+
+		# coffeeLint.reporter
 		.pipe coffeeLint.reporter()
 		.on 'error', onError
-		.on 'end', -> gutil.log 'scripts: CoffeeScript linting complete'
+		.on 'end', -> moduleLogger 'coffeeLint.reporter'
+
+		# ngClassify
 		.pipe ngClassify options.ngClassify
 		.on 'error', onError
-		.on 'end', -> gutil.log 'scripts: ng-classify complete'
+		.on 'end', -> moduleLogger 'ngClassify'
+
+		# coffee
 		.pipe coffee options.coffeeScript
 		.on 'error', onError
+		.on 'end', -> moduleLogger 'coffee'
+
+		# destination
 		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'end', ->
-			gutil.log 'scripts: CoffeeScript compilation complete'
-			deferred.resolve()
+		.on 'end', -> moduleLogger()
+
+		# end
+		.on 'end', -> deferred.resolve()
 
 	deferred.promise
 
 processCss = ->
-	deferred = q.defer()
+	deferred              = q.defer()
+	sources               = STYLES
+	optimizedStylesSource = if isProd then sources else []
+	optimizedStylesFilter = filter optimizedStylesSource
+	destinationDirectory  = if isProd then path.join(DIST_DIRECTORY, STYLES_MIN_DIRECTORY) else DIST_DIRECTORY
+	moduleLogger          = (args...) -> logger 'CSS', args
 
 	options =
 		keepSpecialComments: 0
-
-	sources = STYLES
-
-	optimizedStylesSource = if isProd then sources else []
-	optimizedStylesFilter = filter optimizedStylesSource
-
-	destinationDirectory = if isProd then path.join(DIST_DIRECTORY, STYLES_MIN_DIRECTORY) else DIST_DIRECTORY
 
 	gulp
 		.src sources, cwd: TEMP_DIRECTORY
 
 		.pipe optimizedStylesFilter
+
+		# concat
 		.pipe concat STYLES_MIN_FILE
 		.on 'error', onError
-		.on 'end', -> gutil.log 'styles: Concatenation complete' if isProd
+		.on 'end', -> moduleLogger 'concat' if isProd
+
+		# minifyCss
 		.pipe minifyCss options
 		.on 'error', onError
-		.on 'end', -> gutil.log 'styles: Minification complete' if isProd
+		.on 'end', -> moduleLogger 'minifyCss' if isProd
+
+		# rev
 		.pipe rev()
 		.on 'error', onError
-		.on 'end', -> gutil.log 'styles: Hashing complete'
+		.on 'end', -> moduleLogger 'rev'
+
 		.pipe optimizedStylesFilter.restore()
 
+		# destination
 		.pipe gulp.dest destinationDirectory
-		.on 'end', ->
-			gutil.log 'styles: CSS processing complete'
-			deferred.resolve()
+		.on 'end', -> moduleLogger()
+
+		# end
+		.on 'end', -> deferred.resolve()
 
 	deferred.promise
 
 processJade = ->
-	deferred = q.defer()
+	deferred     = q.defer()
+	sources      = ['**/*.jade']
+	moduleLogger = (args...) -> logger 'Jade', args
 
 	options =
 		pretty: true
 
 	gulp
-		.src '**/*.jade', cwd: TEMP_DIRECTORY
+		.src sources, cwd: TEMP_DIRECTORY
+
+		# jade
 		.pipe jade options
 		.on 'error', onError
+		.on 'end', -> moduleLogger 'jade'
+
+		# destination
 		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'end', ->
-			gutil.log 'views: Jade compilation complete'
-			deferred.resolve()
+		.on 'end', -> moduleLogger()
+
+		# end
+		.on 'end', -> deferred.resolve()
 
 	deferred.promise
 
 processJavaScript = ->
-	deferred = q.defer()
-
-	sources = SCRIPTS
-
-	if isProd
-		sources.push '!**/*.spec.js'
-		sources.push '!**/*.backend.js'
-		sources.push '!**/angular-mocks.js'
-
+	deferred               = q.defer()
+	sources                = SCRIPTS.concat if isProd then ['!**/*.spec.js', '!**/*.backend.js', '!**/angular-mocks.js'] else []
 	optimizedScriptsSource = if isProd then sources else []
 	optimizedScriptsFilter = filter optimizedScriptsSource
-
-	destinationDirectory = if isProd then path.join(DIST_DIRECTORY, SCRIPTS_MIN_DIRECTORY) else DIST_DIRECTORY
+	destinationDirectory   = if isProd then path.join(DIST_DIRECTORY, SCRIPTS_MIN_DIRECTORY) else DIST_DIRECTORY
+	moduleLogger           = (args...) -> logger 'JavaScript', args
 
 	gulp
 		.src sources, cwd: TEMP_DIRECTORY
 
 		.pipe optimizedScriptsFilter
+
+		# concat
 		.pipe concat SCRIPTS_MIN_FILE
 		.on 'error', onError
-		.on 'end', -> gutil.log 'scripts: Concatenation complete' if isProd
+		.on 'end', -> moduleLogger 'concat' if isProd
+
+		# uglify
 		.pipe uglify()
 		.on 'error', onError
-		.on 'end', -> gutil.log 'scripts: Minification complete' if isProd
+		.on 'end', -> moduleLogger 'uglify' if isProd
+
 		.pipe rev()
 		.on 'error', onError
-		.on 'end', -> gutil.log 'scripts: Hashing complete'
+		.on 'end', -> moduleLogger 'rev'
+
 		.pipe optimizedScriptsFilter.restore()
+
+		# destination
 		.pipe gulp.dest destinationDirectory
-		.on 'end', ->
-			gutil.log 'scripts: JavaScript processing complete'
-			deferred.resolve()
+		.on 'end', -> moduleLogger()
+
+		# end
+		.on 'end', -> deferred.resolve()
 
 	deferred.promise
 
 processLess = ->
-	deferred = q.defer()
+	deferred     = q.defer()
+	sources      = ['**/*.less']
+	moduleLogger = (args...) -> logger 'Less', args
 
 	options =
 		sourceMap: true
 		sourceMapBasepath: path.resolve TEMP_DIRECTORY
 
 	gulp
-		.src '**/*.less', cwd: TEMP_DIRECTORY
+		.src sources, cwd: TEMP_DIRECTORY
+
+		# less
 		.pipe less options
 		.on 'error', onError
+		.on 'end', -> moduleLogger 'less'
+
+		# destination
 		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'end', ->
-			gutil.log 'styles: Less compilation complete'
-			deferred.resolve()
+		.on 'end', -> moduleLogger()
+
+		# end
+		.on 'end', -> deferred.resolve()
 
 	deferred.promise
 
 processMarkdown = ->
-	deferred = q.defer()
+	deferred     = q.defer()
+	sources      = ['**/*.{md,markdown}']
+	moduleLogger = (args...) -> logger 'Markdown', args
 
 	gulp
-		.src '**/*.{md,markdown}', cwd: TEMP_DIRECTORY
+		.src sources, cwd: TEMP_DIRECTORY
+
+		# markdown
 		.pipe markdown()
 		.on 'error', onError
+		.on 'end', -> moduleLogger 'markdown'
+
+		# destination
 		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'end', ->
-			gutil.log 'views: Markdown compilation complete'
-			deferred.resolve()
+		.on 'end', -> moduleLogger()
+
+		# end
+		.on 'end', -> deferred.resolve()
 
 	deferred.promise
 
 processSourceScripts = ->
-	deferred = q.defer()
+	return true if isProd
 
-	return deferred.resolve() if isProd
+	deferred     = q.defer()
+	sources      = ['**/*.{coffee,ts,js.map}']
+	moduleLogger = (args...) -> logger 'source scripts', args
 
 	gulp
-		.src '**/*.{coffee,ts,js.map}', cwd: TEMP_DIRECTORY
+		.src sources, cwd: TEMP_DIRECTORY
+
+		# desination
 		.pipe gulp.dest DIST_DIRECTORY
-		.on 'end', ->
-			gutil.log 'scripts: source files moved'
-			deferred.resolve()
+		.on 'end', -> moduleLogger()
+
+		# end
+		.on 'end', -> deferred.resolve()
 
 	deferred.promise
 
 processSourceStyles = ->
-	deferred = q.defer()
+	return true if isProd
 
-	return deferred.resolve() if isProd
+	deferred     = q.defer()
+	sources      = ['**/*.less']
+	moduleLogger = (args...) -> logger 'source styles', args
 
 	gulp
-		.src '**/*.less', cwd: TEMP_DIRECTORY
+		.src sources, cwd: TEMP_DIRECTORY
+
+		# destination
 		.pipe gulp.dest DIST_DIRECTORY
-		.on 'end', ->
-			gutil.log 'styles: source files moved'
-			deferred.resolve()
+		.on 'end', -> moduleLogger()
+
+		# end
+		.on 'end', -> deferred.resolve()
 
 	deferred.promise
 
 processSourceViews = ->
-	deferred = q.defer()
+	return true if isProd
 
-	return deferred.resolve() if isProd
+	deferred     = q.defer()
+	sources      = ['**/*.{jade,md,markdown}']
+	moduleLogger = (args...) -> logger 'source views', args
 
 	gulp
-		.src '**/*.{jade,md,markdown}', cwd: TEMP_DIRECTORY
+		.src sources, cwd: TEMP_DIRECTORY
+
+		# destination
 		.pipe gulp.dest DIST_DIRECTORY
-		.on 'end', ->
-			gutil.log 'scripts: source files moved'
-			deferred.resolve()
+		.on 'end', -> moduleLogger()
+
+		# end
+		.on 'end', -> deferred.resolve()
 
 	deferred.promise
 
 processTypeScript = ->
-	deferred = q.defer()
-
-	sources = ['**/*.ts']
-
-	if isProd
-		sources.push '!**/*.spec.ts'
-		sources.push '!**/*.backend.ts'
+	deferred     = q.defer()
+	sources      = ['**/*.ts'].concat if isProd then ['!**/*.spec.ts', '!**/*.backend.ts'] else []
+	moduleLogger = (args...) -> logger 'TypeScript', args
 
 	gulp
 		.src sources, cwd: TEMP_DIRECTORY
+
+		# typeScript
 		.pipe typeScript()
 		.on 'error', onError
+		.on 'end', -> moduleLogger 'typeScript'
+
+		# destination
 		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'end', ->
-			gutil.log 'scripts: TypeScript compilation complete'
-			deferred.resolve()
+		.on 'end', -> moduleLogger()
+
+		# end
+		.on 'end', -> deferred.resolve()
 
 	deferred.promise
 
 processViews = ->
-	deferred = q.defer()
+	return true if isProd
 
-	return deferred.resolve() if isProd
+	deferred     = q.defer()
+	sources      = VIEWS
+	moduleLogger = (args...) -> logger 'views', args
 
 	gulp
-		.src VIEWS, cwd: TEMP_DIRECTORY
+		.src sources, cwd: TEMP_DIRECTORY
+
+		# destination
 		.pipe gulp.dest DIST_DIRECTORY
-		.on 'end', ->
-			gutil.log 'views: processing complete'
-			deferred.resolve()
+		.on 'end', -> moduleLogger()
+
+		# end
+		.on 'end', -> deferred.resolve()
 
 	deferred.promise
 
 gulp.task 'bower', ->
-	deferred = q.defer()
+	deferred     = q.defer()
+	moduleLogger = (args...) -> logger 'Bower', args
 
 	options =
 		directory: BOWER_DIRECTORY
@@ -354,11 +418,13 @@ gulp.task 'bower', ->
 			components.push "#{component}##{version}"
 
 	bower
-		.commands
-		.install components, {}, options
+		# bower
+		.commands.install components, {}, options
 		.on 'error', onError
-		.on 'end', (results) ->
-			deferred.resolve results
+		.on 'end', -> moduleLogger()
+
+		# end
+		.on 'end', (results) -> deferred.resolve results
 
 	deferred.promise
 
@@ -375,30 +441,46 @@ gulp.task 'changelog', ->
 		fs.writeFile CHANGELOG_FILE, log
 
 gulp.task 'clean', ['clean:working'], ->
+	sources      = [BOWER_DIRECTORY]
+	moduleLogger = (args...) -> logger 'clean', args
+
 	gulp
-		.src BOWER_DIRECTORY
+		.src sources
+
+		# clean
 		.pipe clean()
 		.on 'error', onError
+		.on 'end', -> moduleLogger()
 
 gulp.task 'clean:working', ->
+	sources      = [COMPONENTS_DIRECTORY, TEMP_DIRECTORY, DIST_DIRECTORY, DOCS_DIRECTORY]
+	moduleLogger = (args...) -> logger 'clean:working', args
+
 	gulp
-		.src [COMPONENTS_DIRECTORY, TEMP_DIRECTORY, DIST_DIRECTORY, DOCS_DIRECTORY]
+		.src sources
+
+		# clean
 		.pipe clean()
 		.on 'error', onError
+		.on 'end', -> moduleLogger()
 
 gulp.task 'copy:temp', ['clean:working', 'normalizeComponents'], ->
+	sources      = ["#{SRC_DIRECTORY}**", "#{COMPONENTS_DIRECTORY}**"]
+	moduleLogger = (args...) -> logger 'clean:working', args
+
 	gulp
-		.src [
-			"#{SRC_DIRECTORY}**"
-			"#{COMPONENTS_DIRECTORY}**"
-		]
+		.src sources
+
+		# destination
 		.pipe gulp.dest TEMP_DIRECTORY
+		.on 'end', -> moduleLogger()
 
 gulp.task 'default', if isProd then ['open'] else ['open', 'watch', 'build', 'test']
 
 gulp.task 'e2e', ->
 	e2eConfigFile       = path.join './', TEMP_DIRECTORY, 'e2e-config.coffee'
 	phantomjsBinaryPath = if isWindows then './node_modules/.bin/phantomjs.cmd' else './node_modules/phantomjs/bin/phantomjs'
+	sources             = ['**/*.spec.{coffee,js}']
 
 	# create temporary e2e-config file to avoid an additional config file
 	# currently gulp-protractor requires one the existence of an e2e-config file
@@ -421,27 +503,37 @@ gulp.task 'e2e', ->
 		]
 
 	gulp
-		.src '**/*.spec.{coffee,js}', cwd: E2E_DIRECTORY
+		.src sources, cwd: E2E_DIRECTORY
+
+		# protractor
 		.pipe protractor.protractor options
 		.on 'error', onError
+		.on 'end', -> moduleLogger()
 
 gulp.task 'e2e-driver', protractor.webdriver_standalone
 
 gulp.task 'e2e-driver-update', protractor.webdriver_update
 
 gulp.task 'fonts', ['copy:temp'], ->
-	src = gulp.src '**/*.{eot,svg,ttf,woff}', cwd: TEMP_DIRECTORY
+	sources      = ['**/*.{eot,svg,ttf,woff}']
+	src          = gulp.src sources, cwd: TEMP_DIRECTORY
+	moduleLogger = (args...) -> logger 'fonts', args
 
 	return if isProd
 		src
+			# flatten
 			.pipe flatten()
 			.on 'error', onError
-			.on 'end', ->
-				gutil.log 'fonts: flattened'
+			.on 'end', -> moduleLogger 'flatten'
+
+			# destination
 			.pipe gulp.dest path.join DIST_DIRECTORY, FONTS_DIRECTORY
+			.on 'end', -> moduleLogger()
 
 	src
+		# destination
 		.pipe gulp.dest DIST_DIRECTORY
+		.on 'end', -> moduleLogger()
 
 gulp.task 'karma', ->
 	options =
@@ -474,55 +566,86 @@ gulp.task 'karma', ->
 gulp.task 'minify:views', ['copy:temp'],->
 	return true if not isProd
 
+	sources      = VIEWS
+	moduleLogger = (args...) -> logger 'minify:views', args
+
 	options =
 		empty: true
 		quotes: true
 
 	gulp
-		.src VIEWS, cwd: TEMP_DIRECTORY
+		.src sources, cwd: TEMP_DIRECTORY
+
+		# minifyHtml
 		.pipe minifyHtml options
 		.on 'error', onError
+		.on 'end', -> moduleLogger 'minifyHtml'
+
+		# destination
 		.pipe gulp.dest path.join TEMP_DIRECTORY
+		.on 'end', -> moduleLogger()
 
 gulp.task 'normalizeComponents', ['bower', 'clean:working'], ->
-	promises = []
+	promises     = []
+	moduleLogger = (args...) -> logger 'normalizeComponents', args
 
 	for componentType, files of bowerComponents
 		promise = do (files, componentType) ->
 			deferred = q.defer()
+			sources = files
 
 			gulp
-				.src files, cwd: BOWER_DIRECTORY
+				.src sources, cwd: BOWER_DIRECTORY
+
+				# destination
 				.pipe gulp.dest path.join COMPONENTS_DIRECTORY, VENDOR_DIRECTORY, componentType
-				.on 'end', ->
-					deferred.resolve()
+
+				# end
+				.on 'end', -> deferred.resolve()
 
 			deferred.promise
 
 		promises.push promise
 
-	q.all promises
+	q
+		.all promises
+		.then -> moduleLogger()
 
 gulp.task 'open', ['serve'], ->
+	sources      = ['index.html']
+	moduleLogger = (args...) -> logger 'open', args
+
 	options =
 		url: appUrl
 
 	gulp
-		.src 'index.html', cwd: DIST_DIRECTORY
+		.src sources, cwd: DIST_DIRECTORY
+
+		# open
 		.pipe open '', options
 		.on 'error', onError
+		.on 'end', -> moduleLogger()
 
 gulp.task 'reload', ['build'], ->
+	sources      = ['index.html']
+	moduleLogger = (args...) -> logger 'reload', args
+
 	gulp
-		.src 'index.html', cwd: DIST_DIRECTORY
+		.src sources, cwd: DIST_DIRECTORY
+
+		# reload
 		.pipe connect.reload()
 		.on 'error', onError
+		.on 'end', -> moduleLogger()
 
 gulp.task 'scripts', ['copy:temp', 'templateCache'], ->
+	moduleLogger = (args...) -> logger 'scripts', args
+
 	processCoffeeScript()
 		.then processTypeScript
 		.then processJavaScript
 		.then processSourceScripts
+		.then -> moduleLogger()
 
 gulp.task 'serve', ['build'], ->
 	connect.server
@@ -531,9 +654,6 @@ gulp.task 'serve', ['build'], ->
 		root: DIST_DIRECTORY
 
 gulp.task 'spa', ['scripts', 'styles', 'views', 'fonts'], ->
-	unixifyPath = (p) ->
-		p.replace /\\/g, '/'
-
 	includify = ->
 		scripts = []
 		styles  = []
@@ -558,24 +678,31 @@ gulp.task 'spa', ['scripts', 'styles', 'views', 'fonts'], ->
 		es.through bufferContents, endStream
 
 	getIncludes = ->
-		deferred = q.defer()
+		deferred     = q.defer()
+		moduleLogger = (args...) -> logger 'includify', args
 
-		files = []
+		sources = []
 			.concat SCRIPTS
 			.concat ['!**/*.spec.js']
 			.concat STYLES
 
 		gulp
-			.src files, cwd: DIST_DIRECTORY
+			.src sources, cwd: DIST_DIRECTORY
+
+			# includify
 			.pipe includify()
 			.on 'error', onError
-			.on 'end', (data) ->
-				deferred.resolve data
+			.on 'end', -> moduleLogger()
+
+			# end
+			.on 'end', (data) -> deferred.resolve data
 
 		deferred.promise
 
-	processTemplate = (files) ->
-		deferred = q.defer()
+	processSpa = (files) ->
+		deferred     = q.defer()
+		sources      = ['index.html']
+		moduleLogger = (args...) -> logger 'SPA', args
 
 		options =
 			empty: true
@@ -586,61 +713,83 @@ gulp.task 'spa', ['scripts', 'styles', 'views', 'fonts'], ->
 			scripts: files.scripts
 			styles: files.styles
 
-		source          = 'index.html'
-		optimizedSource = if isProd then source else []
+		optimizedSource = if isProd then sources else []
 		optimizedFilter = filter optimizedSource
 
 		gulp
-			.src source, cwd: TEMP_DIRECTORY
+			.src sources, cwd: TEMP_DIRECTORY
+
+			# template
 			.pipe template data
 			.on 'error', onError
-			.on 'end', -> gutil.log 'spa: Templating complete'
+			.on 'end', -> moduleLogger 'template'
 
 			.pipe optimizedFilter
+
+			# minifyHtml
 			.pipe minifyHtml options
 			.on 'error', onError
-			.on 'end', -> gutil.log 'spa: Minification complete' if isProd
+			.on 'end', -> moduleLogger 'minifyHtml' if isProd
+
 			.pipe optimizedFilter.restore()
 
+			# destination
 			.pipe gulp.dest DIST_DIRECTORY
-			.on 'end', ->
-				deferred.resolve()
+			.on 'end', -> moduleLogger()
+
+			# end
+			.on 'end', -> deferred.resolve()
 
 		deferred.promise
 
 	getIncludes()
-		.then processTemplate
+		.then processSpa
 
 gulp.task 'styles', ['copy:temp'], ->
+	moduleLogger = (args...) -> logger 'styles', args
+
 	processLess()
 		.then processCss
 		.then processSourceStyles
+		.then -> moduleLogger()
 
 gulp.task 'templateCache', ['copy:temp'], ->
 	return true if not isProd
+
+	sources      = VIEWS
+	moduleLogger = (args...) -> logger 'templateCache', args
 
 	options =
 		module: APP_NAME
 		root: '/'
 
 	gulp
-		.src VIEWS, cwd: TEMP_DIRECTORY
+		.src sources, cwd: TEMP_DIRECTORY
+
+		# templateCache
 		.pipe templateCache options
 		.on 'error', onError
+		.on 'end', -> moduleLogger 'templateCache'
+
+		# destination
 		.pipe gulp.dest path.join TEMP_DIRECTORY, SCRIPTS_MIN_DIRECTORY
+		.on 'end', -> moduleLogger()
 
 gulp.task 'test', ['build'], ->
 	return true if isProd
 
 	# don't allow karma to block gulp
 	command = if isWindows then '.\\node_modules\\.bin\\gulp.cmd' else 'gulp'
-	spawn = childProcess.spawn command, ['karma'], {stdio: 'inherit'}
+	spawn   = childProcess.spawn command, ['karma'], {stdio: 'inherit'}
 
 gulp.task 'views', ['copy:temp'], ->
+	moduleLogger = (args...) -> logger 'views', args
+
 	processJade()
 		.then processMarkdown
 		.then processViews
 		.then processSourceViews
+		.then -> moduleLogger()
 
 gulp.task 'watch', ['build'], ->
 	return true if isProd

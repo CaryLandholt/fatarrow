@@ -1,6 +1,5 @@
-// the build instructions are in gulpfile.coffee
-// this file is a simple bridge since gulp doesn't support
-// CoffeeScript files natively.
+// The build instructions are in gulpfile.coffee.
+// This file is a simple bridge since gulp doesn't support CoffeeScript configurations natively.
 
 require('coffee-script').register();
 require('./gulpfile.coffee');
