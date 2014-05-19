@@ -1,3 +1,13 @@
+<a name="0.2.0"></a>
+## 0.2.0  (2014-05-18)
+
+
+#### Features
+
+* **backend:** add backend config ([6e4aa93b](https://github.com/CaryLandholt/fatarrow/commit/6e4aa93b904b645f8c3aa35b296382c143eb9b3b))
+* **ngmin:** add ngmin ([7513cb3f](https://github.com/CaryLandholt/fatarrow/commit/7513cb3f40dbaa2224a54cd38cd72908ce7e7552))
+
+
 <a name="0.1.2"></a>
 ### 0.1.2  (2014-05-16)
 
