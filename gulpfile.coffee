@@ -38,6 +38,7 @@ markdown              = require 'gulp-markdown'
 minifyCss             = require 'gulp-minify-css'
 minifyHtml            = require 'gulp-minify-html'
 ngClassify            = require 'gulp-ng-classify'
+ngmin                 = require 'gulp-ngmin'
 open                  = require 'gulp-open'
 path                  = require 'path'
 pkg                   = require './package.json'
@@ -231,6 +232,11 @@ processJavaScript = ->
 		.src sources, cwd: TEMP_DIRECTORY
 
 		.pipe optimizedScriptsFilter
+
+		# ngMin
+		.pipe ngmin()
+		.on 'error', onError
+		.on 'end', -> moduleLogger 'ngmin' if isProd
 
 		# concat
 		.pipe concat SCRIPTS_MIN_FILE
@@ -480,7 +486,7 @@ defaultTasks = do ->
 
 	return tasks if isProd
 
-	tasks = tasks.concat  ['open', 'watch', 'build']
+	tasks = tasks.concat  ['watch', 'build']
 
 	return tasks if useBackend
 
@@ -809,4 +815,4 @@ gulp.task 'watch', ['build'], ->
 	watchTasks = if useBackend then ['reload'] else ['test', 'reload']
 
 	gulp
-		.watch "#{SRC_DIRECTORY}**/*.{coffee,css,html,jade,less,markdown,md,ts}", watchTasks
+		.watch "#{SRC_DIRECTORY}**/*.{coffee,css,html,jade,js,less,markdown,md,ts}", watchTasks
