@@ -1,3 +1,12 @@
+<a name="0.3.0"></a>
+## 0.3.0  (2014-05-20)
+
+
+#### Features
+
+* **imagemin:** add imagemin ([13ff2d49](https://github.com/CaryLandholt/fatarrow/commit/13ff2d4952e41622add01d842fe8f25b1e9e35de))
+
+
 <a name="0.2.0"></a>
 ## 0.2.0  (2014-05-18)
 
