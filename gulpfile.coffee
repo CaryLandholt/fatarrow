@@ -17,6 +17,47 @@ TEMP_DIRECTORY        = '.temp/'
 VENDOR_DIRECTORY      = 'vendor/'
 VIEWS                 =  ['**/*.html', '!index.html']
 
+SOURCE_EXTENSIONS =
+	FONTS: [
+		'eot'
+		'svg'
+		'ttf'
+		'woff'
+	]
+	IMAGES: [
+		'gif'
+		'jpeg'
+		'jpg'
+	]
+	SCRIPTS: [
+		'coffee'
+		'map'
+		'ts'
+	]
+	STYLES: [
+		'less'
+		'map'
+	]
+	VIEWS: [
+		'jade'
+		'md'
+		'markdown'
+	]
+
+DESTINATION_EXTENSIONS = [
+	'css'
+	'html'
+	'js'
+]
+
+ALL_EXTENSIONS = do ->
+	extensions = DESTINATION_EXTENSIONS
+
+	for k, v of SOURCE_EXTENSIONS
+		extensions = extensions.concat v
+
+	extensions
+
 bower                 = require 'bower'
 childProcess          = require 'child_process'
 clean                 = require 'gulp-clean'
@@ -33,6 +74,7 @@ gulp                  = require 'gulp'
 gutil                 = require 'gulp-util'
 jade                  = require 'gulp-jade'
 karma                 = require 'karma'
+imagemin              = require 'gulp-imagemin'
 less                  = require 'gulp-less'
 markdown              = require 'gulp-markdown'
 minifyCss             = require 'gulp-minify-css'
@@ -315,7 +357,7 @@ processSourceScripts = ->
 	return true if isProd
 
 	deferred     = q.defer()
-	sources      = ['**/*.{coffee,ts,js.map}']
+	sources      = ["**/*.{#{SOURCE_EXTENSIONS.SCRIPTS.join()}}"]
 	moduleLogger = (args...) -> logger 'source scripts', args
 
 	gulp
@@ -334,7 +376,7 @@ processSourceStyles = ->
 	return true if isProd
 
 	deferred     = q.defer()
-	sources      = ['**/*.less']
+	sources      = ["**/*.#{SOURCE_EXTENSIONS.STYLES.join()}"]
 	moduleLogger = (args...) -> logger 'source styles', args
 
 	gulp
@@ -353,7 +395,7 @@ processSourceViews = ->
 	return true if isProd
 
 	deferred     = q.defer()
-	sources      = ['**/*.{jade,md,markdown}']
+	sources      = ["**/*.{#{SOURCE_EXTENSIONS.VIEWS.join()}}"]
 	moduleLogger = (args...) -> logger 'source views', args
 
 	gulp
@@ -434,7 +476,7 @@ gulp.task 'bower', ->
 
 	deferred.promise
 
-gulp.task 'build', ['scripts', 'styles', 'views', 'fonts', 'spa']
+gulp.task 'build', ['scripts', 'styles', 'views', 'fonts', 'images', 'documents', 'spa']
 
 gulp.task 'changelog', ->
 	options =
@@ -500,6 +542,7 @@ gulp.task 'e2e', ->
 	e2eConfigFile       = path.join './', TEMP_DIRECTORY, 'e2e-config.coffee'
 	phantomjsBinaryPath = windowsify './node_modules/.bin/phantomjs.cmd', './node_modules/phantomjs/bin/phantomjs'
 	sources             = ['**/*.spec.{coffee,js}']
+	moduleLogger        = (args...) -> logger 'e2e', args
 
 	# create temporary e2e-config file to avoid an additional config file
 	# currently gulp-protractor requires one the existence of an e2e-config file
@@ -533,8 +576,19 @@ gulp.task 'e2e-driver', protractor.webdriver_standalone
 
 gulp.task 'e2e-driver-update', protractor.webdriver_update
 
+gulp.task 'documents', ['copy:temp'], ->
+	sources      = ['**/*.*'].concat ("!**/*.#{extension}" for extension in ALL_EXTENSIONS)
+	moduleLogger = (args...) -> logger 'remaining', args
+
+	gulp
+		.src sources, cwd: SRC_DIRECTORY
+
+		# destination
+		.pipe gulp.dest DIST_DIRECTORY
+		.on 'end', -> moduleLogger()
+
 gulp.task 'fonts', ['copy:temp'], ->
-	sources      = ['**/*.{eot,svg,ttf,woff}']
+	sources      = ["**/*.{#{SOURCE_EXTENSIONS.FONTS.join()}}"]
 	src          = gulp.src sources, cwd: TEMP_DIRECTORY
 	moduleLogger = (args...) -> logger 'fonts', args
 
@@ -547,6 +601,27 @@ gulp.task 'fonts', ['copy:temp'], ->
 
 			# destination
 			.pipe gulp.dest path.join DIST_DIRECTORY, FONTS_DIRECTORY
+			.on 'end', -> moduleLogger()
+
+	src
+		# destination
+		.pipe gulp.dest DIST_DIRECTORY
+		.on 'end', -> moduleLogger()
+
+gulp.task 'images', ['copy:temp'], ->
+	sources      = ["**/*.{#{SOURCE_EXTENSIONS.IMAGES.join()}}"]
+	src          = gulp.src sources, cwd: TEMP_DIRECTORY
+	moduleLogger = (args...) -> logger 'images', args
+
+	return if isProd
+		src
+			# flatten
+			.pipe imagemin()
+			.on 'error', onError
+			.on 'end', -> moduleLogger 'imagemin'
+
+			# destination
+			.pipe gulp.dest DIST_DIRECTORY
 			.on 'end', -> moduleLogger()
 
 	src
@@ -815,4 +890,4 @@ gulp.task 'watch', ['build'], ->
 	watchTasks = if useBackend then ['reload'] else ['test', 'reload']
 
 	gulp
-		.watch "#{SRC_DIRECTORY}**/*.{coffee,css,html,jade,js,less,markdown,md,ts}", watchTasks
+		.watch "#{SRC_DIRECTORY}**/*.{#{ALL_EXTENSIONS.join()}}", watchTasks
