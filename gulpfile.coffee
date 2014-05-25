@@ -21,6 +21,7 @@ less                  = require 'gulp-less'
 markdown              = require 'gulp-markdown'
 minifyCss             = require 'gulp-minify-css'
 minifyHtml            = require 'gulp-minify-html'
+plato                 = require 'gulp-plato'
 ngClassify            = require 'gulp-ng-classify'
 ngmin                 = require 'gulp-ngmin'
 open                  = require 'gulp-open'
@@ -44,6 +45,7 @@ PORT                  = 8181
 SCRIPTS_MIN_DIRECTORY = 'scripts/'
 SCRIPTS_MIN_FILE      = 'scripts.min.js'
 SRC_DIRECTORY         = 'src/'
+STATS_DIRECTORY       = 'stats/'
 STYLES_MIN_DIRECTORY  = 'styles/'
 STYLES_MIN_FILE       = 'styles.min.css'
 TEMP_DIRECTORY        = '.temp/'
@@ -143,11 +145,25 @@ onStyle = (file) ->
 
 	file
 
-startServer = ->
+openApp = (rootDirectory) ->
+	sources = 'index.html'
+
+	options =
+		open:
+			url: appUrl
+
+	gulp
+		.src sources, cwd: rootDirectory
+		.on 'error', onError
+
+		.pipe open '', options.open
+		.on 'error', onError
+
+startServer = (rootDirectory) ->
 	connect.server
 		livereload: !isProd
 		port: PORT
-		root: DIST_DIRECTORY
+		root: rootDirectory
 
 unixifyPath = (p) ->
 	p.replace /\\/g, '/'
@@ -686,17 +702,53 @@ gulp.task 'normalizeComponents', ['bower'], ->
 
 # Open the app in the default browser
 gulp.task 'open', ['server'], ->
-	sources = 'index.html'
+	openApp DIST_DIRECTORY
 
-	options =
-		open:
-			url: appUrl
+# Execute Plato complexity analysis
+gulp.task 'plato', ['clean:working'], ->
+	srcs = []
 
-	gulp
-		.src sources, cwd: DIST_DIRECTORY
+	srcs.push src =
+		gulp
+			.src '**/*.coffee', cwd: SRC_DIRECTORY
+			.on 'error', onError
+
+			.pipe template templateOptions
+			.on 'error', onError
+
+			.pipe ngClassify()
+			.on 'error', onError
+
+			.pipe coffeeScript()
+			.on 'error', onError
+
+	srcs.push src =
+		gulp
+			.src '**/*.js', cwd: SRC_DIRECTORY
+			.on 'error', onError
+
+			.pipe template templateOptions
+			.on 'error', onError
+
+	srcs.push src =
+		gulp
+			.src '**/*.ts', cwd: SRC_DIRECTORY
+			.on 'error', onError
+
+			.pipe template templateOptions
+			.on 'error', onError
+
+			.pipe typeScript()
+			.on 'error', onError
+
+	es
+		.merge.apply @, srcs
 		.on 'error', onError
 
-		.pipe open '', options.open
+		.pipe gulp.dest DIST_DIRECTORY
+		.on 'error', onError
+
+		.pipe plato STATS_DIRECTORY
 		.on 'error', onError
 
 # Prepare for compilation
@@ -758,11 +810,21 @@ gulp.task 'scripts', ['coffeeScript', 'javaScript', 'typeScript'].concat(if isPr
 
 # Start a web server without rebuilding
 gulp.task 'serve', ->
-	startServer()
+	startServer DIST_DIRECTORY
+
+# Start a web server for stats without rebuilding
+gulp.task 'serveStats', ->
+	startServer STATS_DIRECTORY
+	openApp STATS_DIRECTORY
 
 # Start a web server
 gulp.task 'server', ['build'], ->
-	startServer()
+	startServer DIST_DIRECTORY
+
+# Start a web server for stats
+gulp.task 'serverStats', ['stats'], ->
+	startServer STATS_DIRECTORY
+	openApp STATS_DIRECTORY
 
 # Process SPA
 gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' else 'views'), ->
@@ -797,6 +859,9 @@ gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' els
 	src
 		.pipe gulp.dest DIST_DIRECTORY
 		.on 'error', onError
+
+# Execute stats
+gulp.task 'stats', ['plato']
 
 # Process styles
 gulp.task 'styles', ['less', 'css'], ->
