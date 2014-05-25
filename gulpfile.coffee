@@ -95,6 +95,7 @@ env            = gutil.env
 isProd         = env.prod? or env.production?
 isWindows      = /^win/.test(process.platform)
 manifest       = {}
+serve          = env.serve?
 useBackendless = not (env.backend? or isProd)
 useSpecs       = useBackendless
 
@@ -811,20 +812,11 @@ gulp.task 'scripts', ['coffeeScript', 'javaScript', 'typeScript'].concat(if isPr
 # Start a web server without rebuilding
 gulp.task 'serve', ->
 	startServer DIST_DIRECTORY
-
-# Start a web server for stats without rebuilding
-gulp.task 'serveStats', ->
-	startServer STATS_DIRECTORY
-	openApp STATS_DIRECTORY
+	openApp DIST_DIRECTORY
 
 # Start a web server
 gulp.task 'server', ['build'], ->
 	startServer DIST_DIRECTORY
-
-# Start a web server for stats
-gulp.task 'serverStats', ['stats'], ->
-	startServer STATS_DIRECTORY
-	openApp STATS_DIRECTORY
 
 # Process SPA
 gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' else 'views'), ->
@@ -861,7 +853,10 @@ gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' els
 		.on 'error', onError
 
 # Execute stats
-gulp.task 'stats', ['plato']
+gulp.task 'stats', ['plato'], ->
+	if serve
+		startServer STATS_DIRECTORY
+		openApp STATS_DIRECTORY
 
 # Process styles
 gulp.task 'styles', ['less', 'css'], ->
