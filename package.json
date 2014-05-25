@@ -38,7 +38,7 @@
 		"gulp-ngmin": "~0.3.0",
 		"gulp-open": "~0.2.8",
 		"gulp-protractor": "~0.0.7",
-		"gulp-rev": "~0.3.2",
+		"gulp-rev": "~0.4.0",
 		"gulp-template": "~0.1.1",
 		"gulp-typescript": "~0.2.0",
 		"gulp-uglify": "~0.3.0",
