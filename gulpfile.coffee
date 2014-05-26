@@ -727,7 +727,7 @@ gulp.task 'open', ['server'], ->
 gulp.task 'plato', ['clean:working'], ->
 	options =
 		plato:
-			title: pkg.name
+			title: "#{pkg.name} v#{pkg.version}"
 
 	srcs = []
 
