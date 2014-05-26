@@ -45,7 +45,8 @@ PORT                  = 8181
 SCRIPTS_MIN_DIRECTORY = 'scripts/'
 SCRIPTS_MIN_FILE      = 'scripts.min.js'
 SRC_DIRECTORY         = 'src/'
-STATS_DIRECTORY       = 'stats/'
+STATS_DIRECTORY       = 'stats/stats/'
+STATS_DIST_DIRECTORY  = 'stats/'
 STYLES_MIN_DIRECTORY  = 'styles/'
 STYLES_MIN_FILE       = 'styles.min.css'
 TEMP_DIRECTORY        = '.temp/'
@@ -95,7 +96,7 @@ env            = gutil.env
 isProd         = env.prod? or env.production?
 isWindows      = /^win/.test(process.platform)
 manifest       = {}
-serve          = env.serve?
+nostats        = env.nostats? or isProd
 useBackendless = not (env.backend? or isProd)
 useSpecs       = useBackendless
 
@@ -146,7 +147,7 @@ onStyle = (file) ->
 
 	file
 
-openApp = (rootDirectory) ->
+openApp = ->
 	sources = 'index.html'
 
 	options =
@@ -154,17 +155,17 @@ openApp = (rootDirectory) ->
 			url: appUrl
 
 	gulp
-		.src sources, cwd: rootDirectory
+		.src sources, cwd: DIST_DIRECTORY
 		.on 'error', onError
 
 		.pipe open '', options.open
 		.on 'error', onError
 
-startServer = (rootDirectory) ->
+startServer = ->
 	connect.server
 		livereload: !isProd
 		port: PORT
-		root: rootDirectory
+		root: DIST_DIRECTORY
 
 unixifyPath = (p) ->
 	p.replace /\\/g, '/'
@@ -199,8 +200,14 @@ gulp.task 'build', ['spa', 'fonts', 'images'], ->
 
 	srcs = []
 
+	if not nostats
+		srcs.push src =
+			gulp
+				.src '**', cwd: STATS_DIST_DIRECTORY
+				.on 'error', onError
+
 	if not isProd
-		srcs.push temp =
+		srcs.push src =
 			gulp
 				.src getSources(), cwd: TEMP_DIRECTORY
 				.on 'error', onError
@@ -212,12 +219,12 @@ gulp.task 'build', ['spa', 'fonts', 'images'], ->
 
 	sources = getSources()
 
-	srcs.push source =
+	srcs.push src =
 		gulp
 			.src sources, cwd: SRC_DIRECTORY
 			.on 'error', onError
 
-	srcs.push components =
+	srcs.push src =
 		gulp
 			.src sources, cwd: COMPONENTS_DIRECTORY
 			.on 'error', onError
@@ -278,8 +285,9 @@ gulp.task 'coffeeScript', ['prepare'], ->
 				level: 'ignore'
 
 	sources = getScriptSources '.coffee'
+	srcs    = []
 
-	source =
+	srcs.push src =
 		gulp
 			.src sources, cwd: SRC_DIRECTORY
 			.on 'error', onError
@@ -296,7 +304,7 @@ gulp.task 'coffeeScript', ['prepare'], ->
 			.pipe ngClassify()
 			.on 'error', onError
 
-	components =
+	srcs.push src =
 		gulp
 			.src sources, cwd: COMPONENTS_DIRECTORY
 			.on 'error', onError
@@ -305,7 +313,7 @@ gulp.task 'coffeeScript', ['prepare'], ->
 			.on 'error', onError
 
 	es
-		.merge source, components
+		.merge.apply @, srcs
 		.on 'error', onError
 
 		.pipe coffeeScript options.coffeeScript
@@ -317,8 +325,9 @@ gulp.task 'coffeeScript', ['prepare'], ->
 # Compile CSS
 gulp.task 'css', ['prepare'], ->
 	sources = '**/*.css'
+	srcs    = []
 
-	source =
+	srcs.push src =
 		gulp
 			.src sources, cwd: SRC_DIRECTORY
 			.on 'error', onError
@@ -329,13 +338,13 @@ gulp.task 'css', ['prepare'], ->
 			.pipe template templateOptions
 			.on 'error', onError
 
-	components =
+	srcs.push src =
 		gulp
 			.src sources, cwd: COMPONENTS_DIRECTORY
 			.on 'error', onError
 
 	es
-		.merge source, components
+		.merge.apply @, srcs
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -408,19 +417,20 @@ gulp.task 'fonts', ['fontTypes'], ->
 # Compile fontTypes
 gulp.task 'fontTypes', ['prepare'], ->
 	sources = [].concat ("**/*#{extension}" for extension in EXTENSIONS.FONTS.COMPILED)
+	srcs    = []
 
-	source =
+	srcs.push src =
 		gulp
 			.src sources, cwd: SRC_DIRECTORY
 			.on 'error', onError
 
-	components =
+	srcs.push src =
 		gulp
 			.src sources, cwd: COMPONENTS_DIRECTORY
 			.on 'error', onError
 
 	es
-		.merge source, components
+		.merge.apply @, srcs
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -433,7 +443,9 @@ gulp.task 'html', ['prepare'], ->
 		'!index.html'
 	]
 
-	source =
+	srcs = []
+
+	srcs.push src =
 		gulp
 			.src sources, cwd: SRC_DIRECTORY
 			.on 'error', onError
@@ -444,13 +456,13 @@ gulp.task 'html', ['prepare'], ->
 			.pipe template templateOptions
 			.on 'error', onError
 
-	components =
+	srcs.push src =
 		gulp
 			.src sources, cwd: COMPONENTS_DIRECTORY
 			.on 'error', onError
 
 	es
-		.merge source, components
+		.merge.apply @, srcs
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -480,19 +492,20 @@ gulp.task 'images', ['imageTypes'], ->
 # Compile imageTypes
 gulp.task 'imageTypes', ['prepare'], ->
 	sources = [].concat ("**/*#{extension}" for extension in EXTENSIONS.IMAGES.COMPILED)
+	srcs    = []
 
-	source =
+	srcs.push src =
 		gulp
 			.src sources, cwd: SRC_DIRECTORY
 			.on 'error', onError
 
-	components =
+	srcs.push src =
 		gulp
 			.src sources, cwd: COMPONENTS_DIRECTORY
 			.on 'error', onError
 
 	es
-		.merge source, components
+		.merge.apply @, srcs
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -505,8 +518,9 @@ gulp.task 'jade', ['prepare'], ->
 			pretty: true
 
 	sources = '**/*.jade'
+	srcs    = []
 
-	source =
+	srcs.push src =
 		gulp
 			.src sources, cwd: SRC_DIRECTORY
 			.on 'error', onError
@@ -517,7 +531,7 @@ gulp.task 'jade', ['prepare'], ->
 			.pipe template templateOptions
 			.on 'error', onError
 
-	components =
+	srcs.push src =
 		gulp
 			.src sources, cwd: COMPONENTS_DIRECTORY
 			.on 'error', onError
@@ -526,7 +540,7 @@ gulp.task 'jade', ['prepare'], ->
 			.on 'error', onError
 
 	es
-		.merge source, components
+		.merge.apply @, srcs
 		.on 'error', onError
 
 		.pipe jade options.jade
@@ -538,8 +552,9 @@ gulp.task 'jade', ['prepare'], ->
 # Compile JavaScript
 gulp.task 'javaScript', ['prepare'], ->
 	sources = getScriptSources '.js'
+	srcs    = []
 
-	source =
+	srcs.push src =
 		gulp
 			.src sources, cwd: SRC_DIRECTORY
 			.on 'error', onError
@@ -550,13 +565,13 @@ gulp.task 'javaScript', ['prepare'], ->
 			.pipe template templateOptions
 			.on 'error', onError
 
-	components =
+	srcs.push src =
 		gulp
 			.src sources, cwd: COMPONENTS_DIRECTORY
 			.on 'error', onError
 
 	es
-		.merge source, components
+		.merge.apply @, srcs
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -572,6 +587,7 @@ gulp.task 'karma', ->
 			'PhantomJS'
 		]
 		colors: true
+		exclude: ["#{STATS_DIST_DIRECTORY}**"]
 		files: SCRIPTS
 		frameworks: [
 			'jasmine'
@@ -598,8 +614,9 @@ gulp.task 'less', ['prepare'], ->
 			sourceMapBasepath: path.resolve TEMP_DIRECTORY
 
 	sources = '**/*.less'
+	srcs    = []
 
-	source =
+	srcs.push src =
 		gulp
 			.src sources, cwd: SRC_DIRECTORY
 			.on 'error', onError
@@ -610,7 +627,7 @@ gulp.task 'less', ['prepare'], ->
 			.pipe template templateOptions
 			.on 'error', onError
 
-	components =
+	srcs.push src =
 		gulp
 			.src sources, cwd: COMPONENTS_DIRECTORY
 			.on 'error', onError
@@ -619,7 +636,7 @@ gulp.task 'less', ['prepare'], ->
 			.on 'error', onError
 
 	es
-		.merge source, components
+		.merge.apply @, srcs
 		.on 'error', onError
 
 		.pipe less options.less
@@ -631,8 +648,9 @@ gulp.task 'less', ['prepare'], ->
 # Compile Markdown
 gulp.task 'markdown', ['prepare'], ->
 	sources = '**/*.{md,markdown}'
+	srcs    = []
 
-	source =
+	srcs.push src =
 		gulp
 			.src sources, cwd: SRC_DIRECTORY
 			.on 'error', onError
@@ -643,7 +661,7 @@ gulp.task 'markdown', ['prepare'], ->
 			.pipe template templateOptions
 			.on 'error', onError
 
-	components =
+	srcs.push src =
 		gulp
 			.src sources, cwd: COMPONENTS_DIRECTORY
 			.on 'error', onError
@@ -652,7 +670,7 @@ gulp.task 'markdown', ['prepare'], ->
 			.on 'error', onError
 
 	es
-		.merge source, components
+		.merge.apply @, srcs
 		.on 'error', onError
 
 		.pipe markdown()
@@ -703,7 +721,7 @@ gulp.task 'normalizeComponents', ['bower'], ->
 
 # Open the app in the default browser
 gulp.task 'open', ['server'], ->
-	openApp DIST_DIRECTORY
+	openApp()
 
 # Execute Plato complexity analysis
 gulp.task 'plato', ['clean:working'], ->
@@ -811,12 +829,12 @@ gulp.task 'scripts', ['coffeeScript', 'javaScript', 'typeScript'].concat(if isPr
 
 # Start a web server without rebuilding
 gulp.task 'serve', ->
-	startServer DIST_DIRECTORY
-	openApp DIST_DIRECTORY
+	startServer()
+	openApp()
 
 # Start a web server
 gulp.task 'server', ['build'], ->
-	startServer DIST_DIRECTORY
+	startServer()
 
 # Process SPA
 gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' else 'views'), ->
@@ -853,10 +871,7 @@ gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' els
 		.on 'error', onError
 
 # Execute stats
-gulp.task 'stats', ['plato'], ->
-	if serve
-		startServer STATS_DIRECTORY
-		openApp STATS_DIRECTORY
+gulp.task 'stats', ['plato']
 
 # Process styles
 gulp.task 'styles', ['less', 'css'], ->
@@ -929,8 +944,9 @@ gulp.task 'test', ['build'], ->
 # Compile TypeScript
 gulp.task 'typeScript', ['prepare'], ->
 	sources = getScriptSources '.ts'
+	srcs    = []
 
-	source =
+	srcs.push src =
 		gulp
 			.src sources, cwd: SRC_DIRECTORY
 			.on 'error', onError
@@ -941,7 +957,7 @@ gulp.task 'typeScript', ['prepare'], ->
 			.pipe template templateOptions
 			.on 'error', onError
 
-	components =
+	srcs.push src =
 		gulp
 			.src sources, cwd: COMPONENTS_DIRECTORY
 			.on 'error', onError
@@ -950,7 +966,7 @@ gulp.task 'typeScript', ['prepare'], ->
 			.on 'error', onError
 
 	es
-		.merge source, components
+		.merge.apply @, srcs
 		.on 'error', onError
 
 		.pipe typeScript()
