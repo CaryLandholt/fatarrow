@@ -1,3 +1,14 @@
+<a name="0.4.0"></a>
+## 0.4.0  (2014-05-25)
+
+
+#### Features
+
+* **stats:**
+  * make stats available when running the app ([0ea9825d](https://github.com/CaryLandholt/fatarrow/commit/0ea9825dbb3894259c3adb14e63bef1d912c5cc3))
+  * add plato stats ([6e4dc435](https://github.com/CaryLandholt/fatarrow/commit/6e4dc43585d4344a57f679f6cd9e71c39ad16fbb))
+
+
 <a name="0.3.0"></a>
 ## 0.3.0  (2014-05-20)
 
