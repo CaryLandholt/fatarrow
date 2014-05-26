@@ -1,3 +1,12 @@
+<a name="0.4.1"></a>
+### 0.4.1  (2014-05-26)
+
+
+#### Bug Fixes
+
+* **imagemin:** add .png files ([7f039036](https://github.com/CaryLandholt/fatarrow/commit/7f0390361d5ee4da0818c7248a21d653b20efec5))
+
+
 <a name="0.4.0"></a>
 ## 0.4.0  (2014-05-25)
 
