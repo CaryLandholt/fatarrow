@@ -65,6 +65,7 @@ EXTENSIONS =
 			'.gif'
 			'.jpeg'
 			'.jpg'
+			'.png'
 		]
 	SCRIPTS:
 		COMPILED: [
