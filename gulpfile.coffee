@@ -725,6 +725,10 @@ gulp.task 'open', ['server'], ->
 
 # Execute Plato complexity analysis
 gulp.task 'plato', ['clean:working'], ->
+	options =
+		plato:
+			title: pkg.name
+
 	srcs = []
 
 	srcs.push src =
@@ -767,7 +771,7 @@ gulp.task 'plato', ['clean:working'], ->
 		.pipe gulp.dest DIST_DIRECTORY
 		.on 'error', onError
 
-		.pipe plato STATS_DIRECTORY
+		.pipe plato STATS_DIRECTORY, options.plato
 		.on 'error', onError
 
 # Prepare for compilation
