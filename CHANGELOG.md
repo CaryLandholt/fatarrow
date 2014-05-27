@@ -1,3 +1,13 @@
+<a name="0.4.2"></a>
+### 0.4.2  (2014-05-27)
+
+
+#### Bug Fixes
+
+* **bower.json:** recreate bower.json on changelog ([f1f26fcb](https://github.com/CaryLandholt/fatarrow/commit/f1f26fcb91d64127a721e21031ac8af4ca428aa2))
+* **paths:** Windows paths are file paths ([3121a2c1](https://github.com/CaryLandholt/fatarrow/commit/3121a2c1b44fe5eac61bad949c2763e888de0929))
+
+
 <a name="0.4.1"></a>
 ### 0.4.1  (2014-05-26)
 
