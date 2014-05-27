@@ -237,7 +237,7 @@ gulp.task 'build', ['spa', 'fonts', 'images'], ->
 		.on 'error', onError
 
 # Generate CHANGELOG
-gulp.task 'changelog', ['stats'], ->
+gulp.task 'changelog', ['normalizeComponents', 'stats'], ->
 	options =
 		repository: pkg.repository.url
 		version: pkg.version
