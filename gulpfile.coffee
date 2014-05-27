@@ -130,7 +130,7 @@ onRev = (file) ->
 onScript = (file) ->
 	filePath = path.relative file.base, file.path
 	filePath = path.join SCRIPTS_MIN_DIRECTORY, filePath if file.revOrigBase
-	filePath = path.resolve '/', filePath
+	filePath = unixifyPath '/' + filePath
 	endsWith = '.spec.js'
 	isSpec   = filePath.slice(-endsWith.length) is endsWith
 
@@ -141,7 +141,7 @@ onScript = (file) ->
 onStyle = (file) ->
 	filePath = path.relative file.base, file.path
 	filePath = path.join STYLES_MIN_DIRECTORY, filePath if file.revOrigBase
-	filePath = path.resolve '/', filePath
+	filePath = unixifyPath '/' + filePath
 
 	templateOptions.styles.push filePath
 
