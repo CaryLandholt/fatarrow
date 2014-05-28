@@ -117,7 +117,7 @@ onError = (e) ->
 	errors   = if isArray then err else [err]
 	messages = (error for error in errors)
 
-	log gutil.colors.red message for message in messages
+	gutil.log gutil.colors.red message for message in messages
 	@emit 'end'
 
 onRev = (file) ->
