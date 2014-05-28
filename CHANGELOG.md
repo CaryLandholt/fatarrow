@@ -1,3 +1,12 @@
+<a name="0.5.0"></a>
+## 0.5.0  (2014-05-27)
+
+
+#### Features
+
+* **YouTubePlayer:** add YouTubePlayer widget ([eebde83c](https://github.com/CaryLandholt/fatarrow/commit/eebde83c0ca407de0ff6519e0fa4a2f4dbd76007))
+
+
 <a name="0.4.2"></a>
 ### 0.4.2  (2014-05-27)
 
