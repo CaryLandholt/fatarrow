@@ -1,14 +1,18 @@
 class YouTubePlayer extends Factory
 	constructor: ($rootScope, $window, $log) ->
 		apiReady = false
-		players = {}
+		players  = {}
 
-		$window.onYouTubeIframeAPIReady = =>
+		onApiReady = =>
 			apiReady = true
 
 			$rootScope.$broadcast playerId for playerId, videoId of players
 
 			players = null
+
+		$window.onYouTubeIframeAPIReady = onApiReady
+
+		onApiReady() if not apiReady and $window.YT and $window.YT.loaded
 
 		createPlayer = (playerId, videoId, playlistId, playerHeight, playerWidth) ->
 			options =

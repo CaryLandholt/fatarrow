@@ -1,5 +1,5 @@
 class Syntax extends Directive
-	constructor: ($http, $templateCache, syntaxHighlighterService) ->
+	constructor: ($http, $templateCache, syntaxService) ->
 		link = (scope, element, attrs) ->
 			language        = scope.language
 			lineNumbers     = scope.lineNumbers isnt 'false'
@@ -29,7 +29,7 @@ class Syntax extends Directive
 						response = "#{comment}\n" + response if comment isnt ''
 
 					code = sanitize response
-					html = syntaxHighlighterService.highlight code, language, lineNumbers
+					html = syntaxService.highlight code, language, lineNumbers
 
 					element.html html
 
@@ -46,7 +46,7 @@ class Syntax extends Directive
 			# remove trailing newlines
 			code = code.substr 0, last while code.charCodeAt(last) is newlineCharCode
 
-			html = syntaxHighlighterService.highlight code, language, lineNumbers
+			html = syntaxService.highlight code, language, lineNumbers
 
 			element.html html
 

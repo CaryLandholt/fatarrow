@@ -1,4 +1,4 @@
-class SyntaxHighlighter extends Service
+class Syntax extends Service
 	constructor: ($window) ->
 		@process = $window.prettyPrintOne
 
