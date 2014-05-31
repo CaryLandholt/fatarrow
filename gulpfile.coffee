@@ -1010,5 +1010,5 @@ gulp.task 'watch', ['build'], ->
 	sources = [].concat ("**/*#{extension}" for extension in extensions)
 
 	gulp
-		.watch sources, cwd: SRC_DIRECTORY, tasks
+		.watch sources, {cwd: SRC_DIRECTORY, maxListeners: 999}, tasks
 		.on 'error', onError
