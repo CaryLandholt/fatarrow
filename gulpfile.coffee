@@ -33,6 +33,7 @@ template              = require 'gulp-template'
 templateCache         = require 'gulp-angular-templatecache'
 typeScript            = require 'gulp-typescript'
 uglify                = require 'gulp-uglify'
+yargs                 = require 'yargs'
 
 BOWER_DIRECTORY       = 'bower_components/'
 CHANGELOG_FILE        = 'CHANGELOG.md'
@@ -91,14 +92,74 @@ EXTENSIONS =
 			'.md'
 		]
 
+getSwitchOption = (switches) ->
+	isArray = Array.isArray switches
+	keys    = if isArray then switches else [switches]
+	key     = keys[0]
+
+	for k in keys
+		hasSwitch = !!yargs.argv[k]
+		key       = k if hasSwitch
+
+	set = yargs.argv[key]
+	def = yargs.parse([])[key]
+
+	value =
+		if set is 'false' or set is false
+			false
+		else if set is 'true' or set is true
+			true
+		else
+			def
+
+yargs
+	.usage 'Run $0 with the following options.'
+
+yargs.options 'backend',
+	default     : false
+	description : 'Use your own backend.  No backendless.'
+	type        : 'boolean'
+
+yargs.options 'help',
+	default     : false
+	description : 'Show help'
+	type        : 'boolean'
+
+yargs.options 'serve',
+	default     : true
+	description : 'Serve the app'
+	type        : 'boolean'
+
+yargs.options 'prod',
+	default     : false
+	description : 'Execute with all optimzations.  App will open in the browser but no file watching.'
+	type        : 'boolean'
+
+yargs.options 'stats',
+	default     :  false
+	description : 'Run statistics'
+	type        : 'boolean'
+
+yargs.options 'specs',
+	default     : true
+	description : 'Run specs'
+	type        : 'boolean'
+
 appUrl         = "http://localhost:#{PORT}"
 env            = gutil.env
-isProd         = env.prod? or env.production?
+isProd         = getSwitchOption 'prod'
 isWindows      = /^win/.test(process.platform)
 manifest       = {}
 nostats        = env.nostats? or isProd
-useBackendless = not (env.backend? or isProd)
-useSpecs       = useBackendless
+useBackendless = not (isProd or getSwitchOption 'backend')
+runServer      = getSwitchOption 'server'
+runSpecs       = !isProd and useBackendless and getSwitchOption 'specs'
+runWatch       = !isProd and runServer
+showHelp       = getSwitchOption 'help'
+
+return if showHelp
+	# console.log task for task, options of gulp.tasks
+	console.log '\n' + yargs.help()
 
 templateOptions =
 	appName: APP_NAME
@@ -109,7 +170,7 @@ templateOptions =
 getScriptSources = (ext) ->
 	["**/*#{ext}"]
 		.concat if not useBackendless then ["!**/*.backend#{ext}"] else []
-		.concat if not useSpecs       then ["!**/*.spec#{ext}"]    else []
+		.concat if not runSpecs       then ["!**/*.spec#{ext}"]    else []
 
 onError = (e) ->
 	isArray  = Array.isArray e
@@ -351,7 +412,7 @@ gulp.task 'css', ['prepare'], ->
 		.on 'error', onError
 
 # Default build
-gulp.task 'default', ['open'].concat(if not isProd then ['watch'] else []).concat(if useSpecs then ['test'] else [])
+gulp.task 'default', [].concat(if runServer then ['open'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['test'] else [])
 
 # Execute E2E tests
 gulp.task 'e2e', ->
@@ -794,7 +855,7 @@ gulp.task 'scripts', ['coffeeScript', 'javaScript', 'typeScript'].concat(if isPr
 		SCRIPTS
 			.concat if not useBackendless then ["!**/angular-mocks#{ext}"] else []
 			.concat if not useBackendless then ["!**/*.backend#{ext}"]     else []
-			.concat if not useSpecs       then ["!**/*.spec#{ext}"]        else []
+			.concat if not runSpecs       then ["!**/*.spec#{ext}"]        else []
 
 	src =
 		gulp
@@ -995,7 +1056,7 @@ gulp.task 'views', ['html', 'jade', 'markdown'], ->
 
 # Watch and recompile on-the-fly
 gulp.task 'watch', ['build'], ->
-	tasks = ['reload'].concat if useSpecs then ['test'] else []
+	tasks = ['reload'].concat if runSpecs then ['test'] else []
 
 	extensions = []
 		.concat EXTENSIONS.FONTS.COMPILED

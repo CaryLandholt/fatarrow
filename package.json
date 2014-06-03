@@ -49,7 +49,8 @@
 		"karma-spec-reporter": "~0.0.13",
 		"phantomjs": "~1.9.7-8",
 		"protractor": "~0.23.1",
-		"q": "~2.0.1"
+		"q": "~2.0.1",
+		"yargs": "~1.2.2"
 	},
 	"scripts": {
 		"postinstall": "gulp e2e-driver-update"
