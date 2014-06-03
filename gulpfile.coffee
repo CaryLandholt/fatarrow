@@ -261,7 +261,7 @@ gulp.task 'build', ['spa', 'fonts', 'images'], ->
 
 	srcs = []
 
-	if runStats
+	if not isProd
 		srcs.push src =
 			gulp
 				.src '**', cwd: STATS_DIST_DIRECTORY
