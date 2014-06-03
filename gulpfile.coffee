@@ -125,19 +125,14 @@ yargs.options 'help',
 	description : 'Show help'
 	type        : 'boolean'
 
-yargs.options 'serve',
-	default     : true
-	description : 'Serve the app'
-	type        : 'boolean'
-
 yargs.options 'prod',
 	default     : false
 	description : 'Execute with all optimzations.  App will open in the browser but no file watching.'
 	type        : 'boolean'
 
-yargs.options 'stats',
-	default     :  false
-	description : 'Run statistics'
+yargs.options 'serve',
+	default     : true
+	description : 'Serve the app'
 	type        : 'boolean'
 
 yargs.options 'specs',
@@ -145,14 +140,19 @@ yargs.options 'specs',
 	description : 'Run specs'
 	type        : 'boolean'
 
+yargs.options 'stats',
+	default     :  false
+	description : 'Run statistics'
+	type        : 'boolean'
+
 appUrl         = "http://localhost:#{PORT}"
 env            = gutil.env
 isProd         = getSwitchOption 'prod'
 isWindows      = /^win/.test(process.platform)
 manifest       = {}
-nostats        = env.nostats? or isProd
+runStats       = !isProd and getSwitchOption 'stats'
 useBackendless = not (isProd or getSwitchOption 'backend')
-runServer      = getSwitchOption 'server'
+runServer      = getSwitchOption 'serve'
 runSpecs       = !isProd and useBackendless and getSwitchOption 'specs'
 runWatch       = !isProd and runServer
 showHelp       = getSwitchOption 'help'
@@ -261,7 +261,7 @@ gulp.task 'build', ['spa', 'fonts', 'images'], ->
 
 	srcs = []
 
-	if not nostats
+	if runStats
 		srcs.push src =
 			gulp
 				.src '**', cwd: STATS_DIST_DIRECTORY
