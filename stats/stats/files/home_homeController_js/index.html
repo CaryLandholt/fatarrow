@@ -96,7 +96,7 @@
   Home = (function() {
     function Home($log, scriptService) {
       var script, scripts;
-      scripts = scriptService.getScripts();
+      scripts = scriptService.get();
       this.scripts = (function() {
         var _i, _len, _results;
         _results = [];

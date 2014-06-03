@@ -91,14 +91,14 @@
 <div class="container">
   <div class="row">
     <textarea id="file-source" class="col-md-12">(function() {
-  var SyntaxHighlighter;
+  var Syntax;
 
-  SyntaxHighlighter = (function() {
-    function SyntaxHighlighter($window) {
+  Syntax = (function() {
+    function Syntax($window) {
       this.process = $window.prettyPrintOne;
     }
 
-    SyntaxHighlighter.prototype.highlight = function(code, language, lineNumbers) {
+    Syntax.prototype.highlight = function(code, language, lineNumbers) {
       var html, syntax;
       if (lineNumbers == null) {
         lineNumbers = true;
@@ -107,11 +107,11 @@
       return html = &quot;&lt;pre class=\&quot;prettyprint\&quot;&gt;&lt;code&gt;&quot; + syntax + &quot;&lt;/code&gt;&lt;/pre&gt;&quot;;
     };
 
-    return SyntaxHighlighter;
+    return Syntax;
 
   })();
 
-  angular.module(&#039;app&#039;).service(&#039;syntaxHighlighterService&#039;, [&#039;$window&#039;, SyntaxHighlighter]);
+  angular.module(&#039;app&#039;).service(&#039;syntaxService&#039;, [&#039;$window&#039;, Syntax]);
 
 }).call(this);</textarea>
   </div>

@@ -1,3 +1,20 @@
+## 0.6.0 (2014-06-02)
+
+
+#### Bug Fixes
+
+* **cli:** prevent stats from executing on changelog if switch set ([01c60aca](https://github.com/CaryLandholt/fatarrow/commit/01c60aca7cb33dbacf3277258313f77cc846e1fa))
+* **script:** build correct url ([48679143](https://github.com/CaryLandholt/fatarrow/commit/48679143e799767848d1810ced293f0bff4ac2dc))
+* **stats:**
+  * serve stats in non prod ([7a8394d8](https://github.com/CaryLandholt/fatarrow/commit/7a8394d88f358ff299034b0975b2d7f935cddfaa))
+  * run stats on changelog ([0491e2c3](https://github.com/CaryLandholt/fatarrow/commit/0491e2c3648d9558ec60c9df98f2255e74dc3076))
+
+
+#### Features
+
+* **cli:** add stats ([f4d0b867](https://github.com/CaryLandholt/fatarrow/commit/f4d0b8678bf619b534f59c858ec82af97f18fbff))
+
+
 <a name="0.5.0"></a>
 ## 0.5.0  (2014-05-27)
 

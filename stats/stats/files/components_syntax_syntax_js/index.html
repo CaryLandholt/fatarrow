@@ -94,7 +94,7 @@
   var Syntax;
 
   Syntax = (function() {
-    function Syntax($http, $templateCache, syntaxHighlighterService) {
+    function Syntax($http, $templateCache, syntaxService) {
       var link;
       link = function(scope, element, attrs) {
         var code, hasSrc, html, language, last, lineNumbers, newlineCharCode, sanitize, src;
@@ -131,7 +131,7 @@
               }
             }
             code = sanitize(response);
-            html = syntaxHighlighterService.highlight(code, language, lineNumbers);
+            html = syntaxService.highlight(code, language, lineNumbers);
             return element.html(html);
           });
         }
@@ -144,7 +144,7 @@
         while (code.charCodeAt(last) === newlineCharCode) {
           code = code.substr(0, last);
         }
-        html = syntaxHighlighterService.highlight(code, language, lineNumbers);
+        html = syntaxService.highlight(code, language, lineNumbers);
         return element.html(html);
       };
       return {
@@ -164,7 +164,7 @@
 
   })();
 
-  angular.module(&#039;app&#039;).directive(&#039;syntax&#039;, [&#039;$http&#039;, &#039;$templateCache&#039;, &#039;syntaxHighlighterService&#039;, Syntax]);
+  angular.module(&#039;app&#039;).directive(&#039;syntax&#039;, [&#039;$http&#039;, &#039;$templateCache&#039;, &#039;syntaxService&#039;, Syntax]);
 
 }).call(this);</textarea>
   </div>
