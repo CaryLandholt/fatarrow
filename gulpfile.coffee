@@ -29,6 +29,7 @@ pkg                   = require './package.json'
 protractor            = require 'gulp-protractor'
 q                     = require 'q'
 rev                   = require 'gulp-rev'
+sourceMaps            = require 'gulp-sourcemaps'
 template              = require 'gulp-template'
 templateCache         = require 'gulp-angular-templatecache'
 typeScript            = require 'gulp-typescript'
@@ -36,6 +37,7 @@ uglify                = require 'gulp-uglify'
 yargs                 = require 'yargs'
 
 BOWER_DIRECTORY       = 'bower_components/'
+BOWER_FILE            = 'bower.json'
 CHANGELOG_FILE        = 'CHANGELOG.md'
 COMPONENTS_DIRECTORY  = "#{BOWER_DIRECTORY}_/"
 DIST_DIRECTORY        = 'dist/'
@@ -321,7 +323,7 @@ gulp.task 'clean', ['clean:working'], ->
 
 # Clean working directories
 gulp.task 'clean:working', ->
-	sources = [COMPONENTS_DIRECTORY, TEMP_DIRECTORY, DIST_DIRECTORY]
+	sources = [COMPONENTS_DIRECTORY, TEMP_DIRECTORY, DIST_DIRECTORY, BOWER_FILE]
 
 	gulp
 		.src sources
@@ -333,8 +335,6 @@ gulp.task 'clean:working', ->
 # Compile CoffeeScript
 gulp.task 'coffeeScript', ['prepare'], ->
 	options =
-		coffeeScript:
-			sourceMap: true
 		coffeeLint:
 			arrow_spacing:
 				level: 'error'
@@ -344,6 +344,8 @@ gulp.task 'coffeeScript', ['prepare'], ->
 				level: 'ignore'
 			no_tabs:
 				level: 'ignore'
+		sourceMaps:
+			sourceRoot: './'
 
 	sources = getScriptSources '.coffee'
 	srcs    = []
@@ -376,8 +378,14 @@ gulp.task 'coffeeScript', ['prepare'], ->
 	es
 		.merge.apply @, srcs
 		.on 'error', onError
+		
+		.pipe sourceMaps.init()
+		.on 'error', onError
 
-		.pipe coffeeScript options.coffeeScript
+		.pipe coffeeScript()
+		.on 'error', onError
+		
+		.pipe sourceMaps.write './', options.sourceMaps
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
