@@ -29,6 +29,7 @@ pkg                   = require './package.json'
 protractor            = require 'gulp-protractor'
 q                     = require 'q'
 rev                   = require 'gulp-rev'
+sass                  = require 'gulp-sass'
 sourceMaps            = require 'gulp-sourcemaps'
 template              = require 'gulp-template'
 templateCache         = require 'gulp-angular-templatecache'
@@ -83,6 +84,7 @@ EXTENSIONS =
 		]
 		UNCOMPILED: [
 			'.less'
+			'.scss'
 		]
 	VIEWS:
 		COMPILED: [
@@ -857,6 +859,44 @@ gulp.task 'reload', ['build'], ->
 		.pipe connect.reload()
 		.on 'error', onError
 
+# Compile Sass
+gulp.task 'sass', ['prepare'], ->
+	options =
+		sass:
+			errLogToConsole: true
+
+	sources = '**/*.scss'
+	srcs    = []
+
+	srcs.push src =
+		gulp
+			.src sources, cwd: SRC_DIRECTORY
+			.on 'error', onError
+
+			.pipe gulp.dest TEMP_DIRECTORY
+			.on 'error', onError
+
+			.pipe template templateOptions
+			.on 'error', onError
+
+	srcs.push src =
+		gulp
+			.src sources, cwd: COMPONENTS_DIRECTORY
+			.on 'error', onError
+
+			.pipe gulp.dest TEMP_DIRECTORY
+			.on 'error', onError
+
+	es
+		.merge.apply @, srcs
+		.on 'error', onError
+
+		.pipe sass options.sass
+		.on 'error', onError
+
+		.pipe gulp.dest TEMP_DIRECTORY
+		.on 'error', onError
+
 # Process scripts
 gulp.task 'scripts', ['coffeeScript', 'javaScript', 'typeScript'].concat(if isProd then 'templateCache' else []), ->
 	sources = do (ext ='.js') ->
@@ -947,7 +987,7 @@ gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' els
 gulp.task 'stats', ['plato']
 
 # Process styles
-gulp.task 'styles', ['less', 'css'], ->
+gulp.task 'styles', ['less', 'css', 'sass'], ->
 	options =
 		minifyCss:
 			keepSpecialComments: 0

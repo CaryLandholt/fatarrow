@@ -16,7 +16,6 @@ Build large [AngularJS](http://angularjs.org/) applications with [CoffeeScript](
 ## Table of Contents
 * [Installing](#installing)
 * [Running](#running)
-* [Writing Your App](#writing-your-app)
 * [Contributing](#contributing)
 * [Changelog](#changelog)
 * [License](#license)
@@ -32,7 +31,7 @@ Before running, you must install and configure the following one-time dependenci
 $ npm install -g gulp
 ```
 
-Once the dependencies have been installed, enter the following commands in the terminal:
+Once the dependencies have been installed, enter the following in the terminal:
 ```bash
 $ git clone git@github.com:CaryLandholt/fatarrow.git
 $ cd fatarrow
@@ -47,101 +46,34 @@ $ gulp
 ```
 
 
-## Writing Your App
-fatarrow takes advantage of **[ng-classify](https://github.com/CaryLandholt/ng-classify)**, allowing you to write AngularJS modules as CoffeeScript classes.
+## Scripting
+Your choice of scripting languages.
 
-Instead of writing your controllers like this:
-```javascript
-angular.module('app').controller('todoController', ['todoService', function (todoService) {
-	this.todos = todoService.get();
+<img src="http://drtom.ch/talks/2012/06/jazoon/images/coffeescript_logo.svg" height="100px" />
 
-	this.add = function (todo) {
-		todoService.add(todo);
-	};
-}]);
-```
+<img src="http://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" height="100px" />
 
-Write them like this:
-```coffee
-class Todo extends Controller
-	constructor: (@todoService) ->
-		@todos = @todoService.get()
-
-	add: (todo) ->
-		@todoService.add todo
-```
+<img src="http://www.typescriptlang.org/content/images/logo_small.png" height="100px" />
 
 
-### Structure
-**Source**
-```
-src/
-├── app/
-│   ├── app.coffee
-│   ├── appRoutes.coffee
-│   └── views.backend.coffee
-├── home/
-│   ├── home.html
-│   ├── homeController.coffee
-│   └── homeRoutes.coffee
-└── index.html
-```
+## Styling
+Your choice of styling languages.
 
-**Distribution (Dev)**
-```
-dist/
-├── app/
-│   ├── app.js
-│   ├── appRoutes.js
-│   └── views.backend.js
-├── home/
-│   ├── home.html
-│   ├── homeController.js
-│   └── homeRoutes.js
-├── vendor/
-│   ├── angular/
-│   │   └── scripts/
-|   |       └── angular.min.js
-│   ├── angular-animate/
-│   │   └── scripts/
-|   |       └── angular-animate.min.js
-│   ├── angular-mocks/
-│   │   └── scripts/
-|   |       └── angular-mocks.js
-│   ├── angular-route/
-│   │   └── scripts/
-|   |       └── angular-route.min.js
-│   ├── bootstrap/
-│   │   ├── fonts/
-|   |   |   ├── glyphicons-halflings-regular.eot
-|   |   |   ├── glyphicons-halflings-regular.svg
-|   |   |   ├── glyphicons-halflings-regular.ttf
-|   |   |   └── glyphicons-halflings-regular.woff
-│   │   └── styles/
-|   |       ├── bootstrap-theme.min.css
-|   |       └── bootstrap.min.css
-│   ├── google-code-prettify/
-│   │   ├── scripts/
-|   |   |   └── prettify.js
-│   │   └── styles/
-|   |       └── prettify.css
-└── index.html
-```
+<img src="http://www.logotypes101.com/logos/194/830812341256B99B32E1A9F242BB9F5F/css3logo.png" height="100px" />
 
-**Distribution (Prod)**
-```
-dist/
-├── fonts/
-│   ├── glyphicons-halflings-regular.eot
-│   ├── glyphicons-halflings-regular.svg
-│   ├── glyphicons-halflings-regular.ttf
-│   └── glyphicons-halflings-regular.woff
-├── scripts/
-│   └── scripts.min.js
-├── styles/
-│   └── styles.min.css
-└── index.html
-```
+<img src="http://moduscreate.com/wp-content/uploads/2012/01/less-css-logo.png" height="100px" />
+
+<img src="http://sass-lang.com/assets/img/logo-235e394c.png" height="100px" />
+
+
+## Templating
+Your choice of templating engines.
+
+<img src="http://www.w3.org/html/logo/downloads/HTML5_Logo_512.png" height="100px" />
+
+<img src="http://jade-lang.com/public/images/logo.png" height="100px" />
+
+<img src="http://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/208px-Markdown-mark.svg.png" height="100px" />
 
 
 ## Contributing
