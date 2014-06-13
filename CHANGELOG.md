@@ -1,3 +1,12 @@
+## 0.7.0 (2014-06-12)
+
+
+#### Features
+
+* **haml:** add haml support ([c2e7cec9](https://github.com/CaryLandholt/fatarrow/commit/c2e7cec99da19b1d6b6ba92274670aec0cb6a60d))
+* **sass:** add sass support ([86db0cd9](https://github.com/CaryLandholt/fatarrow/commit/86db0cd911baec1ab3f0de7883bd396f6abccefb))
+
+
 ## 0.6.0 (2014-06-02)
 
 
