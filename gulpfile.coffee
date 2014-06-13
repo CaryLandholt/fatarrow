@@ -13,6 +13,7 @@ flatten               = require 'gulp-flatten'
 fs                    = require 'fs'
 gulp                  = require 'gulp'
 gutil                 = require 'gulp-util'
+haml                  = require 'gulp-haml'
 jade                  = require 'gulp-jade'
 karma                 = require 'karma'
 imagemin              = require 'gulp-imagemin'
@@ -91,6 +92,7 @@ EXTENSIONS =
 			'.html'
 		]
 		UNCOMPILED: [
+			'.haml'
 			'.jade'
 			'.markdown'
 			'.md'
@@ -502,6 +504,40 @@ gulp.task 'fontTypes', ['prepare'], ->
 
 	es
 		.merge.apply @, srcs
+		.on 'error', onError
+
+		.pipe gulp.dest TEMP_DIRECTORY
+		.on 'error', onError
+
+# Compile Haml
+gulp.task 'haml', ['prepare'], ->
+	sources = '**/*.haml'
+	srcs    = []
+
+	srcs.push src =
+		gulp
+			.src sources, cwd: SRC_DIRECTORY
+			.on 'error', onError
+
+			.pipe gulp.dest TEMP_DIRECTORY
+			.on 'error', onError
+
+			.pipe template templateOptions
+			.on 'error', onError
+
+	srcs.push src =
+		gulp
+			.src sources, cwd: COMPONENTS_DIRECTORY
+			.on 'error', onError
+
+			.pipe gulp.dest TEMP_DIRECTORY
+			.on 'error', onError
+
+	es
+		.merge.apply @, srcs
+		.on 'error', onError
+
+		.pipe haml()
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -1027,7 +1063,7 @@ gulp.task 'styles', ['less', 'css', 'sass'], ->
 		.on 'error', onError
 
 # Compile templateCache
-gulp.task 'templateCache', ['html', 'jade', 'markdown'], ->
+gulp.task 'templateCache', ['haml', 'html', 'jade', 'markdown'], ->
 	options =
 		templateCache:
 			module: APP_NAME
@@ -1089,7 +1125,7 @@ gulp.task 'typeScript', ['prepare'], ->
 		.on 'error', onError
 
 # Process views
-gulp.task 'views', ['html', 'jade', 'markdown'], ->
+gulp.task 'views', ['haml', 'html', 'jade', 'markdown'], ->
 	sources = [
 		'**/*.html'
 		'!index.html'

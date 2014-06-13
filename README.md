@@ -69,6 +69,8 @@ Your choice of styling languages.
 ## Templating
 Your choice of templating engines.
 
+<img src="http://haml.info/images/haml.png" height="100px" />
+
 <img src="http://www.w3.org/html/logo/downloads/HTML5_Logo_512.png" height="100px" />
 
 <img src="http://jade-lang.com/public/images/logo.png" height="100px" />
