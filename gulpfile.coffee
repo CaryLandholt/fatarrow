@@ -15,6 +15,7 @@ gulp                  = require 'gulp'
 gutil                 = require 'gulp-util'
 haml                  = require 'gulp-haml'
 jade                  = require 'gulp-jade'
+jsHint                = require 'gulp-jshint'
 karma                 = require 'karma'
 imagemin              = require 'gulp-imagemin'
 less                  = require 'gulp-less'
@@ -97,6 +98,13 @@ EXTENSIONS =
 			'.markdown'
 			'.md'
 		]
+
+PREDEFINED_GLOBALS = [
+	'angular'
+	'beforeEach'
+	'describe'
+	'it'
+]
 
 getSwitchOption = (switches) ->
 	isArray = Array.isArray switches
@@ -658,6 +666,26 @@ gulp.task 'jade', ['prepare'], ->
 
 # Compile JavaScript
 gulp.task 'javaScript', ['prepare'], ->
+	options =
+		jsHint:
+			camelcase: true
+			curly: true
+			eqeqeq: true
+			forin: true
+			freeze: true
+			immed: true
+			indent: 1
+			latedef: true
+			newcap: true
+			noarg: true
+			noempty: true
+			nonbsp: true
+			nonew: true
+			plusplus: true
+			undef: true
+			unused: true
+			predef: PREDEFINED_GLOBALS
+	
 	sources = getScriptSources '.js'
 	srcs    = []
 
@@ -667,6 +695,12 @@ gulp.task 'javaScript', ['prepare'], ->
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
+			.on 'error', onError
+			
+			.pipe jsHint options.jsHint
+			.on 'error', onError
+			
+			.pipe jsHint.reporter 'default'
 			.on 'error', onError
 
 			.pipe template templateOptions
