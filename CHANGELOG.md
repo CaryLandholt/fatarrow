@@ -1,3 +1,28 @@
+## 0.8.0 (2014-06-20)
+
+
+#### Features
+
+* **jshint:** add jshint for JavaScript files ([9427b7d9](https://github.com/CaryLandholt/fatarrow/commit/9427b7d9a3da3d4167266da6a4fc04cefe64db1b))
+* **loading-bar:** add angular-loading-bar ([9d72f44a](https://github.com/CaryLandholt/fatarrow/commit/9d72f44ae094a63dbfa1cf8a7b03e632233c02be))
+
+
+#### Breaking Changes
+
+* update gulp-ng-classify
+
+See https://github.com/CaryLandholt/ng-classify/blob/master/CHANGELOG.md#300-2014-06-18
+
+ ([c913cf7a](https://github.com/CaryLandholt/fatarrow/commit/c913cf7a2f1ebcd6a8e2706d4dfdd3aea2027f40))
+* some Protractor locators have been deprecated
+
+See https://github.com/angular/protractor/commit/9e5d9e4abb7d0928e6092a711fda527554994be7
+
+Instead of By.input, use By.model, for example
+
+ ([db08eb53](https://github.com/CaryLandholt/fatarrow/commit/db08eb53b87982049237fac8d48f9bfbf201c033))
+
+
 ## 0.7.0 (2014-06-12)
 
 
