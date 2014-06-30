@@ -12,7 +12,7 @@ BOWER_COMPONENTS =
 	'angular-loading-bar': '0.4.3':
 		scripts: 'build/loading-bar.min.js'
 		styles:  'build/loading-bar.min.css'
-	'bootstrap': '3.1.1':
+	'bootstrap': '3.2.0':
 		fonts:   'dist/fonts/**/*.{eot,svg,ttf,woff}'
 		styles:  'dist/css/*.min.css'
 	'google-code-prettify': '1.0.1':
