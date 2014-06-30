@@ -1,3 +1,11 @@
+### 0.9.1 (2014-06-29)
+
+
+#### Bug Fixes
+
+* **package.json:** require specific package version when not following semver ([5b5ff52b](https://github.com/CaryLandholt/fatarrow/commit/5b5ff52b9d99f1629f86ccf3b0bb44eddfaee77b))
+
+
 ## 0.9.0 (2014-06-23)
 
 
