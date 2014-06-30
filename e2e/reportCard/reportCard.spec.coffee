@@ -34,4 +34,4 @@ describe 'ReportCard Page', ->
 	it 'should get the username', ->
 		@page.fillUsername 'yokun'
 		@page.search()
-		expect(@page.getFullName()).toEqual('Yevgeniy Okun')
+		expect(@page.getFullName()).toEqual('yokun')
