@@ -1,4 +1,8 @@
-# fatarrow [![Version][version-image]][version-url] [![Build Status][build-image]][build-url] [![Dependency Status][dependencies-image]][dependencies-url] [![License][license-image]][license-url]
+# fatarrow
+[![License][license-image]][license-url]
+[![Version][version-image]][version-url]
+[![Build Status][build-image]][build-url]
+[![Dependency Status][dependencies-image]][dependencies-url]
 > An [AngularJS](http://angularjs.org/) large application Reference Architecture
 
 > <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/AngularJS_logo.svg/695px-AngularJS_logo.svg.png" height="100px" />
