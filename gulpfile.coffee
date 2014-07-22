@@ -2,7 +2,6 @@
 
 bower                 = require 'bower'
 childProcess          = require 'child_process'
-clean                 = require 'gulp-clean'
 coffeeScript          = require 'gulp-coffee'
 coffeeLint            = require 'gulp-coffeelint'
 concat                = require 'gulp-concat'
@@ -24,14 +23,15 @@ markdown              = require 'gulp-markdown'
 minifyCss             = require 'gulp-minify-css'
 minifyHtml            = require 'gulp-minify-html'
 plato                 = require 'gulp-plato'
+ngAnnotate            = require 'gulp-ng-annotate'
 ngClassify            = require 'gulp-ng-classify'
-ngmin                 = require 'gulp-ngmin'
 open                  = require 'gulp-open'
 path                  = require 'path'
 pkg                   = require './package.json'
 protractor            = require 'gulp-protractor'
 q                     = require 'q'
 rev                   = require 'gulp-rev'
+rimraf                = require 'gulp-rimraf'
 sass                  = require 'gulp-sass'
 sourceMaps            = require 'gulp-sourcemaps'
 template              = require 'gulp-template'
@@ -329,10 +329,10 @@ gulp.task 'clean', ['clean:working'], ->
 	sources = BOWER_DIRECTORY
 
 	gulp
-		.src sources
+		.src sources, {read: false}
 		.on 'error', onError
 
-		.pipe clean()
+		.pipe rimraf()
 		.on 'error', onError
 
 # Clean working directories
@@ -340,10 +340,10 @@ gulp.task 'clean:working', ->
 	sources = [COMPONENTS_DIRECTORY, TEMP_DIRECTORY, DIST_DIRECTORY, BOWER_FILE]
 
 	gulp
-		.src sources
+		.src sources, {read: false}
 		.on 'error', onError
 
-		.pipe clean()
+		.pipe rimraf()
 		.on 'error', onError
 
 # Compile CoffeeScript
@@ -464,7 +464,7 @@ gulp.task 'e2e', ->
 			]
 
 	gulp
-		.src sources, cwd: E2E_DIRECTORY
+		.src sources, {cwd: E2E_DIRECTORY, read: false}
 		.on 'error', onError
 
 		.pipe protractor.protractor options.protractor
@@ -970,7 +970,7 @@ gulp.task 'reload', ['build'], ->
 	sources = 'index.html'
 
 	gulp
-		.src sources, cwd: DIST_DIRECTORY
+		.src sources, {cwd: DIST_DIRECTORY, read: false}
 		.on 'error', onError
 
 		.pipe connect.reload()
@@ -1029,7 +1029,7 @@ gulp.task 'scripts', ['coffeeScript', 'javaScript', 'liveScript', 'typeScript'].
 
 	return if isProd
 		src
-			.pipe ngmin()
+			.pipe ngAnnotate()
 			.on 'error', onError
 
 			.pipe concat SCRIPTS_MIN_FILE
