@@ -5,4 +5,4 @@ class ReadmeRoutes extends Config
 			caption: 'Readme'
 			controller: 'readmeController'
 			controllerAs: 'controller'
-			templateUrl: '/readme/readme.html'
+			templateUrl: 'readme/readme.html'

@@ -47,7 +47,7 @@ COMPONENTS_DIRECTORY  = "#{BOWER_DIRECTORY}_/"
 DIST_DIRECTORY        = 'dist/'
 E2E_DIRECTORY         = 'e2e/'
 FONTS_DIRECTORY       = 'fonts/'
-PORT                  = 8181
+PORT                  = process.env.PORT ? 8181
 SCRIPTS_MIN_DIRECTORY = 'scripts/'
 SCRIPTS_MIN_FILE      = 'scripts.min.js'
 SRC_DIRECTORY         = 'src/'
@@ -207,7 +207,7 @@ onRev = (file) ->
 onScript = (file) ->
 	filePath = path.relative file.base, file.path
 	filePath = path.join SCRIPTS_MIN_DIRECTORY, filePath if file.revOrigBase
-	filePath = unixifyPath '/' + filePath
+	filePath = unixifyPath filePath
 	endsWith = '.spec.js'
 	isSpec   = filePath.slice(-endsWith.length) is endsWith
 
@@ -218,7 +218,7 @@ onScript = (file) ->
 onStyle = (file) ->
 	filePath = path.relative file.base, file.path
 	filePath = path.join STYLES_MIN_DIRECTORY, filePath if file.revOrigBase
-	filePath = unixifyPath '/' + filePath
+	filePath = unixifyPath filePath
 
 	templateOptions.styles.push filePath
 
@@ -1148,7 +1148,6 @@ gulp.task 'templateCache', ['haml', 'html', 'jade', 'markdown'], ->
 	options =
 		templateCache:
 			module: APP_NAME
-			root: '/'
 
 	sources = [
 		'**/*.html'

@@ -5,4 +5,4 @@ class ScreencastsRoutes extends Config
 			caption: 'Screencasts'
 			controller: 'screencastsController'
 			controllerAs: 'controller'
-			templateUrl: '/screencasts/screencasts.html'
+			templateUrl: 'screencasts/screencasts.html'

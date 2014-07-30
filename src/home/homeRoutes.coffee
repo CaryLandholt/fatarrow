@@ -5,4 +5,4 @@ class HomeRoutes extends Config
 			caption: 'Home'
 			controller: 'homeController'
 			controllerAs: 'controller'
-			templateUrl: '/home/home.html'
+			templateUrl: 'home/home.html'

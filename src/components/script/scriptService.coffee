@@ -1,7 +1,7 @@
 class Script extends Service
 	constructor: ($document, $location) ->
 		url    = $location.$$absUrl
-		prefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.$$port
+		prefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.$$port + '/'
 		doc    = $document[0]
 
 		@add = (url) ->
@@ -20,6 +20,6 @@ class Script extends Service
 
 				trimmedScript = scriptTag.src.replace prefix, ''
 
-				continue if trimmedScript[0] isnt '/'
+				continue if trimmedScript[..$location.$$protocol.length - 1] is $location.$$protocol
 
 				script = trimmedScript

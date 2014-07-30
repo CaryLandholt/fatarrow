@@ -2,11 +2,11 @@
 
 <div class="container">
 	<div class="jumbotron">
-		<img src="/img/angularjs.jpg" width="500" />
+		<img src="img/angularjs.jpg" width="500" />
 		<h1>Reference Architecture</h1>
 	</div>
 
-	<div class="row" ng-repeat="script in controller.scripts | filter:'/home/'">
+	<div class="row" ng-repeat="script in controller.scripts | filter:'home/'">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<h3 class="panel-title">{{script | toExtension:''}}</h3>
@@ -23,7 +23,7 @@
 		</div>
 	</div>
 
-	<div class="row" ng-init="script = '/home/home.html'">
+	<div class="row" ng-init="script = 'home/home.html'">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<h3 class="panel-title">{{script}}</h3>
@@ -36,7 +36,7 @@
 		</div>
 	</div>
 
-	<div class="row" ng-repeat="script in controller.scripts | filter:'/components/'">
+	<div class="row" ng-repeat="script in controller.scripts | filter:'components/'">
 		<div class="panel panel-primary">
 			<div class="panel-heading">
 				<h3 class="panel-title">{{script | toExtension:''}}</h3>

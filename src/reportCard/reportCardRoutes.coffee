@@ -5,4 +5,4 @@ class ReportCardRoutes extends Config
 			caption: 'Your Open Source Report Card'
 			controller: 'reportCardController'
 			controllerAs: 'controller'
-			templateUrl: '/reportCard/report-card.html'
+			templateUrl: 'reportCard/report-card.html'
