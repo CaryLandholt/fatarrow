@@ -69,7 +69,7 @@ Your choice of styling languages.
 
 * <img src="http://moduscreate.com/wp-content/uploads/2012/01/less-css-logo.png" height="100px" />
 
-* <img src="http://sass-lang.com/assets/img/logo-235e394c.png" height="100px" />
+* <img src="http://static.dyp.im/KkDwGPALQw/282646bf181e9d5fa2b4bf83f0d80f3e.png" height="100px" />
 
 
 ## Templating
