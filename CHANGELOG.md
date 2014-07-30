@@ -1,3 +1,12 @@
+### 0.9.2 (2014-07-29)
+
+
+#### Bug Fixes
+
+* **README:** fix sass logo path ([be4a0a84](https://github.com/CaryLandholt/fatarrow/commit/be4a0a84578f80e6f929d149881aef11e31dec19))
+* **subDomain:** remove prefixed / to ensure app is functional within a sub domain ([17339c9b](https://github.com/CaryLandholt/fatarrow/commit/17339c9bd7d3a1fcfd3523517fbdb2cc7ac8192a))
+
+
 ### 0.9.1 (2014-06-29)
 
 
