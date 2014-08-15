@@ -251,7 +251,7 @@ windowsify = (windowsCommand, nonWindowsCommand) ->
 	if isWindows then windowsCommand else nonWindowsCommand
 
 # Get components via Bower
-gulp.task 'bower', ->
+gulp.task 'bower', ['clean:working'], ->
 	options =
 		directory: BOWER_DIRECTORY
 
