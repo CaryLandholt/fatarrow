@@ -1,3 +1,11 @@
+### 0.9.3 (2014-08-14)
+
+
+#### Bug Fixes
+
+* **bower:** clean prior to running bower task ([87629086](https://github.com/CaryLandholt/fatarrow/commit/876290865a6aeee7e1ebeb887dfcf9794c9afc95), closes [#2](https://github.com/CaryLandholt/fatarrow/issues/2))
+
+
 ### 0.9.2 (2014-07-29)
 
 
