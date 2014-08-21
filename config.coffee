@@ -15,7 +15,7 @@ BOWER_COMPONENTS =
 	'bootstrap': '3.2.0':
 		fonts:   'dist/fonts/**/*.{eot,svg,ttf,woff}'
 		styles:  'dist/css/*.min.css'
-	'google-code-prettify': '1.0.2':
+	'google-code-prettify': '1.0.3':
 		scripts: 'src/prettify.js'
 		styles:  'src/prettify.css'
 	'showdown': '0.3.1':
