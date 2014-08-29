@@ -47,7 +47,7 @@
 		"gulp-sourcemaps": "^1.1.0",
 		"gulp-template": "^1.0.0",
 		"gulp-typescript": "^1.0.0",
-		"gulp-uglify": "0.3.1",
+		"gulp-uglify": "0.3.2",
 		"gulp-util": "^3.0.0",
 		"karma": "0.12.22",
 		"karma-jasmine": "0.2.2",
