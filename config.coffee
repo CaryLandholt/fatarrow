@@ -9,7 +9,7 @@ BOWER_COMPONENTS =
 		scripts: 'angular-mocks.js'
 	'angular-route': '1.2.23':
 		scripts: 'angular-route.min.js'
-	'angular-loading-bar': '0.5.0':
+	'angular-loading-bar': '0.5.1':
 		scripts: 'build/loading-bar.min.js'
 		styles:  'build/loading-bar.min.css'
 	'bootstrap': '3.2.0':
