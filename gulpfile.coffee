@@ -722,7 +722,8 @@ gulp.task 'javaScript', ['prepare'], ->
 
 # Execute karma unit tests
 gulp.task 'karma', ->
-	sources = [].concat SCRIPTS, "**/*.html"
+	sources = [].concat SCRIPTS, '**/*.html'
+
 	options =
 		autoWatch: false
 		background: true
@@ -741,7 +742,7 @@ gulp.task 'karma', ->
 		ngHtml2JsPreprocessor:
 			stripPrefix: 'dist/'
 		preprocessors:
-			"**/*.html": 'ng-html2js'
+			'**/*.html': 'ng-html2js'
 		reporters: [
 			'spec'
 		]
