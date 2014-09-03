@@ -392,13 +392,13 @@ gulp.task 'coffeeScript', ['prepare'], ->
 	es
 		.merge.apply @, srcs
 		.on 'error', onError
-		
+
 		.pipe sourceMaps.init()
 		.on 'error', onError
 
 		.pipe coffeeScript()
 		.on 'error', onError
-		
+
 		.pipe sourceMaps.write './', options.sourceMaps
 		.on 'error', onError
 
@@ -687,7 +687,7 @@ gulp.task 'javaScript', ['prepare'], ->
 			undef: true
 			unused: true
 			predef: PREDEFINED_GLOBALS
-	
+
 	sources = getScriptSources '.js'
 	srcs    = []
 
@@ -698,10 +698,10 @@ gulp.task 'javaScript', ['prepare'], ->
 
 			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
-			
+
 			.pipe jsHint options.jsHint
 			.on 'error', onError
-			
+
 			.pipe jsHint.reporter 'default'
 			.on 'error', onError
 
@@ -722,6 +722,7 @@ gulp.task 'javaScript', ['prepare'], ->
 
 # Execute karma unit tests
 gulp.task 'karma', ->
+	sources = [].concat SCRIPTS, "**/*.html"
 	options =
 		autoWatch: false
 		background: true
@@ -731,12 +732,16 @@ gulp.task 'karma', ->
 		]
 		colors: true
 		exclude: ["#{STATS_DIST_DIRECTORY}**"]
-		files: SCRIPTS
+		files: sources
 		frameworks: [
 			'jasmine'
 		]
 		keepalive: false
 		logLevel: 'WARN'
+		ngHtml2JsPreprocessor:
+			stripPrefix: 'dist/'
+		preprocessors:
+			"**/*.html": 'ng-html2js'
 		reporters: [
 			'spec'
 		]
