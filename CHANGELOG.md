@@ -1,3 +1,13 @@
+### 0.9.4 (2014-09-03)
+
+
+#### Bug Fixes
+
+* **karma config:** load external templates ([7b0a8a34](https://github.com/CaryLandholt/fatarrow/commit/7b0a8a34dabf196816cd377769dafd7806662bbe))
+* **path:** file path was off ([6ef797e1](https://github.com/CaryLandholt/fatarrow/commit/6ef797e11383cea9aadc3611779315d79e4dabd6))
+* **reportCard:** use jsonp instead of get ([04cb1d3b](https://github.com/CaryLandholt/fatarrow/commit/04cb1d3bdc60735bb9e0716e6f366e27b46ad230))
+
+
 ### 0.9.3 (2014-08-14)
 
 

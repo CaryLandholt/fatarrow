@@ -94,7 +94,7 @@
 
   ReportCardBackend = (function() {
     function ReportCardBackend($httpBackend) {
-      $httpBackend.whenGET(/osrc.dfm.io/).passThrough();
+      $httpBackend.whenJSONP(/osrc.dfm.io/).passThrough();
     }
 
     return ReportCardBackend;
