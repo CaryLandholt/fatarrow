@@ -1,7 +1,7 @@
 describe 'routes', ->
 	describe 'routes directive', ->
 		beforeEach module 'app'
-		beforeEach module('components/routes/routes.html')
+		beforeEach module 'components/routes/routes.html'
 
 		beforeEach inject (@$compile, $rootScope) ->
 			@scope = $rootScope.$new()
