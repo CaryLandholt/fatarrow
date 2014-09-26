@@ -43,7 +43,7 @@
 		"gulp-protractor": "0.0.11",
 		"gulp-rev": "^1.0.0",
 		"gulp-rimraf": "0.1.0",
-		"gulp-sass": "0.7.3",
+		"gulp-sass": "^1.0.0",
 		"gulp-sourcemaps": "^1.1.0",
 		"gulp-template": "^1.0.0",
 		"gulp-typescript": "^1.0.0",
