@@ -1,15 +1,15 @@
 APP_NAME = 'app'
 
 BOWER_COMPONENTS =
-	'angular': '1.2.23':
+	'angular': '1.2.25':
 		scripts: 'angular.min.js'
-	'angular-animate': '1.2.23':
+	'angular-animate': '1.2.25':
 		scripts: 'angular-animate.min.js'
-	'angular-mocks': '1.2.23':
+	'angular-mocks': '1.2.25':
 		scripts: 'angular-mocks.js'
-	'angular-route': '1.2.23':
+	'angular-route': '1.2.25':
 		scripts: 'angular-route.min.js'
-	'angular-loading-bar': '0.5.1':
+	'angular-loading-bar': '0.6.0':
 		scripts: 'build/loading-bar.min.js'
 		styles:  'build/loading-bar.min.css'
 	'bootstrap': '3.2.0':
