@@ -255,12 +255,15 @@ gulp.task 'bower', ['clean:working'], ->
 	options =
 		directory: BOWER_DIRECTORY
 
+	bowerOptions =
+		forceLatest: true
+
 	components = []
 
 	components.push "#{component}##{version}" for version, files of value for component, value of BOWER_COMPONENTS
 
 	bower
-		.commands.install components, {}, options
+		.commands.install components, bowerOptions, options
 		.on 'error', onError
 
 # build the app
