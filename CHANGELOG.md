@@ -1,3 +1,12 @@
+## 1.0.0 (2014-10-15)
+
+
+#### Bug Fixes
+
+* **avatar:** use avatar path from reportcard response ([8c2b453e](https://github.com/CaryLandholt/fatarrow/commit/8c2b453e5ec16331baf1d825c5f84d039706bbde))
+* **bower:** use latest version when conflicted ([5e42dcbb](https://github.com/CaryLandholt/fatarrow/commit/5e42dcbb8132b0f18dd5e0fc361dedc3b8e1733d))
+
+
 ### 0.9.4 (2014-09-03)
 
 
