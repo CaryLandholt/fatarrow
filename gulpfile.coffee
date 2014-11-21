@@ -136,6 +136,11 @@ yargs.options 'backend',
 	description : 'Use your own backend.  No backendless.'
 	type        : 'boolean'
 
+yargs.options 'bower',
+	default     : true
+	description : 'Force retrieve of Bower components'
+	type        : 'boolean'
+
 yargs.options 'help',
 	default     : false
 	description : 'Show help'
@@ -163,6 +168,7 @@ yargs.options 'stats',
 
 appUrl         = "http://localhost:#{PORT}"
 env            = gutil.env
+getBower       = getSwitchOption 'bower'
 isProd         = getSwitchOption 'prod'
 isWindows      = /^win/.test(process.platform)
 manifest       = {}
@@ -339,7 +345,7 @@ gulp.task 'clean', ['clean:working'], ->
 
 # Clean working directories
 gulp.task 'clean:working', ->
-	sources = [COMPONENTS_DIRECTORY, TEMP_DIRECTORY, DIST_DIRECTORY, BOWER_FILE]
+	sources = [TEMP_DIRECTORY, DIST_DIRECTORY].concat(if getBower then [COMPONENTS_DIRECTORY, BOWER_FILE] else [])
 
 	gulp
 		.src sources, {read: false}
@@ -971,7 +977,7 @@ gulp.task 'plato', ['clean:working'], ->
 		.on 'error', onError
 
 # Prepare for compilation
-gulp.task 'prepare', ['normalizeComponents', 'clean:working']
+gulp.task 'prepare', ['clean:working'].concat(if getBower then ['normalizeComponents'] else [])
 
 # Reload the app in the default browser
 gulp.task 'reload', ['build'], ->
