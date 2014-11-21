@@ -174,7 +174,6 @@ runWatch       = !isProd and runServer
 showHelp       = getSwitchOption 'help'
 
 return if showHelp
-	# console.log task for task, options of gulp.tasks
 	console.log '\n' + yargs.help()
 
 templateOptions =
@@ -1177,7 +1176,11 @@ gulp.task 'templateCache', ['haml', 'html', 'jade', 'markdown'], ->
 gulp.task 'test', ['build'], ->
 	# launch karma in a new process to avoid blocking gulp
 	command = windowsify '.\\node_modules\\.bin\\gulp.cmd', 'gulp'
-	spawn   = childProcess.spawn command, ['karma'], {stdio: 'inherit'}
+
+	# get args from parent process to pass on to child process
+	args  = ("--#{key}=#{value}" for own key, value of yargs.argv when key isnt '_' and key isnt '$0')
+	args  = ['karma'].concat args
+	spawn = childProcess.spawn command, args, {stdio: 'inherit'}
 
 # Compile TypeScript
 gulp.task 'typeScript', ['prepare'], ->
