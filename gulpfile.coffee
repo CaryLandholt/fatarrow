@@ -182,6 +182,9 @@ showHelp       = getSwitchOption 'help'
 return if showHelp
 	console.log '\n' + yargs.help()
 
+ngClassifyOptions =
+	appName: APP_NAME
+
 templateOptions =
 	appName: APP_NAME
 	useBackendless: useBackendless
@@ -386,7 +389,7 @@ gulp.task 'coffeeScript', ['prepare'], ->
 			.pipe template templateOptions
 			.on 'error', onError
 
-			.pipe ngClassify()
+			.pipe ngClassify ngClassifyOptions
 			.on 'error', onError
 
 	srcs.push src =
@@ -930,7 +933,7 @@ gulp.task 'plato', ['clean:working'], ->
 			.pipe template templateOptions
 			.on 'error', onError
 
-			.pipe ngClassify()
+			.pipe ngClassify ngClassifyOptions
 			.on 'error', onError
 
 			.pipe coffeeScript()
