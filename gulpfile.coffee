@@ -1186,7 +1186,13 @@ gulp.task 'test', ['build'], ->
 	# get args from parent process to pass on to child process
 	args  = ("--#{key}=#{value}" for own key, value of yargs.argv when key isnt '_' and key isnt '$0')
 	args  = ['karma'].concat args
-	spawn = childProcess.spawn command, args, {stdio: 'inherit'}
+
+	if runWatch
+		spawn = childProcess.spawn command, args, {stdio: 'inherit'}
+	else
+		gulp.start 'karma'
+
+	
 
 # Compile TypeScript
 gulp.task 'typeScript', ['prepare'], ->
