@@ -770,6 +770,9 @@ gulp.task 'karma', ->
 gulp.task 'less', ['prepare'], ->
 	options =
 		less:
+			paths: [
+				path.resolve SRC_DIRECTORY
+			]
 			sourceMap: true
 			sourceMapBasepath: path.resolve TEMP_DIRECTORY
 
