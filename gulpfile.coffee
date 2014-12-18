@@ -182,6 +182,9 @@ showHelp       = getSwitchOption 'help'
 return if showHelp
 	console.log '\n' + yargs.help()
 
+ngClassifyOptions =
+	appName: APP_NAME
+
 templateOptions =
 	appName: APP_NAME
 	useBackendless: useBackendless
@@ -237,7 +240,7 @@ openApp = ->
 			url: appUrl
 
 	gulp
-		.src sources, cwd: DIST_DIRECTORY
+		.src sources, {cwd: DIST_DIRECTORY, nodir: true}
 		.on 'error', onError
 
 		.pipe open '', options.open
@@ -265,7 +268,24 @@ gulp.task 'bower', ['clean:working'], ->
 
 	components = []
 
-	components.push "#{component}##{version}" for version, files of value for component, value of BOWER_COMPONENTS
+	urlExpression = /[-a-zA-Z0-9@:%_\+.~#?&//=]{2,256}\.[a-z]{2,4}\b(\/[-a-zA-Z0-9@:%_\+.~#?&//=]*)?/gi
+	urlRegEx = new RegExp urlExpression
+
+	for component, value of BOWER_COMPONENTS
+		for version, files of value
+			hasVersion = !!version
+
+			if !hasVersion
+				components.push component
+				continue
+
+			isUrl = version.match urlRegEx
+
+			if isUrl
+				components.push version
+				continue
+
+			components.push "#{component}##{version}"
 
 	bower
 		.commands.install components, bowerOptions, options
@@ -294,7 +314,7 @@ gulp.task 'build', ['spa', 'fonts', 'images'], ->
 	if not isProd
 		srcs.push src =
 			gulp
-				.src getSources(), cwd: TEMP_DIRECTORY
+				.src getSources(), {cwd: TEMP_DIRECTORY, nodir: true}
 				.on 'error', onError
 
 	extensions = extensions
@@ -306,12 +326,12 @@ gulp.task 'build', ['spa', 'fonts', 'images'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: COMPONENTS_DIRECTORY
+			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 	es
@@ -374,7 +394,7 @@ gulp.task 'coffeeScript', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -386,12 +406,12 @@ gulp.task 'coffeeScript', ['prepare'], ->
 			.pipe template templateOptions
 			.on 'error', onError
 
-			.pipe ngClassify()
+			.pipe ngClassify ngClassifyOptions
 			.on 'error', onError
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: COMPONENTS_DIRECTORY
+			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -420,7 +440,7 @@ gulp.task 'css', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -431,7 +451,7 @@ gulp.task 'css', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: COMPONENTS_DIRECTORY
+			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 	es
@@ -472,7 +492,7 @@ gulp.task 'e2e', ->
 			]
 
 	gulp
-		.src sources, {cwd: E2E_DIRECTORY, read: false}
+		.src sources, {cwd: E2E_DIRECTORY, read: false, nodir: true}
 		.on 'error', onError
 
 		.pipe protractor.protractor options.protractor
@@ -490,7 +510,7 @@ gulp.task 'fonts', ['fontTypes'], ->
 
 	src =
 		gulp
-			.src sources, cwd: TEMP_DIRECTORY
+			.src sources, {cwd: TEMP_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 	return if isProd
@@ -512,12 +532,12 @@ gulp.task 'fontTypes', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: COMPONENTS_DIRECTORY
+			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 	es
@@ -534,7 +554,7 @@ gulp.task 'haml', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -545,7 +565,7 @@ gulp.task 'haml', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: COMPONENTS_DIRECTORY
+			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -572,7 +592,7 @@ gulp.task 'html', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -583,7 +603,7 @@ gulp.task 'html', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: COMPONENTS_DIRECTORY
+			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 	es
@@ -599,7 +619,7 @@ gulp.task 'images', ['imageTypes'], ->
 
 	src =
 		gulp
-			.src sources, cwd: TEMP_DIRECTORY
+			.src sources, {cwd: TEMP_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 	return if isProd
@@ -621,12 +641,12 @@ gulp.task 'imageTypes', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: COMPONENTS_DIRECTORY
+			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 	es
@@ -647,7 +667,7 @@ gulp.task 'jade', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -658,7 +678,7 @@ gulp.task 'jade', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: COMPONENTS_DIRECTORY
+			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -701,7 +721,7 @@ gulp.task 'javaScript', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -718,7 +738,7 @@ gulp.task 'javaScript', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: COMPONENTS_DIRECTORY
+			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 	es
@@ -729,7 +749,7 @@ gulp.task 'javaScript', ['prepare'], ->
 		.on 'error', onError
 
 # Execute karma unit tests
-gulp.task 'karma', ->
+gulp.task 'karma', [].concat(unless runWatch then ['build'] else []), ->
 	sources = [].concat SCRIPTS, '**/*.html'
 
 	options =
@@ -767,6 +787,9 @@ gulp.task 'karma', ->
 gulp.task 'less', ['prepare'], ->
 	options =
 		less:
+			paths: [
+				path.resolve SRC_DIRECTORY
+			]
 			sourceMap: true
 			sourceMapBasepath: path.resolve TEMP_DIRECTORY
 
@@ -775,7 +798,7 @@ gulp.task 'less', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -786,7 +809,7 @@ gulp.task 'less', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: COMPONENTS_DIRECTORY
+			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -809,7 +832,7 @@ gulp.task 'liveScript', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -820,7 +843,7 @@ gulp.task 'liveScript', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: COMPONENTS_DIRECTORY
+			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -843,7 +866,7 @@ gulp.task 'markdown', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -854,7 +877,7 @@ gulp.task 'markdown', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: COMPONENTS_DIRECTORY
+			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -902,7 +925,7 @@ gulp.task 'normalizeComponents', ['bower'], ->
 
 	srcs = for componentType, sources of bowerComponents
 		gulp
-			.src sources, cwd: BOWER_DIRECTORY
+			.src sources, {cwd: BOWER_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest path.join COMPONENTS_DIRECTORY, VENDOR_DIRECTORY, componentType
@@ -924,13 +947,13 @@ gulp.task 'plato', ['clean:working'], ->
 
 	srcs.push src =
 		gulp
-			.src '**/*.coffee', cwd: SRC_DIRECTORY
+			.src '**/*.coffee', {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe template templateOptions
 			.on 'error', onError
 
-			.pipe ngClassify()
+			.pipe ngClassify ngClassifyOptions
 			.on 'error', onError
 
 			.pipe coffeeScript()
@@ -938,7 +961,7 @@ gulp.task 'plato', ['clean:working'], ->
 
 	srcs.push src =
 		gulp
-			.src '**/*.js', cwd: SRC_DIRECTORY
+			.src '**/*.js', {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe template templateOptions
@@ -946,7 +969,7 @@ gulp.task 'plato', ['clean:working'], ->
 
 	srcs.push src =
 		gulp
-			.src '**/*.ls', cwd: SRC_DIRECTORY
+			.src '**/*.ls', {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe template templateOptions
@@ -957,7 +980,7 @@ gulp.task 'plato', ['clean:working'], ->
 
 	srcs.push src =
 		gulp
-			.src '**/*.ts', cwd: SRC_DIRECTORY
+			.src '**/*.ts', {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe template templateOptions
@@ -1001,7 +1024,7 @@ gulp.task 'sass', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -1012,7 +1035,7 @@ gulp.task 'sass', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: COMPONENTS_DIRECTORY
+			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -1038,7 +1061,7 @@ gulp.task 'scripts', ['coffeeScript', 'javaScript', 'liveScript', 'typeScript'].
 
 	src =
 		gulp
-			.src sources, cwd: TEMP_DIRECTORY
+			.src sources, {cwd: TEMP_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 	return if isProd
@@ -1096,7 +1119,7 @@ gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' els
 
 	src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe template options.template
@@ -1127,7 +1150,7 @@ gulp.task 'styles', ['less', 'css', 'sass'], ->
 
 	src =
 		gulp
-			.src sources, cwd: TEMP_DIRECTORY
+			.src sources, {cwd: TEMP_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 	return if isProd
@@ -1169,7 +1192,7 @@ gulp.task 'templateCache', ['haml', 'html', 'jade', 'markdown'], ->
 	]
 
 	gulp
-		.src sources, cwd: TEMP_DIRECTORY
+		.src sources, {cwd: TEMP_DIRECTORY, nodir: true}
 		.on 'error', onError
 
 		.pipe templateCache options.templateCache
@@ -1186,6 +1209,7 @@ gulp.task 'test', ['build'], ->
 	# get args from parent process to pass on to child process
 	args  = ("--#{key}=#{value}" for own key, value of yargs.argv when key isnt '_' and key isnt '$0')
 	args  = ['karma'].concat args
+
 	spawn = childProcess.spawn command, args, {stdio: 'inherit'}
 
 # Compile TypeScript
@@ -1195,7 +1219,7 @@ gulp.task 'typeScript', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: SRC_DIRECTORY
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -1206,7 +1230,7 @@ gulp.task 'typeScript', ['prepare'], ->
 
 	srcs.push src =
 		gulp
-			.src sources, cwd: COMPONENTS_DIRECTORY
+			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -1230,7 +1254,7 @@ gulp.task 'views', ['haml', 'html', 'jade', 'markdown'], ->
 	]
 
 	gulp
-		.src sources, cwd: TEMP_DIRECTORY
+		.src sources, {cwd: TEMP_DIRECTORY, nodir: true}
 		.on 'error', onError
 
 		.pipe gulp.dest DIST_DIRECTORY

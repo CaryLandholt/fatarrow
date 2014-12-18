@@ -1,12 +1,11 @@
 class App extends App
 	constructor: ->
-		return [
+		dependencies = [
 			'ngAnimate'
 			'ngRoute'
-			# coffeelint: disable=coffeescript_error
-			<% if (useBackendless) { %>
-			'ngMockE2E'
-			<% } %>
-			# coffeelint: enable=coffeescript_error
 			'angular-loading-bar'
 		]
+
+		dependencies.push('ngMockE2E') if '<%= useBackendless %>' is 'true'
+
+		return dependencies
