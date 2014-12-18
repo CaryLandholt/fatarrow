@@ -729,7 +729,7 @@ gulp.task 'javaScript', ['prepare'], ->
 		.on 'error', onError
 
 # Execute karma unit tests
-gulp.task 'karma', ->
+gulp.task 'karma', [].concat(unless runWatch then ['build'] else []), ->
 	sources = [].concat SCRIPTS, '**/*.html'
 
 	options =
@@ -1187,12 +1187,7 @@ gulp.task 'test', ['build'], ->
 	args  = ("--#{key}=#{value}" for own key, value of yargs.argv when key isnt '_' and key isnt '$0')
 	args  = ['karma'].concat args
 
-	if runWatch
-		spawn = childProcess.spawn command, args, {stdio: 'inherit'}
-	else
-		gulp.start 'karma'
-
-	
+	spawn = childProcess.spawn command, args, {stdio: 'inherit'}
 
 # Compile TypeScript
 gulp.task 'typeScript', ['prepare'], ->
