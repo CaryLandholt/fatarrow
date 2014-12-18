@@ -1,3 +1,20 @@
+### 1.1.0 (2014-12-10)
+
+
+#### Bug Fixes
+
+* **app:** make IDE friendly ([1ae02635](https://github.com/CaryLandholt/fatarrow/commit/1ae026357dbcb768f91f4b85420ae5b3ceecb5fa), closes [#18](https://github.com/CaryLandholt/fatarrow/issues/18))
+* **appName:** pass config option to ng-classify ([eecac027](https://github.com/CaryLandholt/fatarrow/commit/eecac027c0b03586adb9d6760462cb9f22bcae56), closes [#17](https://github.com/CaryLandholt/fatarrow/issues/17))
+* **bower:** add support for component urls ([3b9b1ad3](https://github.com/CaryLandholt/fatarrow/commit/3b9b1ad3bbfe3ecb73fe9129195a19cdfbe7e006), closes [#21](https://github.com/CaryLandholt/fatarrow/issues/21))
+* **childProcess:** pass args to child process ([e43a4215](https://github.com/CaryLandholt/fatarrow/commit/e43a4215ea65c5e22a1a623110a257ed4d25bfb5), closes [#13](https://github.com/CaryLandholt/fatarrow/issues/13))
+* **less:** add paths to less configuration ([c5f8d9c1](https://github.com/CaryLandholt/fatarrow/commit/c5f8d9c1f69e1d455c73da6c3d4b5364c08e56a9), closes [#20](https://github.com/CaryLandholt/fatarrow/issues/20))
+
+
+#### Features
+
+* **bowerSwitch:** add switch to turn off bower component retrieval ([a6e5a58f](https://github.com/CaryLandholt/fatarrow/commit/a6e5a58f3959d962070399347711a77ab9694891))
+
+
 ## 1.0.0 (2014-10-15)
 
 
