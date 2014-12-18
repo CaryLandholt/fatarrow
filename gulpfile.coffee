@@ -203,7 +203,7 @@ onError = (e) ->
 	messages = (error for error in errors)
 
 	gutil.log gutil.colors.red message for message in messages
-	@emit 'end'
+	@emit 'end' unless isProd
 
 onRev = (file) ->
 	from           = path.relative file.revOrigBase, file.revOrigPath
