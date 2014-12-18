@@ -935,7 +935,7 @@ gulp.task 'normalizeComponents', ['bower'], ->
 
 # Open the app in the default browser
 gulp.task 'open', ['server'], ->
-	openApp() if useBackendless
+	openApp()
 
 # Execute Plato complexity analysis
 gulp.task 'plato', ['clean:working'], ->
@@ -1097,7 +1097,7 @@ gulp.task 'scripts', ['coffeeScript', 'javaScript', 'liveScript', 'typeScript'].
 # Start a web server without rebuilding
 gulp.task 'serve', ->
 	startServer()
-	openApp() if useBackendless
+	openApp()
 
 # Start a web server
 gulp.task 'server', ['build'], ->
