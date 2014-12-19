@@ -203,7 +203,7 @@ onError = (e) ->
 	messages = (error for error in errors)
 
 	gutil.log gutil.colors.red message for message in messages
-	@emit 'end'
+	@emit 'end' unless isProd
 
 onRev = (file) ->
 	from           = path.relative file.revOrigBase, file.revOrigPath
@@ -749,7 +749,7 @@ gulp.task 'javaScript', ['prepare'], ->
 		.on 'error', onError
 
 # Execute karma unit tests
-gulp.task 'karma', [].concat(unless runWatch then ['build'] else []), ->
+gulp.task 'karma', ->
 	sources = [].concat SCRIPTS, '**/*.html'
 
 	options =
@@ -1209,7 +1209,6 @@ gulp.task 'test', ['build'], ->
 	# get args from parent process to pass on to child process
 	args  = ("--#{key}=#{value}" for own key, value of yargs.argv when key isnt '_' and key isnt '$0')
 	args  = ['karma'].concat args
-
 	spawn = childProcess.spawn command, args, {stdio: 'inherit'}
 
 # Compile TypeScript
