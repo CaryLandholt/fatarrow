@@ -462,7 +462,7 @@ gulp.task 'css', ['prepare'], ->
 		.on 'error', onError
 
 # Default build
-gulp.task 'default', [].concat(if runServer then ['open'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['test'] else [])
+gulp.task 'default', [].concat(if runServer and useBackendless then ['open'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['test'] else [])
 
 # Execute E2E tests
 gulp.task 'e2e', ->
