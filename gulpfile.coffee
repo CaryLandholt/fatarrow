@@ -22,12 +22,13 @@ liveScript            = require 'gulp-livescript'
 markdown              = require 'gulp-markdown'
 minifyCss             = require 'gulp-minify-css'
 minifyHtml            = require 'gulp-minify-html'
-plato                 = require 'gulp-plato'
+multiparty            = require 'connect-multiparty'
 ngAnnotate            = require 'gulp-ng-annotate'
 ngClassify            = require 'gulp-ng-classify'
 open                  = require 'gulp-open'
 path                  = require 'path'
 pkg                   = require './package.json'
+plato                 = require 'gulp-plato'
 protractor            = require 'gulp-protractor'
 q                     = require 'q'
 rev                   = require 'gulp-rev'
@@ -56,6 +57,7 @@ STATS_DIST_DIRECTORY  = 'stats/'
 STYLES_MIN_DIRECTORY  = 'styles/'
 STYLES_MIN_FILE       = 'styles.min.css'
 TEMP_DIRECTORY        = '.temp/'
+UPLOADS_DIRECTORY     = 'uploads/'
 VENDOR_DIRECTORY      = 'vendor/'
 
 EXTENSIONS =
@@ -107,6 +109,16 @@ PREDEFINED_GLOBALS = [
 	'describe'
 	'it'
 ]
+
+mkdirSync = (path) ->
+	try
+		fs.mkdirSync path
+	catch e
+		if e.code isnt 'EEXIST'
+			throw e
+
+# Create uploads directory.  Uploading won't work when the directory doesn't exist
+mkdirSync UPLOADS_DIRECTORY
 
 getSwitchOption = (switches) ->
 	isArray = Array.isArray switches
@@ -247,10 +259,31 @@ openApp = ->
 		.on 'error', onError
 
 startServer = ->
+	options =
+		multiparty:
+			uploadDir: UPLOADS_DIRECTORY
+
 	connect.server
 		livereload: !isProd
 		port: PORT
 		root: DIST_DIRECTORY
+		middleware: (connect, opt) ->
+			app = connect()
+
+			[
+				app.use multiparty options.multiparty
+				# app.use (req, res, next) ->
+				# 	if (req.url is '/api/upload') and (req.method is 'POST')
+				# 		# form = new multiparty.Form()
+				# 		# mp = multiparty options.multiparty
+				# 		form = multiparty(options.multiparty)
+				# 		console.log form
+				# 
+				# 		# form.parse req, (err, fields, files) ->
+				# 		# 	console.log files
+				# 
+				# 	next()
+			]
 
 unixifyPath = (p) ->
 	p.replace /\\/g, '/'

@@ -15,6 +15,8 @@ BOWER_COMPONENTS =
 	'bootstrap': '3.3.1':
 		fonts:   'dist/fonts/**/*.{eot,svg,ttf,woff}'
 		styles:  'dist/css/*.min.css'
+	'danialfarid-angular-file-upload': '2.1.1':
+		scripts: 'dist/angular-file-upload.min.js'
 	'google-code-prettify': '1.0.3':
 		scripts: 'src/prettify.js'
 		styles:  'src/prettify.css'
@@ -26,6 +28,7 @@ SCRIPTS = [
 	'**/angular-animate.min.js'
 	'**/angular-mocks.js'
 	'**/angular-route.min.js'
+	'**/angular-file-upload.min.js'
 	'**/loading-bar.min.js'
 	'**/app.js'
 	'**/*.js'

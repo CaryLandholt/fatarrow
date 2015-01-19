@@ -3,6 +3,7 @@ class App extends App
 		dependencies = [
 			'ngAnimate'
 			'ngRoute'
+			'angularFileUpload'
 			'angular-loading-bar'
 		]
 
