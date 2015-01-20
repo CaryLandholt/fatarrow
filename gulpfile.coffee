@@ -6,6 +6,7 @@ coffeeScript          = require 'gulp-coffee'
 coffeeLint            = require 'gulp-coffeelint'
 concat                = require 'gulp-concat'
 connect               = require 'gulp-connect'
+connectRoute          = require 'connect-route'
 conventionalChangelog = require 'conventional-changelog'
 es                    = require 'event-stream'
 flatten               = require 'gulp-flatten'
@@ -269,20 +270,13 @@ startServer = ->
 		root: DIST_DIRECTORY
 		middleware: (connect, opt) ->
 			app = connect()
+			multipartMiddleware = multiparty options.multiparty
 
 			[
-				app.use multiparty options.multiparty
-				# app.use (req, res, next) ->
-				# 	if (req.url is '/api/upload') and (req.method is 'POST')
-				# 		# form = new multiparty.Form()
-				# 		# mp = multiparty options.multiparty
-				# 		form = multiparty(options.multiparty)
-				# 		console.log form
-				# 
-				# 		# form.parse req, (err, fields, files) ->
-				# 		# 	console.log files
-				# 
-				# 	next()
+				app.use connectRoute (route) ->
+					route.post '/api/upload', (req, res, next) ->
+						multipartMiddleware.apply @, arguments
+						res.end 'success'
 			]
 
 unixifyPath = (p) ->

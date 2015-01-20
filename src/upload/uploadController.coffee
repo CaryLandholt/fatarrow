@@ -1,8 +1,16 @@
 class Upload extends Controller
 	constructor: ($log, $upload) ->
 		@fileSelected = (files, event) ->
-			for file in files
+			files.forEach (file) ->
+				data =
+					lastModified: file.lastModified
+					lastModifiedDate: file.lastModifiedDate
+					name: file.name
+					size: file.size
+					type: file.type
+
 				config =
+					data: data
 					file: file
 					method: 'POST'
 					url: 'api/upload'
