@@ -23,6 +23,7 @@
 		"conventional-changelog": "0.0.11",
 		"event-stream": "^3.1.5",
 		"gulp": "^3.8.5",
+		"gulp-aglio": "0.1.0",
 		"gulp-angular-templatecache": "^1.2.1",
 		"gulp-coffee": "^2.0.1",
 		"gulp-coffeelint": "0.4.0",

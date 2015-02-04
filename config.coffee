@@ -9,6 +9,8 @@ BOWER_COMPONENTS =
 		scripts: 'angular-mocks.js'
 	'angular-route': '1.3.9':
 		scripts: 'angular-route.min.js'
+	'angular-leaflet-directive': '0.7.11':
+		scripts: 'dist/angular-leaflet-directive.min.js'
 	'angular-loading-bar': '0.6.0':
 		scripts: 'build/loading-bar.min.js'
 		styles:  'build/loading-bar.min.css'
@@ -20,14 +22,19 @@ BOWER_COMPONENTS =
 	'google-code-prettify': '1.0.3':
 		scripts: 'src/prettify.js'
 		styles:  'src/prettify.css'
+	'leaflet': '0.7.3':
+		scripts: 'dist/leaflet.js'
+		styles: 'dist/leaflet.css'
 	'showdown': '0.3.1':
 		scripts: 'src/showdown.js'
 
 SCRIPTS = [
+	'**/leaflet.js'
 	'**/angular.min.js'
 	'**/angular-animate.min.js'
 	'**/angular-mocks.js'
 	'**/angular-route.min.js'
+	'**/angular-leaflet-directive.min.js'
 	'**/angular-file-upload.min.js'
 	'**/loading-bar.min.js'
 	'**/app.js'

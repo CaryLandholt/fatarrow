@@ -1,5 +1,6 @@
 {APP_NAME, BOWER_COMPONENTS, SCRIPTS, STYLES} = require './config.coffee'
 
+aglio                 = require 'gulp-aglio'
 bower                 = require 'bower'
 childProcess          = require 'child_process'
 coffeeScript          = require 'gulp-coffee'
@@ -1305,3 +1306,14 @@ gulp.task 'watch', ['build'], ->
 	gulp
 		.watch sources, {cwd: SRC_DIRECTORY, maxListeners: 999}, tasks
 		.on 'error', onError
+
+gulp.task 'api', ->
+	options =
+		aglio:
+			includePath: 'api'
+			template: 'default'
+
+	gulp
+		.src 'api/**/*.md'
+		.pipe aglio options.aglio
+		.pipe gulp.dest 'docs'
