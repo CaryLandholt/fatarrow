@@ -1,3 +1,8 @@
 <routes></routes>
 
-<leaflet style="height: 480px; width: 640px;" markers="controller.markers" center="controller.center" geojson="controller.geojson"></leaflet>
+<button ng-file-select ng-file-change="controller.fileSelected($files, $event)" accept=".kml">Upload KML</button>
+
+<leaflet ng-if="controller.show_map" style="height: 480px; width: 640px;" markers="controller.markers" center="controller.center" geojson="controller.geojson"></leaflet>
+
+{{controller.show_map}}
+{{controller.geojson | json}}
