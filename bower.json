@@ -13,6 +13,7 @@
 		"danialfarid-angular-file-upload": "2.1.1",
 		"google-code-prettify": "1.0.3",
 		"leaflet": "0.7.3",
-		"showdown": "0.3.1"
+		"showdown": "0.3.1",
+		"togeojson": "0.10.1"
 	}
 }

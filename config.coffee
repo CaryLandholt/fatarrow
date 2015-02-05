@@ -27,8 +27,11 @@ BOWER_COMPONENTS =
 		styles: 'dist/leaflet.css'
 	'showdown': '0.3.1':
 		scripts: 'src/showdown.js'
+	'togeojson': '0.10.1':
+		scripts: 'togeojson.js'
 
 SCRIPTS = [
+	'**/togeojson.js'
 	'**/leaflet.js'
 	'**/angular.min.js'
 	'**/angular-animate.min.js'

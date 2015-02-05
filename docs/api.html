@@ -1,0 +1,242 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>Matchup API</title><link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"><link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata|Raleway:200"><style>/* Highlight.js Theme Tomorrow */
+.hljs-comment,.hljs-title{color:#8e908c}.hljs-variable,.hljs-attribute,.hljs-tag,.hljs-regexp,.ruby .hljs-constant,.xml .hljs-tag .hljs-title,.xml .hljs-pi,.xml .hljs-doctype,.html .hljs-doctype,.css .hljs-id,.css .hljs-class,.css .hljs-pseudo{color:#c82829}.hljs-number,.hljs-preprocessor,.hljs-pragma,.hljs-built_in,.hljs-literal,.hljs-params,.hljs-constant{color:#f5871f}.ruby .hljs-class .hljs-title,.css .hljs-rules .hljs-attribute{color:#eab700}.hljs-string,.hljs-value,.hljs-inheritance,.hljs-header,.ruby .hljs-symbol,.xml .hljs-cdata{color:#718c00}.css .hljs-hexcolor{color:#3e999f}.hljs-function,.python .hljs-decorator,.python .hljs-title,.ruby .hljs-function .hljs-title,.ruby .hljs-title .hljs-keyword,.perl .hljs-sub,.javascript .hljs-title,.coffeescript .hljs-title{color:#4271ae}.hljs-keyword,.javascript .hljs-function{color:#8959a8}.hljs{display:block;background:white;color:#4d4d4c;padding:.5em}.coffeescript .javascript,.javascript .xml,.tex .hljs-formula,.xml .javascript,.xml .vbscript,.xml .css,.xml .hljs-cdata{opacity:.5}</style><style>body,
+h4,
+h5 {
+  font-family: 'Roboto' sans-serif !important;
+}
+h1,
+h2,
+h3,
+.aglio {
+  font-family: 'Raleway' sans-serif !important;
+}
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a {
+  display: none;
+}
+h1:hover a,
+h2:hover a,
+h3:hover a,
+h4:hover a,
+h5:hover a {
+  display: inline;
+}
+code {
+  color: #444;
+  background-color: #ddd;
+  font-family: 'Inconsolata' monospace !important;
+}
+a[data-target] {
+  cursor: pointer;
+}
+h4 {
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.back-to-top {
+  position: fixed;
+  z-index: 1;
+  bottom: 0px;
+  right: 24px;
+  padding: 4px 8px;
+  background-color: #eee;
+  text-decoration: none !important;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  border-left: 1px solid rgba(0,0,0,0.1);
+  border-right: 1px solid rgba(0,0,0,0.1);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.panel {
+  overflow: hidden;
+}
+.panel-heading code {
+  margin-left: 3px;
+  color: #c7254e;
+  background-color: rgba(255,255,255,0.7);
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.panel-heading h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+a.list-group-item:hover {
+  background-color: #f8f8f8;
+  border-left: 2px solid #555;
+  padding-left: 15px;
+}
+.indent {
+  display: block;
+  text-indent: 16px;
+}
+.list-group-item {
+  padding-left: 16px;
+}
+.list-group-item .toggle .open {
+  display: block;
+}
+.list-group-item .toggle .closed {
+  display: none;
+}
+.list-group-item.collapsed .toggle .open {
+  display: none;
+}
+.list-group-item.collapsed .toggle .closed {
+  display: block;
+}
+a.list-group-item {
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+a.list-group-item.heading {
+  font-size: 15px;
+  background-color: #f5f5f5;
+}
+a.list-group-item.heading:hover {
+  background-color: #f8f8f8;
+}
+.list-group-item.collapse {
+  display: none;
+}
+.list-group-item.collapse.in {
+  display: block;
+}
+.list-group-item a span.closed {
+  display: none;
+}
+.list-group-item a span.open {
+  display: block;
+}
+.list-group-item a.collapsed span.closed {
+  display: block;
+}
+.list-group-item a.collapsed span.open {
+  display: none;
+}
+#nav {
+  width: inherit;
+  margin-top: 38px;
+  max-width: 255px;
+  top: 0;
+  bottom: 0;
+  padding-right: 12px;
+  padding-bottom: 12px;
+  overflow-y: auto;
+}
+@media (max-width: 1199px) {
+  #nav {
+    max-width: 212px;
+  }
+}
+</style></head><body><a href="#top" class="text-muted back-to-top"><i class="fa fa-toggle-up"></i>&nbsp;Back to top</a><div class="container"><div class="row"><div class="col-md-3"><nav id="nav" class="hidden-sm hidden-xs affix nav"><div class="list-group"><a data-toggle="" data-target="#companies-menu" href="#companies" class="list-group-item heading collapsed">Companies</a><div id="companies-menu"><a href="#companies-companies-collection" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item">Companies Collection</a><a href="#companies-companies-collection-get" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span><span class="indent">List all Companies</span></a><a href="#companies-companies-collection-post" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span><span class="indent">Create a Company</span></a><a href="#companies-company" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item">Company</a><a href="#companies-company-get" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span><span class="indent">Retrieve a Company</span></a><a href="#companies-company-put" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-warning"><i class="fa fa-pencil"></i></span><span class="indent">Update a Company</span></a><a href="#companies-company-delete" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-danger"><i class="fa fa-times"></i></span><span class="indent">Remove a Company</span></a></div></div><div class="list-group"><a data-toggle="" data-target="#users-menu" href="#users" class="list-group-item heading collapsed">Users</a><div id="users-menu"><a href="#users-users-collection" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item">Users Collection</a><a href="#users-users-collection-get" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span><span class="indent">List all Users</span></a><a href="#users-users-collection-post" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-success"><i class="fa fa-plus"></i></span><span class="indent">Create a User</span></a><a href="#users-user" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item">User</a><a href="#users-user-get" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-info"><i class="fa fa-arrow-down"></i></span><span class="indent">Retrieve a User</span></a><a href="#users-user-put" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-warning"><i class="fa fa-pencil"></i></span><span class="indent">Update a User</span></a><a href="#users-user-delete" style="border-top-left-radius: 0; border-top-right-radius: 0" class="list-group-item"><span class="badge alert-danger"><i class="fa fa-times"></i></span><span class="indent">Remove a User</span></a></div></div></nav></div><div class="col-md-8"><div><header><div class="page-header"><h1 id="top">Matchup API</h1></div></header><div class="description"><h2 id="uri-syntax">URI Syntax</h2>
+<p><a href="http://tools.ietf.org/html/rfc3986#section-3">RFC 3986</a></p>
+<pre><code>https://api.matchup.io/resources?offset=10#bottom
+\<span class="hljs-strong">___/   \__</span><span class="hljs-strong">_____</span><span class="hljs-strong">_____</span>/ \<span class="hljs-strong">_____</span><span class="hljs-strong">__/ \__</span><span class="hljs-strong">_____</span>/ \<span class="hljs-emphasis">___</span>_/
+  |            |           |         |        |
+scheme      authority     path     query   fragment
+</code></pre><h2 id="rest">REST</h2>
+<h3 id="standards">Standards</h3>
+<ul>
+<li><p><strong>resource properties</strong><br><a href="http://en.wikipedia.org/wiki/Snake_case">snake case</a> formatting (e.g. start_date, company, average_steps_per_mile) must be used</p>
+<ul>
+<li>an eye tracking study concluded camel case takes 20% longer to comprehend than snake case (<a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.421.6137&amp;rep=rep1&amp;type=pdf">snake case vs. camel case</a>)</li>
+</ul>
+</li>
+<li><p><strong>versioning</strong><br><a href="http://semver.org/">SemVer</a> versioning must be used<br><code>major.minor.patch.build</code></p>
+<ul>
+<li><strong>major</strong> - breaking change(s)</li>
+<li><strong>minor</strong> - new feature(s)</li>
+<li><strong>patch</strong> - bug fix(s)</li>
+<li><strong>build</strong> - build number</li>
+</ul>
+</li>
+</ul>
+<h3 id="status-codes">Status Codes</h3>
+<table>
+<thead>
+<tr>
+<th>HTP Verb</th>
+<th>Entire Collection (e.g. /resources)</th>
+<th>Specific Item (e.g. /resources/{id})</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td>200 (OK), list of resources. Use pagination, sorting, and filtering to navigate big lists</td>
+<td>200 (OK), single resource. 404 (Not Found), if id not found or invalid</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>404 (Not Found), unless you want to update/replace every resource in the entire collection</td>
+<td>204 (No Content). 404 (Not Found), if id not found or invalid</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>201 (Created), ‘Location’ header with link to /resources/{id} containing new id</td>
+<td>404 (Not Found)</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>404 (Not Found), unless you want to delete the entire collection</td>
+<td>200 (OK). 404 (Not Found), if id not found or invalid</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pagination">Pagination</h3>
+<pre><code>?page={pageNumber}&amp;<span class="hljs-built_in">limit</span>={<span class="hljs-built_in">limit</span>ReturnRecordsTo}
+</code></pre><pre><code>?<span class="hljs-variable">page=</span><span class="hljs-number">2</span>&amp;<span class="hljs-variable">limit=</span><span class="hljs-number">50</span>
+</code></pre><p>The above will retrieve records:</p>
+<ul>
+<li><p>50-99 if there are atleast 99 records</p>
+</li>
+<li><p>or 50-last_record if the last_record &lt; 99</p>
+</li>
+<li><p>or 0 records if the last_record &lt; 50</p>
+</li>
+</ul>
+<p>If no pagination parameters are passed, the default page and limit are used</p>
+<h3 id="sorting">Sorting</h3>
+<pre><code>?sort={[-]fielda[,[-]fieldb[,<span class="hljs-keyword">...</span>]]}
+</code></pre><p>The <code>sort</code> parameter takes in a list of comma separated fields, each with a possible unary negative to imply descending sort order</p>
+</div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="companies">Companies&nbsp;<a href="#companies"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><h4 id="companies-companies-collection">Companies Collection&nbsp;<a href="#companies-companies-collection"><i class="fa fa-link"></i></a></h4><section id="companies-companies-collection-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">List all Companies</span></div><div style="float:left"><a href="#companies-companies-collection-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/companies</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#4c061b461d3c0577a709fd1c97dc3b2c" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="4c061b461d3c0577a709fd1c97dc3b2c" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre></li></ul></section><section id="companies-companies-collection-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Create a Company</span></div><div style="float:left"><a href="#companies-companies-collection-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/companies</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#d49bc0bde53a3130b04fa8b6d1b29c01" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="d49bc0bde53a3130b04fa8b6d1b29c01" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{"<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"IBM"</span></span>}
+
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>201</code></strong><a data-toggle="collapse" data-target="#91a7f62fdc134d6c6b62c32a4e4119f8" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="91a7f62fdc134d6c6b62c32a4e4119f8" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre></li></ul></section><h4 id="companies-company">Company&nbsp;<a href="#companies-company"><i class="fa fa-link"></i></a></h4><section id="companies-company-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve a Company</span></div><div style="float:left"><a href="#companies-company-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/companies/{id}</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#c9e8be22bae73544fa950d33c090b610" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="c9e8be22bae73544fa950d33c090b610" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{"<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>, "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Apple"</span></span>}
+
+</code></pre></li></ul></section><section id="companies-company-put" class="panel panel-warning"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Update a Company</span></div><div style="float:left"><a href="#companies-company-put" class="btn btn-xs btn-warning">PUT</a></div><div style="overflow:hidden"><code>/companies/{id}</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#90c8758a2699bedb229c5a4e498953cb" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="90c8758a2699bedb229c5a4e498953cb" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{"<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"MS"</span></span>}
+
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>204</code></strong><a data-toggle="collapse" data-target="#867570dd27076cf6c5cd28a8b8cb0d96" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="867570dd27076cf6c5cd28a8b8cb0d96" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre></li></ul></section><section id="companies-company-delete" class="panel panel-danger"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Remove a Company</span></div><div style="float:left"><a href="#companies-company-delete" class="btn btn-xs btn-danger">DELETE</a></div><div style="overflow:hidden"><code>/companies/{id}</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>204</code></strong><a data-toggle="collapse" data-target="#86cde142ebcea5b976e4bfd15f8bfebe" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="86cde142ebcea5b976e4bfd15f8bfebe" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre></li></ul></section></div></div></div><div><div class="panel panel-default"><div class="panel-heading"><h3 id="users">Users&nbsp;<a href="#users"><i class="fa fa-link"></i></a></h3></div><div class="panel-body"><h4 id="users-users-collection">Users Collection&nbsp;<a href="#users-users-collection"><i class="fa fa-link"></i></a></h4><section id="users-users-collection-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">List all Users</span></div><div style="float:left"><a href="#users-users-collection-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/users</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#e345eb440ba8af4c0ae3852f882934f0" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="e345eb440ba8af4c0ae3852f882934f0" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>[
+{"<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>, "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"John"</span></span>},
+{"<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">2</span></span>, "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Greg"</span></span>},
+{"<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">3</span></span>, "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Anthony"</span></span>}
+]
+
+</code></pre></li></ul></section><section id="users-users-collection-post" class="panel panel-success"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Create a User</span></div><div style="float:left"><a href="#users-users-collection-post" class="btn btn-xs btn-success">POST</a></div><div style="overflow:hidden"><code>/users</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#7659b1b32de18043dd51b9e8ab0fec18" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="7659b1b32de18043dd51b9e8ab0fec18" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{"<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"Andy"</span></span>}
+
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>201</code></strong><a data-toggle="collapse" data-target="#06c042f805eefc9261ea5b76532f1835" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="06c042f805eefc9261ea5b76532f1835" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre></li></ul></section><h4 id="users-user">User&nbsp;<a href="#users-user"><i class="fa fa-link"></i></a></h4><section id="users-user-get" class="panel panel-info"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Retrieve a User</span></div><div style="float:left"><a href="#users-user-get" class="btn btn-xs btn-primary">GET</a></div><div style="overflow:hidden"><code>/users/{id}</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>200</code></strong><a data-toggle="collapse" data-target="#a1bbc0e6a9480554a4e974a0da227ad2" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="a1bbc0e6a9480554a4e974a0da227ad2" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{"<span class="hljs-attribute">id</span>": <span class="hljs-value"><span class="hljs-number">1</span></span>, "<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"John"</span></span>}
+
+</code></pre></li></ul></section><section id="users-user-put" class="panel panel-warning"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Update a User</span></div><div style="float:left"><a href="#users-user-put" class="btn btn-xs btn-warning">PUT</a></div><div style="overflow:hidden"><code>/users/{id}</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Request</strong><a data-toggle="collapse" data-target="#eb0e07015c544e69900d17ca42e6e387" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="eb0e07015c544e69900d17ca42e6e387" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre><h5>Body</h5><pre><code>{"<span class="hljs-attribute">name</span>": <span class="hljs-value"><span class="hljs-string">"JohnnyCon"</span></span>}
+
+</code></pre></li><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>204</code></strong><a data-toggle="collapse" data-target="#0f6048a467b97a2be8dc7638886dca60" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="0f6048a467b97a2be8dc7638886dca60" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre></li></ul></section><section id="users-user-delete" class="panel panel-danger"><div class="panel-heading"><div style="float:right"><span style="text-transform: lowercase">Remove a User</span></div><div style="float:left"><a href="#users-user-delete" class="btn btn-xs btn-danger">DELETE</a></div><div style="overflow:hidden"><code>/users/{id}</code></div></div><ul class="list-group"><li class="list-group-item"><strong>Response&nbsp;&nbsp;<code>204</code></strong><a data-toggle="collapse" data-target="#efe9fc7652bc416a369d5f359d3d3ef8" class="pull-right collapsed"><span class="closed">Show</span><span class="open">Hide</span></a></li><li id="efe9fc7652bc416a369d5f359d3d3ef8" class="list-group-item panel-collapse collapse"><h5>Headers</h5><pre><code><span class="hljs-attribute">Content-Type</span>: <span class="hljs-string">application/json</span><br></code></pre></li></ul></section></div></div></div></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 25 Jan 2015</p><div id="localFile" style="display: none; position: absolute; top: 0; left: 0; width: 100%; color: white; background: red; font-size: 150%; text-align: center; padding: 1em;">This page may not display correctly when opened as a local file. Instead, view it from a web server.
+
+</div></body><script src="//code.jquery.com/jquery-1.11.0.min.js"></script><script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><script>(function() {
+  if (location.protocol === 'file:') {
+    document.getElementById('localFile').style.display = 'block';
+  }
+
+}).call(this);
+</script><script>(function() {
+  $('table').addClass('table');
+
+}).call(this);
+</script></html>

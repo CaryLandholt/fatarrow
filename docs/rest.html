@@ -1,0 +1,218 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>REST</title><link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"><link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css"><link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,700|Inconsolata|Raleway:200"><style>/* Highlight.js Theme Tomorrow */
+.hljs-comment,.hljs-title{color:#8e908c}.hljs-variable,.hljs-attribute,.hljs-tag,.hljs-regexp,.ruby .hljs-constant,.xml .hljs-tag .hljs-title,.xml .hljs-pi,.xml .hljs-doctype,.html .hljs-doctype,.css .hljs-id,.css .hljs-class,.css .hljs-pseudo{color:#c82829}.hljs-number,.hljs-preprocessor,.hljs-pragma,.hljs-built_in,.hljs-literal,.hljs-params,.hljs-constant{color:#f5871f}.ruby .hljs-class .hljs-title,.css .hljs-rules .hljs-attribute{color:#eab700}.hljs-string,.hljs-value,.hljs-inheritance,.hljs-header,.ruby .hljs-symbol,.xml .hljs-cdata{color:#718c00}.css .hljs-hexcolor{color:#3e999f}.hljs-function,.python .hljs-decorator,.python .hljs-title,.ruby .hljs-function .hljs-title,.ruby .hljs-title .hljs-keyword,.perl .hljs-sub,.javascript .hljs-title,.coffeescript .hljs-title{color:#4271ae}.hljs-keyword,.javascript .hljs-function{color:#8959a8}.hljs{display:block;background:white;color:#4d4d4c;padding:.5em}.coffeescript .javascript,.javascript .xml,.tex .hljs-formula,.xml .javascript,.xml .vbscript,.xml .css,.xml .hljs-cdata{opacity:.5}</style><style>body,
+h4,
+h5 {
+  font-family: 'Roboto' sans-serif !important;
+}
+h1,
+h2,
+h3,
+.aglio {
+  font-family: 'Raleway' sans-serif !important;
+}
+h1 a,
+h2 a,
+h3 a,
+h4 a,
+h5 a {
+  display: none;
+}
+h1:hover a,
+h2:hover a,
+h3:hover a,
+h4:hover a,
+h5:hover a {
+  display: inline;
+}
+code {
+  color: #444;
+  background-color: #ddd;
+  font-family: 'Inconsolata' monospace !important;
+}
+a[data-target] {
+  cursor: pointer;
+}
+h4 {
+  font-size: 100%;
+  font-weight: bold;
+  text-transform: uppercase;
+}
+.back-to-top {
+  position: fixed;
+  z-index: 1;
+  bottom: 0px;
+  right: 24px;
+  padding: 4px 8px;
+  background-color: #eee;
+  text-decoration: none !important;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  border-left: 1px solid rgba(0,0,0,0.1);
+  border-right: 1px solid rgba(0,0,0,0.1);
+  border-top-left-radius: 3px;
+  border-top-right-radius: 3px;
+}
+.panel {
+  overflow: hidden;
+}
+.panel-heading code {
+  margin-left: 3px;
+  color: #c7254e;
+  background-color: rgba(255,255,255,0.7);
+  white-space: pre-wrap;
+  white-space: -moz-pre-wrap;
+  white-space: -pre-wrap;
+  white-space: -o-pre-wrap;
+  word-wrap: break-word;
+}
+.panel-heading h3 {
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+a.list-group-item:hover {
+  background-color: #f8f8f8;
+  border-left: 2px solid #555;
+  padding-left: 15px;
+}
+.indent {
+  display: block;
+  text-indent: 16px;
+}
+.list-group-item {
+  padding-left: 16px;
+}
+.list-group-item .toggle .open {
+  display: block;
+}
+.list-group-item .toggle .closed {
+  display: none;
+}
+.list-group-item.collapsed .toggle .open {
+  display: none;
+}
+.list-group-item.collapsed .toggle .closed {
+  display: block;
+}
+a.list-group-item {
+  font-size: 13px;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+a.list-group-item.heading {
+  font-size: 15px;
+  background-color: #f5f5f5;
+}
+a.list-group-item.heading:hover {
+  background-color: #f8f8f8;
+}
+.list-group-item.collapse {
+  display: none;
+}
+.list-group-item.collapse.in {
+  display: block;
+}
+.list-group-item a span.closed {
+  display: none;
+}
+.list-group-item a span.open {
+  display: block;
+}
+.list-group-item a.collapsed span.closed {
+  display: block;
+}
+.list-group-item a.collapsed span.open {
+  display: none;
+}
+#nav {
+  width: inherit;
+  margin-top: 38px;
+  max-width: 255px;
+  top: 0;
+  bottom: 0;
+  padding-right: 12px;
+  padding-bottom: 12px;
+  overflow-y: auto;
+}
+@media (max-width: 1199px) {
+  #nav {
+    max-width: 212px;
+  }
+}
+</style></head><body><a href="#top" class="text-muted back-to-top"><i class="fa fa-toggle-up"></i>&nbsp;Back to top</a><div class="container"><div class="row"><div class="col-md-3"><nav id="nav" class="hidden-sm hidden-xs affix nav"></nav></div><div class="col-md-8"><div><header><div class="page-header"><h1 id="top">REST</h1></div></header><div class="description"><h3 id="standards">Standards</h3>
+<ul>
+<li><p><strong>resource properties</strong><br><a href="http://en.wikipedia.org/wiki/Snake_case">snake case</a> formatting (e.g. start_date, company, average_steps_per_mile) must be used</p>
+</li>
+<li><p>an eye tracking study concluded camel case takes 20% longer to comprehend than snake case (<a href="http://citeseerx.ist.psu.edu/viewdoc/download?doi=10.1.1.421.6137&amp;rep=rep1&amp;type=pdf">snake case vs. camel case</a>)</p>
+</li>
+<li><p><strong>versioning</strong><br><a href="http://semver.org/">SemVer</a> versioning must be used<br><code>major.minor.patch.build</code></p>
+</li>
+<li><p><strong>major</strong> - breaking change(s)</p>
+</li>
+<li><p><strong>minor</strong> - new feature(s)</p>
+</li>
+<li><p><strong>patch</strong> - bug fix(s)</p>
+</li>
+<li><p><strong>build</strong> - build number</p>
+</li>
+</ul>
+<h3 id="status-codes">Status Codes</h3>
+<table>
+<thead>
+<tr>
+<th>HTP Verb</th>
+<th>Entire Collection (e.g. /resources)</th>
+<th>Specific Item (e.g. /resources/{id})</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GET</td>
+<td>200 (OK), list of resources. Use pagination, sorting, and filtering to navigate big lists</td>
+<td>200 (OK), single resource. 404 (Not Found), if id not found or invalid</td>
+</tr>
+<tr>
+<td>PUT</td>
+<td>404 (Not Found), unless you want to update/replace every resource in the entire collection</td>
+<td>204 (No Content). 404 (Not Found), if id not found or invalid</td>
+</tr>
+<tr>
+<td>POST</td>
+<td>201 (Created), ‘Location’ header with link to /resources/{id} containing new id</td>
+<td>404 (Not Found)</td>
+</tr>
+<tr>
+<td>DELETE</td>
+<td>404 (Not Found), unless you want to delete the entire collection</td>
+<td>200 (OK). 404 (Not Found), if id not found or invalid</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pagination">Pagination</h3>
+<pre><code>?page={pageNumber}&amp;<span class="hljs-built_in">limit</span>={<span class="hljs-built_in">limit</span>ReturnRecordsTo}
+</code></pre><pre><code>?<span class="hljs-variable">page=</span><span class="hljs-number">2</span>&amp;<span class="hljs-variable">limit=</span><span class="hljs-number">50</span>
+</code></pre><p>The above will retrieve records:</p>
+<ul>
+<li><p>50-99 if there are atleast 99 records</p>
+</li>
+<li><p>or 50-last_record if the last_record &lt; 99</p>
+</li>
+<li><p>or 0 records if the last_record &lt; 50</p>
+</li>
+</ul>
+<p>If no pagination parameters are passed, the default page and limit are used</p>
+<h3 id="sorting">Sorting</h3>
+<pre><code>?sort={[-]fielda[,[-]fieldb[,<span class="hljs-keyword">...</span>]]}
+</code></pre><p>The <code>sort</code> parameter takes in a list of comma separated fields, each with a possible unary negative to imply descending sort order</p>
+</div></div></div></div></div><p style="text-align: center;" class="text-muted">Generated by&nbsp;<a href="https://github.com/danielgtaylor/aglio" class="aglio">aglio</a>&nbsp;on 25 Jan 2015</p><div id="localFile" style="display: none; position: absolute; top: 0; left: 0; width: 100%; color: white; background: red; font-size: 150%; text-align: center; padding: 1em;">This page may not display correctly when opened as a local file. Instead, view it from a web server.
+
+</div></body><script src="//code.jquery.com/jquery-1.11.0.min.js"></script><script src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script><script>(function() {
+  if (location.protocol === 'file:') {
+    document.getElementById('localFile').style.display = 'block';
+  }
+
+}).call(this);
+</script><script>(function() {
+  $('table').addClass('table');
+
+}).call(this);
+</script></html>
