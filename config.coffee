@@ -37,6 +37,11 @@ LANGUAGES =
 		'markdown'
 	]
 
+PROXY_CONFIG = [
+	route: '/api'
+	url: 'http://localhost:8182/api'
+]
+
 SCRIPTS = [
 	'**/angular.min.js'
 	'**/angular-animate.min.js'
@@ -53,4 +58,4 @@ STYLES = [
 	'**/*.css'
 ]
 
-module.exports = {APP_NAME, BOWER_COMPONENTS, LANGUAGES, SCRIPTS, STYLES}
+module.exports = {APP_NAME, BOWER_COMPONENTS, LANGUAGES, PROXY_CONFIG, SCRIPTS, STYLES}

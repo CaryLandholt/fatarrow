@@ -1,4 +1,4 @@
-{APP_NAME, BOWER_COMPONENTS, LANGUAGES, SCRIPTS, STYLES} = require './config.coffee'
+{APP_NAME, BOWER_COMPONENTS, LANGUAGES, PROXY_CONFIG, SCRIPTS, STYLES} = require './config.coffee'
 
 bower                 = require 'bower'
 browserSync           = require 'browser-sync'
@@ -22,13 +22,14 @@ liveScript            = require 'gulp-livescript'
 markdown              = require 'gulp-markdown'
 minifyCss             = require 'gulp-minify-css'
 minifyHtml            = require 'gulp-minify-html'
-plato                 = require 'gulp-plato'
 ngAnnotate            = require 'gulp-ng-annotate'
 ngClassify            = require 'gulp-ng-classify'
 open                  = require 'gulp-open'
 path                  = require 'path'
+plato                 = require 'gulp-plato'
 pkg                   = require './package.json'
 protractor            = require 'gulp-protractor'
+proxy                 = require 'proxy-middleware'
 q                     = require 'q'
 rev                   = require 'gulp-rev'
 rimraf                = require 'gulp-rimraf'
@@ -38,6 +39,7 @@ template              = require 'gulp-template'
 templateCache         = require 'gulp-angular-templatecache'
 typeScript            = require 'gulp-typescript'
 uglify                = require 'gulp-uglify'
+url                   = require 'url'
 yargs                 = require 'yargs'
 
 BOWER_DIRECTORY       = 'bower_components/'
@@ -249,6 +251,10 @@ openApp = ->
 
 startServer = ->
 	browserSync
+		middleware: PROXY_CONFIG.map (config) ->
+			options = url.parse config.url
+			options.route = config.route
+			proxy options
 		open: false
 		port: PORT
 		server: DIST_DIRECTORY
@@ -469,7 +475,7 @@ gulp.task 'css', ['prepare'], ->
 		.on 'error', onError
 
 # Default build
-gulp.task 'default', [].concat(if runServer and useBackendless then ['open'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['test'] else [])
+gulp.task 'default', [].concat(if runServer then ['open'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['test'] else [])
 
 # Execute E2E tests
 gulp.task 'e2e', ->
