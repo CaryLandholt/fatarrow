@@ -1,11 +1,11 @@
 {APP_NAME, BOWER_COMPONENTS, SCRIPTS, STYLES} = require './config.coffee'
 
 bower                 = require 'bower'
+browserSync           = require 'browser-sync'
 childProcess          = require 'child_process'
 coffeeScript          = require 'gulp-coffee'
 coffeeLint            = require 'gulp-coffeelint'
 concat                = require 'gulp-concat'
-connect               = require 'gulp-connect'
 conventionalChangelog = require 'conventional-changelog'
 es                    = require 'event-stream'
 flatten               = require 'gulp-flatten'
@@ -247,10 +247,10 @@ openApp = ->
 		.on 'error', onError
 
 startServer = ->
-	connect.server
-		livereload: !isProd
+	browserSync
+		open: false
 		port: PORT
-		root: DIST_DIRECTORY
+		server: DIST_DIRECTORY
 
 unixifyPath = (p) ->
 	p.replace /\\/g, '/'
@@ -1004,15 +1004,8 @@ gulp.task 'prepare', ['clean:working'].concat(if getBower then ['normalizeCompon
 
 # Reload the app in the default browser
 gulp.task 'reload', ['build'], ->
-	sources = 'index.html'
-
-	gulp
-		.src sources, {cwd: DIST_DIRECTORY, read: false}
-		.on 'error', onError
-
-		.pipe connect.reload()
-		.on 'error', onError
-
+	browserSync.reload()
+	
 # Compile Sass
 gulp.task 'sass', ['prepare'], ->
 	options =
