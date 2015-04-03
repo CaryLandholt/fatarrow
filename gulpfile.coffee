@@ -1113,6 +1113,7 @@ gulp.task 'server', ['build'], ->
 gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' else 'views'), ->
 	options =
 		minifyHtml:
+			conditionals: true
 			empty: true
 			quotes: true
 		template: JSON.parse JSON.stringify templateOptions
