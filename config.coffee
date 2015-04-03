@@ -21,6 +21,22 @@ BOWER_COMPONENTS =
 	'showdown': '0.3.1':
 		scripts: 'src/showdown.js'
 
+LANGUAGES =
+	SCRIPTS: [
+		'coffeeScript'
+		# 'liveScript'
+		# 'typeScript'
+	]
+	STYLES: [
+		'less'
+		# 'sass'
+	]
+	VIEWS: [
+		# 'haml'
+		# 'jade'
+		'markdown'
+	]
+
 SCRIPTS = [
 	'**/angular.min.js'
 	'**/angular-animate.min.js'
@@ -37,4 +53,4 @@ STYLES = [
 	'**/*.css'
 ]
 
-module.exports = {APP_NAME, BOWER_COMPONENTS, SCRIPTS, STYLES}
+module.exports = {APP_NAME, BOWER_COMPONENTS, LANGUAGES, SCRIPTS, STYLES}
