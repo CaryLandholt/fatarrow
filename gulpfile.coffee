@@ -1,5 +1,6 @@
 {APP_NAME, BOWER_COMPONENTS, LANGUAGES, PROXY_CONFIG, SCRIPTS, STYLES} = require './config.coffee'
 
+babel                 = require 'gulp-babel'
 bower                 = require 'bower'
 browserSync           = require 'browser-sync'
 childProcess          = require 'child_process'
@@ -81,6 +82,7 @@ EXTENSIONS =
 		]
 		UNCOMPILED: [
 			'.coffee'
+			'.es6'
 			'.ls'
 			'.ts'
 		]
@@ -265,6 +267,21 @@ unixifyPath = (p) ->
 
 windowsify = (windowsCommand, nonWindowsCommand) ->
 	if isWindows then windowsCommand else nonWindowsCommand
+
+gulp.task 'babel', ['prepare'], ->
+	sources = getScriptSources '.es6'
+	srcs    = []
+
+	srcs.push src =
+		gulp
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
+			.on 'error', onError
+			
+			.pipe babel()
+			.on 'error', onError
+
+			.pipe gulp.dest TEMP_DIRECTORY
+			.on 'error', onError
 
 # Get components via Bower
 gulp.task 'bower', ['clean:working'], ->
