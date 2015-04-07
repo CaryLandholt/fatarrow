@@ -22,6 +22,7 @@ liveScript            = require 'gulp-livescript'
 markdown              = require 'gulp-markdown'
 minifyCss             = require 'gulp-minify-css'
 minifyHtml            = require 'gulp-minify-html'
+newer				  = require 'gulp-newer'
 ngAnnotate            = require 'gulp-ng-annotate'
 ngClassify            = require 'gulp-ng-classify'
 open                  = require 'gulp-open'
@@ -378,7 +379,7 @@ gulp.task 'clean', ['clean:working'], ->
 
 # Clean working directories
 gulp.task 'clean:working', ->
-	sources = [TEMP_DIRECTORY, DIST_DIRECTORY].concat(if getBower and firstRun then [COMPONENTS_DIRECTORY, BOWER_FILE] else [])
+	sources = [DIST_DIRECTORY].concat(if firstRun then [TEMP_DIRECTORY] else []).concat(if getBower and firstRun then [COMPONENTS_DIRECTORY, BOWER_FILE] else [])
 
 	gulp
 		.src sources, {read: false}
@@ -410,9 +411,6 @@ gulp.task 'coffeeScript', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
 			.pipe coffeeLint options.coffeeLint
 			.on 'error', onError
 
@@ -432,6 +430,12 @@ gulp.task 'coffeeScript', ['prepare'], ->
 
 	es
 		.merge.apply @, srcs
+		.on 'error', onError
+
+		.pipe newer TEMP_DIRECTORY
+		.on 'error', onError
+
+		.pipe gulp.dest TEMP_DIRECTORY
 		.on 'error', onError
 
 		.pipe sourceMaps.init()
@@ -454,6 +458,9 @@ gulp.task 'css', ['prepare'], ->
 	srcs.push src =
 		gulp
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
+			.on 'error', onError
+
+			.pipe newer TEMP_DIRECTORY
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -570,6 +577,9 @@ gulp.task 'haml', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
+			.pipe newer TEMP_DIRECTORY
+			.on 'error', onError
+
 			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
 
@@ -608,9 +618,6 @@ gulp.task 'html', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
 			.pipe template templateOptions
 			.on 'error', onError
 
@@ -621,6 +628,9 @@ gulp.task 'html', ['prepare'], ->
 
 	es
 		.merge.apply @, srcs
+		.on 'error', onError
+
+		.pipe newer TEMP_DIRECTORY
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -683,6 +693,9 @@ gulp.task 'jade', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
+			.pipe newer TEMP_DIRECTORY
+			.on 'error', onError
+
 			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
 
@@ -692,9 +705,6 @@ gulp.task 'jade', ['prepare'], ->
 	srcs.push src =
 		gulp
 			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
 
 	es
@@ -737,9 +747,6 @@ gulp.task 'javaScript', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
 			.pipe jsHint options.jsHint
 			.on 'error', onError
 
@@ -756,6 +763,9 @@ gulp.task 'javaScript', ['prepare'], ->
 
 	es
 		.merge.apply @, srcs
+		.on 'error', onError
+
+		.pipe newer TEMP_DIRECTORY
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -814,6 +824,9 @@ gulp.task 'less', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
+			.pipe newer TEMP_DIRECTORY
+			.on 'error', onError
+
 			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
 
@@ -823,6 +836,9 @@ gulp.task 'less', ['prepare'], ->
 	srcs.push src =
 		gulp
 			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
+			.on 'error', onError
+
+			.pipe newer TEMP_DIRECTORY
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -848,9 +864,6 @@ gulp.task 'liveScript', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
 			.pipe template templateOptions
 			.on 'error', onError
 
@@ -864,6 +877,12 @@ gulp.task 'liveScript', ['prepare'], ->
 
 	es
 		.merge.apply @, srcs
+		.on 'error', onError
+
+		.pipe newer TEMP_DIRECTORY
+		.on 'error', onError
+
+		.pipe gulp.dest TEMP_DIRECTORY
 		.on 'error', onError
 
 		.pipe liveScript()
@@ -882,6 +901,9 @@ gulp.task 'markdown', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
+			.pipe newer TEMP_DIRECTORY
+			.on 'error', onError
+
 			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
 
@@ -891,9 +913,6 @@ gulp.task 'markdown', ['prepare'], ->
 	srcs.push src =
 		gulp
 			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
 
 	es
@@ -1024,7 +1043,8 @@ gulp.task 'prepare', ['clean:working'].concat(if getBower then ['normalizeCompon
 # Reload the app in the default browser
 gulp.task 'reload', ['build'], ->
 	browserSync.reload()
-	
+	firstRun = false;
+
 # Compile Sass
 gulp.task 'sass', ['prepare'], ->
 	options =
@@ -1039,6 +1059,9 @@ gulp.task 'sass', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
+			.pipe newer TEMP_DIRECTORY
+			.on 'error', onError
+
 			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
 
@@ -1048,6 +1071,9 @@ gulp.task 'sass', ['prepare'], ->
 	srcs.push src =
 		gulp
 			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
+			.on 'error', onError
+
+			.pipe newer TEMP_DIRECTORY
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -1194,7 +1220,7 @@ gulp.task 'styles', ['css'].concat(LANGUAGES.STYLES), ->
 		.on 'error', onError
 
 # Compile templateCache
-gulp.task 'templateCache', ['haml', 'html', 'jade', 'markdown'], ->
+gulp.task 'templateCache', ['html'].concat(LANGUAGES.VIEWS), ->
 	options =
 		templateCache:
 			module: APP_NAME
@@ -1234,9 +1260,6 @@ gulp.task 'typeScript', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
 			.pipe template templateOptions
 			.on 'error', onError
 
@@ -1250,6 +1273,12 @@ gulp.task 'typeScript', ['prepare'], ->
 
 	es
 		.merge.apply @, srcs
+		.on 'error', onError
+
+		.pipe newer TEMP_DIRECTORY
+		.on 'error', onError
+
+		.pipe gulp.dest TEMP_DIRECTORY
 		.on 'error', onError
 
 		.pipe typeScript()
@@ -1288,6 +1317,9 @@ gulp.task 'watch', ['build'], ->
 
 	sources = [].concat ("**/*#{extension}" for extension in extensions)
 
-	gulp
-		.watch sources, {cwd: SRC_DIRECTORY, maxListeners: 999}, tasks
+	watcher = gulp.watch sources, {cwd: SRC_DIRECTORY, maxListeners: 999}, tasks
+
+	watcher
+		.on 'change', (event) ->
+			firstRun = true if event.type is 'deleted'
 		.on 'error', onError
