@@ -272,13 +272,29 @@ windowsify = (windowsCommand, nonWindowsCommand) ->
 gulp.task 'babel', ['prepare'], ->
 	sources = getScriptSources '.es6'
 	srcs    = []
+	options =
+		sourceMaps:
+			sourceRoot: './'
+
 
 	srcs.push src =
 		gulp
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
-			
+
+			.pipe newer TEMP_DIRECTORY
+			.on 'error', onError
+
+			.pipe gulp.dest TEMP_DIRECTORY
+			.on 'error', onError
+
+			.pipe sourceMaps.init()
+			.on 'error', onError
+
 			.pipe babel()
+			.on 'error', onError
+
+			.pipe sourceMaps.write './', options.sourceMaps
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
