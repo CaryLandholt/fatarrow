@@ -23,7 +23,7 @@ BOWER_COMPONENTS =
 
 LANGUAGES =
 	SCRIPTS: [
-		'babel'
+		# 'babel'
 		'coffeeScript'
 		# 'liveScript'
 		# 'typeScript'
