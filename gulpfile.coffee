@@ -238,27 +238,13 @@ onStyle = (file) ->
 
 	file
 
-openApp = ->
-	sources = 'index.html'
-
-	options =
-		open:
-			url: appUrl
-
-	gulp
-		.src sources, {cwd: DIST_DIRECTORY, nodir: true}
-		.on 'error', onError
-
-		.pipe open '', options.open
-		.on 'error', onError
-
 startServer = ->
 	browserSync
 		middleware: PROXY_CONFIG.map (config) ->
 			options = url.parse config.url
 			options.route = config.route
 			proxy options
-		open: false
+		open: true
 		port: PORT
 		server: DIST_DIRECTORY
 	, -> firstRun = false
@@ -1006,7 +992,6 @@ gulp.task 'normalizeComponents', ['bower'], ->
 
 # Open the app in the default browser
 gulp.task 'open', ['server'], ->
-	openApp()
 
 # Execute Plato complexity analysis
 gulp.task 'plato', ['clean:working'], ->
@@ -1168,7 +1153,6 @@ gulp.task 'scripts', ['javaScript'].concat(LANGUAGES.SCRIPTS).concat(if isProd t
 # Start a web server without rebuilding
 gulp.task 'serve', ->
 	startServer()
-	openApp()
 
 # Start a web server
 gulp.task 'server', ['build'], ->
@@ -1280,7 +1264,7 @@ gulp.task 'test', ['build'], ->
 
 	# get args from parent process to pass on to child process
 	args  = ("--#{key}=#{value}" for own key, value of yargs.argv when key isnt '_' and key isnt '$0')
-	args  = ['karma'].concat args
+	args  = ['karma', 'e2e'].concat args
 	spawn = childProcess.spawn command, args, {stdio: 'inherit'}
 
 # Compile TypeScript
@@ -1351,6 +1335,7 @@ gulp.task 'watch', ['build'], ->
 	sources = [].concat ("**/*#{extension}" for extension in extensions)
 
 	watcher = gulp.watch sources, {cwd: SRC_DIRECTORY, maxListeners: 999}, tasks
+	watcher = gulp.watch sources, {cwd: E2E_DIRECTORY, maxListeners: 999}, ['test']
 
 	watcher
 		.on 'change', (event) ->
