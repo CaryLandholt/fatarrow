@@ -14,6 +14,7 @@ fs                    = require 'fs'
 gulp                  = require 'gulp'
 gutil                 = require 'gulp-util'
 haml                  = require 'gulp-haml'
+gulpIf               = require 'gulp-if'
 jade                  = require 'gulp-jade'
 jsHint                = require 'gulp-jshint'
 karma                 = require 'karma'
@@ -151,6 +152,11 @@ yargs.options 'help',
 	description : 'Show help'
 	type        : 'boolean'
 
+yargs.options 'injectcss',
+	default     : false
+	description : 'Injects CSS without reloading'
+	type        : 'boolean'
+
 yargs.options 'prod',
 	default     : false
 	description : 'Execute with all optimzations.  App will open in the browser but no file watching.'
@@ -175,6 +181,7 @@ appUrl         = "http://localhost:#{PORT}"
 env            = gutil.env
 firstRun       = true
 getBower       = getSwitchOption 'bower'
+injectCss	   = getSwitchOption 'injectcss'
 isProd         = getSwitchOption 'prod'
 isWindows      = /^win/.test(process.platform)
 manifest       = {}
@@ -398,7 +405,7 @@ gulp.task 'clean', ['clean:working'], ->
 
 # Clean working directories
 gulp.task 'clean:working', ->
-	sources = [DIST_DIRECTORY].concat(if firstRun then [TEMP_DIRECTORY] else []).concat(if getBower and firstRun then [COMPONENTS_DIRECTORY, BOWER_FILE] else [])
+	sources = [].concat(if injectCss then [] else [DIST_DIRECTORY]).concat(if firstRun then [TEMP_DIRECTORY] else []).concat(if getBower and firstRun then [COMPONENTS_DIRECTORY, BOWER_FILE] else [])
 
 	gulp
 		.src sources, {read: false}
@@ -1236,6 +1243,8 @@ gulp.task 'styles', ['css'].concat(LANGUAGES.STYLES), ->
 		.pipe gulp.dest DIST_DIRECTORY
 		.on 'error', onError
 
+		.pipe gulpIf injectCss, browserSync.reload {stream: true}
+
 # Compile templateCache
 gulp.task 'templateCache', ['html'].concat(LANGUAGES.VIEWS), ->
 	options =
@@ -1327,15 +1336,19 @@ gulp.task 'watch', ['build'], ->
 		.concat EXTENSIONS.IMAGES.COMPILED
 		.concat EXTENSIONS.SCRIPTS.COMPILED
 		.concat EXTENSIONS.SCRIPTS.UNCOMPILED
-		.concat EXTENSIONS.STYLES.COMPILED
-		.concat EXTENSIONS.STYLES.UNCOMPILED
 		.concat EXTENSIONS.VIEWS.COMPILED
 		.concat EXTENSIONS.VIEWS.UNCOMPILED
 
+	stylesExtensions = []
+		.concat EXTENSIONS.STYLES.COMPILED
+		.concat EXTENSIONS.STYLES.UNCOMPILED
+
 	sources = [].concat ("**/*#{extension}" for extension in extensions)
+	stylesSources = [].concat ("**/*#{extension}" for extension in stylesExtensions)
 
 	watcher = gulp.watch sources, {cwd: SRC_DIRECTORY, maxListeners: 999}, tasks
 	watcher = gulp.watch sources, {cwd: E2E_DIRECTORY, maxListeners: 999}, ['test']
+	stylesWater = gulp.watch stylesSources, {cwd: SRC_DIRECTORY, maxListeners: 999}, [].concat(if injectCss then ['build'] else ['reload'])
 
 	watcher
 		.on 'change', (event) ->

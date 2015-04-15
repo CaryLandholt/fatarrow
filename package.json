@@ -29,6 +29,7 @@
     "gulp-concat": "^2.4.2",
     "gulp-flatten": "0.0.4",
     "gulp-haml": "0.1.1",
+    "gulp-if": "^1.2.5",
     "gulp-imagemin": "^2.0.0",
     "gulp-jade": "0.10.0",
     "gulp-jshint": "^1.6.3",
