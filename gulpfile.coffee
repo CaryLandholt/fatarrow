@@ -14,7 +14,7 @@ fs                    = require 'fs'
 gulp                  = require 'gulp'
 gutil                 = require 'gulp-util'
 haml                  = require 'gulp-haml'
-gulpIf               = require 'gulp-if'
+gulpIf                = require 'gulp-if'
 jade                  = require 'gulp-jade'
 jsHint                = require 'gulp-jshint'
 karma                 = require 'karma'
@@ -27,7 +27,6 @@ minifyHtml            = require 'gulp-minify-html'
 newer				  = require 'gulp-newer'
 ngAnnotate            = require 'gulp-ng-annotate'
 ngClassify            = require 'gulp-ng-classify'
-open                  = require 'gulp-open'
 path                  = require 'path'
 plato                 = require 'gulp-plato'
 pkg                   = require './package.json'
@@ -177,6 +176,11 @@ yargs.options 'stats',
 	description : 'Run statistics'
 	type        : 'boolean'
 
+yargs.options 'open',
+	default     : true
+	description : 'Open app from browser-sync'
+	type        : 'boolean'
+
 appUrl         = "http://localhost:#{PORT}"
 env            = gutil.env
 firstRun       = true
@@ -185,6 +189,7 @@ injectCss	   = getSwitchOption 'injectcss'
 isProd         = getSwitchOption 'prod'
 isWindows      = /^win/.test(process.platform)
 manifest       = {}
+open           = getSwitchOption 'open'
 runStats       = !isProd and getSwitchOption 'stats'
 useBackendless = not (isProd or getSwitchOption 'backend')
 runServer      = getSwitchOption 'serve'
@@ -251,7 +256,7 @@ startServer = ->
 			options = url.parse config.url
 			options.route = config.route
 			proxy options
-		open: true
+		open: open
 		port: PORT
 		server: DIST_DIRECTORY
 	, -> firstRun = false
@@ -508,7 +513,13 @@ gulp.task 'css', ['prepare'], ->
 		.on 'error', onError
 
 # Default build
-gulp.task 'default', [].concat(if runServer then ['open'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['test'] else [])
+gulp.task 'default', [].concat(if runServer then ['server'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['internaltest'] else [])
+
+getProtractorBinary = (binaryName) ->
+	winExt = if /^win/.test(process.platform) then '.cmd' else ''
+	pkgPath = require.resolve('protractor')
+	protractorDir = path.resolve(path.join(path.dirname(pkgPath), '..', 'bin'))
+	path.join protractorDir, '/' + binaryName + winExt
 
 # Execute E2E tests
 gulp.task 'e2e', ->
@@ -544,11 +555,10 @@ gulp.task 'e2e', ->
 		.pipe protractor.protractor options.protractor
 		.on 'error', onError
 
-# Start E2E driver
-gulp.task 'e2e-driver', protractor.webdriver_standalone
 
 # Update E2E driver
-gulp.task 'e2e-driver-update', protractor.webdriver_update
+gulp.task 'e2e-driver-update', (done) ->
+	childProcess.spawn(getProtractorBinary('webdriver-manager'), [ 'update' ], stdio: 'inherit').once 'close', done
 
 # Process fonts
 gulp.task 'fonts', ['fontTypes'], ->
@@ -997,9 +1007,6 @@ gulp.task 'normalizeComponents', ['bower'], ->
 
 	es.merge.apply @, srcs
 
-# Open the app in the default browser
-gulp.task 'open', ['server'], ->
-
 # Execute Plato complexity analysis
 gulp.task 'plato', ['clean:working'], ->
 	options =
@@ -1266,15 +1273,35 @@ gulp.task 'templateCache', ['html'].concat(LANGUAGES.VIEWS), ->
 		.pipe gulp.dest TEMP_DIRECTORY
 		.on 'error', onError
 
-# Execute unit tests
-gulp.task 'test', ['build'], ->
+runTests = ->
 	# launch karma in a new process to avoid blocking gulp
 	command = windowsify '.\\node_modules\\.bin\\gulp.cmd', 'gulp'
 
 	# get args from parent process to pass on to child process
 	args  = ("--#{key}=#{value}" for own key, value of yargs.argv when key isnt '_' and key isnt '$0')
-	args  = ['karma', 'e2e'].concat args
-	spawn = childProcess.spawn command, args, {stdio: 'inherit'}
+	args  = ['karma'].concat args
+	karmaSpawn = childProcess.spawn command, args, {stdio: 'inherit'}
+
+	e2eSpawn = childProcess.spawn(getProtractorBinary('protractor'), ['protractor.config.js'], {stdio: 'inherit'})
+
+	[karmaSpawn, e2eSpawn]
+
+# Execute unit tests
+gulp.task 'internaltest', ['build'], ->
+	runTests()
+
+gulp.task 'test', ['server'], ->
+	spawns = runTests()
+	exitCodes = []
+	spawns.forEach (x) ->
+		x.on 'exit', (code, signal) ->
+			exitCodes.push code
+			if exitCodes.length is 2
+				if (exitCodes[0] isnt 0 or exitCodes[1] isnt 0)
+					process.exit 1
+				else
+					browserSync.exit()
+
 
 # Compile TypeScript
 gulp.task 'typeScript', ['prepare'], ->
@@ -1329,7 +1356,7 @@ gulp.task 'views', ['html'].concat(LANGUAGES.VIEWS), ->
 
 # Watch and recompile on-the-fly
 gulp.task 'watch', ['build'], ->
-	tasks = ['reload'].concat if runSpecs then ['test'] else []
+	tasks = ['reload'].concat if runSpecs then ['internaltest'] else []
 
 	extensions = []
 		.concat EXTENSIONS.FONTS.COMPILED
@@ -1347,7 +1374,7 @@ gulp.task 'watch', ['build'], ->
 	stylesSources = [].concat ("**/*#{extension}" for extension in stylesExtensions)
 
 	watcher = gulp.watch sources, {cwd: SRC_DIRECTORY, maxListeners: 999}, tasks
-	watcher = gulp.watch sources, {cwd: E2E_DIRECTORY, maxListeners: 999}, ['test']
+	watcher = gulp.watch sources, {cwd: E2E_DIRECTORY, maxListeners: 999}, ['internaltest']
 	stylesWater = gulp.watch stylesSources, {cwd: SRC_DIRECTORY, maxListeners: 999}, [].concat(if injectCss then ['build'] else ['reload'])
 
 	watcher
