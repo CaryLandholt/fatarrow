@@ -30,7 +30,6 @@ ngClassify            = require 'gulp-ng-classify'
 path                  = require 'path'
 plato                 = require 'gulp-plato'
 pkg                   = require './package.json'
-protractor            = require 'gulp-protractor'
 proxy                 = require 'proxy-middleware'
 q                     = require 'q'
 rev                   = require 'gulp-rev'
@@ -520,41 +519,6 @@ getProtractorBinary = (binaryName) ->
 	pkgPath = require.resolve('protractor')
 	protractorDir = path.resolve(path.join(path.dirname(pkgPath), '..', 'bin'))
 	path.join protractorDir, '/' + binaryName + winExt
-
-# Execute E2E tests
-gulp.task 'e2e', ->
-	e2eConfigFile       = path.join './', TEMP_DIRECTORY, 'e2e-config.coffee'
-	phantomjsBinaryPath = windowsify './node_modules/.bin/phantomjs.cmd', './node_modules/phantomjs/bin/phantomjs'
-	sources             = '**/*.spec.{coffee,js}'
-
-	# create temporary e2e-config file to avoid an additional config file
-	# currently gulp-protractor requires one the existence of an e2e-config file
-	do (e2eConfigFile) ->
-		doesExist = fs.existsSync TEMP_DIRECTORY
-
-		if !doesExist
-			throw new Error 'The app must be currently running (gulp).'
-
-		contents = 'exports.config = {}'
-
-		fs.writeFileSync e2eConfigFile, contents
-
-	options =
-		protractor:
-			configFile: e2eConfigFile
-			args: [
-				'--baseUrl', appUrl
-				'--browser', 'phantomjs'
-				'--capabilities.phantomjs.binary.path', phantomjsBinaryPath
-			]
-
-	gulp
-		.src sources, {cwd: E2E_DIRECTORY, read: false, nodir: true}
-		.on 'error', onError
-
-		.pipe protractor.protractor options.protractor
-		.on 'error', onError
-
 
 # Update E2E driver
 gulp.task 'e2e-driver-update', (done) ->
