@@ -1246,7 +1246,7 @@ runTests = ->
 	args  = ['karma'].concat args
 	karmaSpawn = childProcess.spawn command, args, {stdio: 'inherit'}
 
-	e2eSpawn = childProcess.spawn(getProtractorBinary('protractor'), ['protractor.config.js'], {stdio: 'inherit'})
+	e2eSpawn = childProcess.spawn(getProtractorBinary('protractor'), ['protractor.config.coffee'], {stdio: 'inherit'})
 
 	[karmaSpawn, e2eSpawn]
 
