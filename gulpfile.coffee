@@ -1,47 +1,56 @@
 {APP_NAME, BOWER_COMPONENTS, LANGUAGES, PROXY_CONFIG, SCRIPTS, STYLES} = require './config.coffee'
 
-babel                 = require 'gulp-babel'
+# babel                 = require 'gulp-babel'
 bower                 = require 'bower'
 browserSync           = require 'browser-sync'
 childProcess          = require 'child_process'
-coffeeScript          = require 'gulp-coffee'
-coffeeLint            = require 'gulp-coffeelint'
-concat                = require 'gulp-concat'
+# coffeeScript          = require 'gulp-coffee'
+# coffeeLint            = require 'gulp-coffeelint'
+# concat                = require 'gulp-concat'
 conventionalChangelog = require 'conventional-changelog'
 es                    = require 'event-stream'
-flatten               = require 'gulp-flatten'
+# flatten               = require 'gulp-flatten'
 fs                    = require 'fs'
 gulp                  = require 'gulp'
-gutil                 = require 'gulp-util'
-haml                  = require 'gulp-haml'
-gulpIf                = require 'gulp-if'
-jade                  = require 'gulp-jade'
-jsHint                = require 'gulp-jshint'
+# gutil                 = require 'gulp-util'
+# haml                  = require 'gulp-haml'
+# gulpIf                = require 'gulp-if'
+# jade                  = require 'gulp-jade'
+# jsHint                = require 'gulp-jshint'
 karma                 = require 'karma'
-imagemin              = require 'gulp-imagemin'
-less                  = require 'gulp-less'
-liveScript            = require 'gulp-livescript'
-markdown              = require 'gulp-markdown'
-minifyCss             = require 'gulp-minify-css'
-minifyHtml            = require 'gulp-minify-html'
-newer				  = require 'gulp-newer'
-ngAnnotate            = require 'gulp-ng-annotate'
-ngClassify            = require 'gulp-ng-classify'
+# imagemin              = require 'gulp-imagemin'
+# less                  = require 'gulp-less'
+# liveScript            = require 'gulp-livescript'
+# markdown              = require 'gulp-markdown'
+# minifyCss             = require 'gulp-minify-css'
+# minifyHtml            = require 'gulp-minify-html'
+# newer				  = require 'gulp-newer'
+# ngAnnotate            = require 'gulp-ng-annotate'
+# ngClassify            = require 'gulp-ng-classify'
 path                  = require 'path'
-plato                 = require 'gulp-plato'
+# plato                 = require 'gulp-plato'
 pkg                   = require './package.json'
 proxy                 = require 'proxy-middleware'
 q                     = require 'q'
-rev                   = require 'gulp-rev'
-rimraf                = require 'gulp-rimraf'
-sass                  = require 'gulp-sass'
-sourceMaps            = require 'gulp-sourcemaps'
-template              = require 'gulp-template'
-templateCache         = require 'gulp-angular-templatecache'
-typeScript            = require 'gulp-typescript'
-uglify                = require 'gulp-uglify'
+# rev                   = require 'gulp-rev'
+# rimraf                = require 'gulp-rimraf'
+# sass                  = require 'gulp-sass'
+# sourceMaps            = require 'gulp-sourcemaps'
+# template              = require 'gulp-template'
+# templateCache         = require 'gulp-angular-templatecache'
+# typeScript            = require 'gulp-typescript'
+# uglify                = require 'gulp-uglify'
 url                   = require 'url'
 yargs                 = require 'yargs'
+
+plugins = require('gulp-load-plugins')
+	rename:
+		'gulp-minify-css': 'minifycss'
+		'gulp-gulp-minify-html': 'minifyhtml'
+		'gulp-ng-annotate': 'ngannotate'
+		'gulp-ng-classify': 'ngclassify'
+		'gulp-angular-templatecache': 'templatecache'
+		'gulp-if': 'gulpif'
 
 BOWER_DIRECTORY       = 'bower_components/'
 BOWER_FILE            = 'bower.json'
@@ -181,7 +190,7 @@ yargs.options 'open',
 	type        : 'boolean'
 
 appUrl         = "http://localhost:#{PORT}"
-env            = gutil.env
+env            = plugins.util.env
 firstRun       = true
 getBower       = getSwitchOption 'bower'
 injectCss	   = getSwitchOption 'injectcss'
@@ -219,7 +228,7 @@ onError = (e) ->
 	errors   = if isArray then err else [err]
 	messages = (error for error in errors)
 
-	gutil.log gutil.colors.red message for message in messages
+	plugins.util.log plugins.util.colors.red message for message in messages
 	@emit 'end' unless isProd
 
 onRev = (file) ->
@@ -279,19 +288,19 @@ gulp.task 'babel', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe newer TEMP_DIRECTORY
+			.pipe plugins.newer TEMP_DIRECTORY
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
 
-			.pipe sourceMaps.init()
+			.pipe plugins.sourcemaps.init()
 			.on 'error', onError
 
-			.pipe babel()
+			.pipe plugins.babel()
 			.on 'error', onError
 
-			.pipe sourceMaps.write './', options.sourceMaps
+			.pipe plugins.sourcemaps.write './', options.sourceMaps
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -391,7 +400,7 @@ gulp.task 'changelog', ['normalizeComponents', 'stats'], ->
 		repository: pkg.repository.url
 		version: pkg.version
 		file: CHANGELOG_FILE
-		log: gutil.log
+		log: plugins.util.log
 
 	conventionalChangelog options, (err, log) ->
 		fs.writeFile CHANGELOG_FILE, log
@@ -404,7 +413,7 @@ gulp.task 'clean', ['clean:working'], ->
 		.src sources, {read: false}
 		.on 'error', onError
 
-		.pipe rimraf()
+		.pipe plugins.rimraf()
 		.on 'error', onError
 
 # Clean working directories
@@ -415,7 +424,7 @@ gulp.task 'clean:working', ->
 		.src sources, {read: false}
 		.on 'error', onError
 
-		.pipe rimraf()
+		.pipe plugins.rimraf()
 		.on 'error', onError
 
 # Compile CoffeeScript
@@ -441,13 +450,13 @@ gulp.task 'coffeeScript', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe coffeeLint options.coffeeLint
+			.pipe plugins.coffeelint options.coffeeLint
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
-			.pipe ngClassify ngClassifyOptions
+			.pipe plugins.ngclassify ngClassifyOptions
 			.on 'error', onError
 
 	srcs.push src =
@@ -462,19 +471,19 @@ gulp.task 'coffeeScript', ['prepare'], ->
 		.merge.apply @, srcs
 		.on 'error', onError
 
-		.pipe newer TEMP_DIRECTORY
+		.pipe plugins.newer TEMP_DIRECTORY
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
 		.on 'error', onError
 
-		.pipe sourceMaps.init()
+		.pipe plugins.sourcemaps.init()
 		.on 'error', onError
 
-		.pipe coffeeScript()
+		.pipe plugins.coffee()
 		.on 'error', onError
 
-		.pipe sourceMaps.write './', options.sourceMaps
+		.pipe plugins.sourcemaps.write './', options.sourceMaps
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -490,13 +499,13 @@ gulp.task 'css', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe newer TEMP_DIRECTORY
+			.pipe plugins.newer TEMP_DIRECTORY
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
 	srcs.push src =
@@ -535,7 +544,7 @@ gulp.task 'fonts', ['fontTypes'], ->
 
 	return if isProd
 		src
-			.pipe flatten()
+			.pipe plugins.flatten()
 			.on 'error', onError
 
 			.pipe gulp.dest path.join DIST_DIRECTORY, FONTS_DIRECTORY
@@ -577,13 +586,13 @@ gulp.task 'haml', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe newer TEMP_DIRECTORY
+			.pipe plugins.newer TEMP_DIRECTORY
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
 	srcs.push src =
@@ -598,7 +607,7 @@ gulp.task 'haml', ['prepare'], ->
 		.merge.apply @, srcs
 		.on 'error', onError
 
-		.pipe haml()
+		.pipe plugins.haml()
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -618,7 +627,7 @@ gulp.task 'html', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
 	srcs.push src =
@@ -630,7 +639,7 @@ gulp.task 'html', ['prepare'], ->
 		.merge.apply @, srcs
 		.on 'error', onError
 
-		.pipe newer TEMP_DIRECTORY
+		.pipe plugins.newer TEMP_DIRECTORY
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -647,7 +656,7 @@ gulp.task 'images', ['imageTypes'], ->
 
 	return if isProd
 		src
-			.pipe imagemin()
+			.pipe plugins.imagemin()
 			.on 'error', onError
 
 			.pipe gulp.dest DIST_DIRECTORY
@@ -693,13 +702,13 @@ gulp.task 'jade', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe newer TEMP_DIRECTORY
+			.pipe plugins.newer TEMP_DIRECTORY
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
 	srcs.push src =
@@ -711,7 +720,7 @@ gulp.task 'jade', ['prepare'], ->
 		.merge.apply @, srcs
 		.on 'error', onError
 
-		.pipe jade options.jade
+		.pipe plugins.jade options.jade
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -747,13 +756,13 @@ gulp.task 'javaScript', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe jsHint options.jsHint
+			.pipe plugins.jshint options.jsHint
 			.on 'error', onError
 
-			.pipe jsHint.reporter 'default'
+			.pipe plugins.jshint.reporter 'default'
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
 	srcs.push src =
@@ -765,7 +774,7 @@ gulp.task 'javaScript', ['prepare'], ->
 		.merge.apply @, srcs
 		.on 'error', onError
 
-		.pipe newer TEMP_DIRECTORY
+		.pipe plugins.newer TEMP_DIRECTORY
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -824,13 +833,13 @@ gulp.task 'less', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe newer TEMP_DIRECTORY
+			.pipe plugins.newer TEMP_DIRECTORY
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
 	srcs.push src =
@@ -838,7 +847,7 @@ gulp.task 'less', ['prepare'], ->
 			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe newer TEMP_DIRECTORY
+			.pipe plugins.newer TEMP_DIRECTORY
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -848,7 +857,7 @@ gulp.task 'less', ['prepare'], ->
 		.merge.apply @, srcs
 		.on 'error', onError
 
-		.pipe less options.less
+		.pipe plugins.less options.less
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -864,7 +873,7 @@ gulp.task 'liveScript', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
 	srcs.push src =
@@ -879,13 +888,13 @@ gulp.task 'liveScript', ['prepare'], ->
 		.merge.apply @, srcs
 		.on 'error', onError
 
-		.pipe newer TEMP_DIRECTORY
+		.pipe plugins.newer TEMP_DIRECTORY
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
 		.on 'error', onError
 
-		.pipe liveScript()
+		.pipe plugins.livescript()
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -901,13 +910,13 @@ gulp.task 'markdown', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe newer TEMP_DIRECTORY
+			.pipe plugins.newer TEMP_DIRECTORY
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
 	srcs.push src =
@@ -919,7 +928,7 @@ gulp.task 'markdown', ['prepare'], ->
 		.merge.apply @, srcs
 		.on 'error', onError
 
-		.pipe markdown()
+		.pipe plugins.markdown()
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -984,13 +993,13 @@ gulp.task 'plato', ['clean:working'], ->
 			.src '**/*.coffee', {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
-			.pipe ngClassify ngClassifyOptions
+			.pipe plugins.ngclassify ngClassifyOptions
 			.on 'error', onError
 
-			.pipe coffeeScript()
+			.pipe plugins.coffee()
 			.on 'error', onError
 
 	srcs.push src =
@@ -998,7 +1007,7 @@ gulp.task 'plato', ['clean:working'], ->
 			.src '**/*.js', {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
 	srcs.push src =
@@ -1006,10 +1015,10 @@ gulp.task 'plato', ['clean:working'], ->
 			.src '**/*.ls', {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
-			.pipe liveScript()
+			.pipe plugins.livescript()
 			.on 'error', onError
 
 	srcs.push src =
@@ -1017,10 +1026,10 @@ gulp.task 'plato', ['clean:working'], ->
 			.src '**/*.ts', {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
-			.pipe typeScript()
+			.pipe plugins.typescript()
 			.on 'error', onError
 
 	es
@@ -1030,7 +1039,7 @@ gulp.task 'plato', ['clean:working'], ->
 		.pipe gulp.dest DIST_DIRECTORY
 		.on 'error', onError
 
-		.pipe plato STATS_DIRECTORY, options.plato
+		.pipe plugins.plato STATS_DIRECTORY, options.plato
 		.on 'error', onError
 
 # Prepare for compilation
@@ -1055,13 +1064,13 @@ gulp.task 'sass', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe newer TEMP_DIRECTORY
+			.pipe plugins.newer TEMP_DIRECTORY
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
 	srcs.push src =
@@ -1069,7 +1078,7 @@ gulp.task 'sass', ['prepare'], ->
 			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe newer TEMP_DIRECTORY
+			.pipe plugins.newer TEMP_DIRECTORY
 			.on 'error', onError
 
 			.pipe gulp.dest TEMP_DIRECTORY
@@ -1079,7 +1088,7 @@ gulp.task 'sass', ['prepare'], ->
 		.merge.apply @, srcs
 		.on 'error', onError
 
-		.pipe sass options.sass
+		.pipe plugins.sass options.sass
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -1100,16 +1109,16 @@ gulp.task 'scripts', ['javaScript'].concat(LANGUAGES.SCRIPTS).concat(if isProd t
 
 	return if isProd
 		src
-			.pipe ngAnnotate()
+			.pipe plugins.ngannotate()
 			.on 'error', onError
 
-			.pipe concat SCRIPTS_MIN_FILE
+			.pipe plugins.concat SCRIPTS_MIN_FILE
 			.on 'error', onError
 
-			.pipe uglify()
+			.pipe plugins.uglify()
 			.on 'error', onError
 
-			.pipe rev()
+			.pipe plugins.rev()
 			.on 'error', onError
 
 			.on 'data', onRev
@@ -1156,12 +1165,12 @@ gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' els
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe template options.template
+			.pipe plugins.template options.template
 			.on 'error', onError
 
 	return if isProd
 		src
-			.pipe minifyHtml options.minifyHtml
+			.pipe plugins.minifyHtml options.minifyHtml
 			.on 'error', onError
 
 			.pipe gulp.dest DIST_DIRECTORY
@@ -1189,13 +1198,13 @@ gulp.task 'styles', ['css'].concat(LANGUAGES.STYLES), ->
 
 	return if isProd
 		src
-			.pipe concat STYLES_MIN_FILE
+			.pipe plugins.concat STYLES_MIN_FILE
 			.on 'error', onError
 
-			.pipe minifyCss options.minifyCss
+			.pipe plugins.minifycss options.minifyCss
 			.on 'error', onError
 
-			.pipe rev()
+			.pipe plugins.rev()
 			.on 'error', onError
 
 			.on 'data', onRev
@@ -1214,7 +1223,7 @@ gulp.task 'styles', ['css'].concat(LANGUAGES.STYLES), ->
 		.pipe gulp.dest DIST_DIRECTORY
 		.on 'error', onError
 
-		.pipe gulpIf injectCss, browserSync.reload {stream: true}
+		.pipe plugins.gulpif injectCss, browserSync.reload {stream: true}
 
 # Compile templateCache
 gulp.task 'templateCache', ['html'].concat(LANGUAGES.VIEWS), ->
@@ -1231,7 +1240,7 @@ gulp.task 'templateCache', ['html'].concat(LANGUAGES.VIEWS), ->
 		.src sources, {cwd: TEMP_DIRECTORY, nodir: true}
 		.on 'error', onError
 
-		.pipe templateCache options.templateCache
+		.pipe plugins.templatecache options.templateCache
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
@@ -1277,7 +1286,7 @@ gulp.task 'typeScript', ['prepare'], ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe template templateOptions
+			.pipe plugins.template templateOptions
 			.on 'error', onError
 
 	srcs.push src =
@@ -1292,13 +1301,13 @@ gulp.task 'typeScript', ['prepare'], ->
 		.merge.apply @, srcs
 		.on 'error', onError
 
-		.pipe newer TEMP_DIRECTORY
+		.pipe plugins.newer TEMP_DIRECTORY
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
 		.on 'error', onError
 
-		.pipe typeScript()
+		.pipe plugins.typescript()
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
