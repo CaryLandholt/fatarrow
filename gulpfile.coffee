@@ -183,11 +183,13 @@ return if showHelp
 ngClassifyOptions =
 	appName: APP_NAME
 
-templateOptions =
+templateOptions = {
 	appName: APP_NAME
-	useBackendless: useBackendless
+	isProd
+	useBackendless
 	scripts: []
 	styles: []
+}
 
 getScriptSources = (ext) ->
 	["**/*#{ext}"]
