@@ -1110,7 +1110,7 @@ gulp.task 'scripts', ['javaScript'].concat(LANGUAGES.SCRIPTS).concat(if isProd t
 		.on 'error', onError
 
 # Start a web server without rebuilding
-gulp.task 'serve', ->
+gulp.task 'serve', ['build'], ->
 	startServer()
 
 # Start a web server
