@@ -161,7 +161,6 @@ yargs.options 'open',
 	description : 'Open app from browser-sync'
 	type        : 'boolean'
 
-appUrl         = "http://localhost:#{PORT}"
 env            = plugins.util.env
 firstRun       = true
 getBower       = getSwitchOption 'bower'
