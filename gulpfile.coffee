@@ -507,7 +507,6 @@ gulp.task 'default', [].concat(if runServer then ['server'] else ['build']).conc
 # Execute E2E tests
 gulp.task 'e2e', ['server'], ->
 	e2eConfigFile       = './protractor.config.coffee'
-	phantomjsBinaryPath = windowsify './node_modules/.bin/phantomjs.cmd', './node_modules/phantomjs/bin/phantomjs'
 	sources             = '**/*.spec.{coffee,js}'
 
 	options =
