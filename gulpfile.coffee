@@ -17,12 +17,12 @@ yargs                 = require 'yargs'
 
 plugins = require('gulp-load-plugins')
 	rename:
-		'gulp-minify-css': 'minifycss'
-		'gulp-gulp-minify-html': 'minifyhtml'
-		'gulp-ng-annotate': 'ngannotate'
-		'gulp-ng-classify': 'ngclassify'
-		'gulp-angular-templatecache': 'templatecache'
-		'gulp-if': 'gulpif'
+		'gulp-minify-css'              : 'minifycss'
+		'gulp-gulp-minify-html'        : 'minifyhtml'
+		'gulp-ng-annotate'             : 'ngannotate'
+		'gulp-ng-classify'             : 'ngclassify'
+		'gulp-angular-templatecache'   : 'templatecache'
+		'gulp-if'                      : 'gulpif'
 
 BOWER_DIRECTORY       = 'bower_components/'
 BOWER_FILE            = 'bower.json'
@@ -161,6 +161,12 @@ yargs.options 'open',
 	description : 'Open app from browser-sync'
 	type        : 'boolean'
 
+yargs.options 'citest',
+	default     : false
+	description : 'Run tests and report exit codes'
+	type        : 'boolean'
+
+citest         = getSwitchOption 'citest'
 env            = plugins.util.env
 firstRun       = true
 getBower       = getSwitchOption 'bower'
@@ -232,6 +238,8 @@ onStyle = (file) ->
 	file
 
 startServer = ->
+	return if browserSync.active
+
 	browserSync
 		middleware: PROXY_CONFIG.map (config) ->
 			options = url.parse config.url
@@ -494,17 +502,34 @@ gulp.task 'css', ['prepare'], ->
 		.on 'error', onError
 
 # Default build
-gulp.task 'default', [].concat(if runServer then ['server'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['internaltest'] else [])
+gulp.task 'default', [].concat(if runServer then ['server'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['test'] else [])
 
-getProtractorBinary = (binaryName) ->
-	winExt = if /^win/.test(process.platform) then '.cmd' else ''
-	pkgPath = require.resolve('protractor')
-	protractorDir = path.resolve(path.join(path.dirname(pkgPath), '..', 'bin'))
-	path.join protractorDir, '/' + binaryName + winExt
+# Execute E2E tests
+gulp.task 'e2e', ['server'], ->
+	e2eConfigFile       = './protractor.config.coffee'
+	sources             = '**/*.spec.{coffee,js}'
+
+	options =
+		protractor:
+			configFile: e2eConfigFile
+
+	str = gulp
+		.src sources, {cwd: E2E_DIRECTORY, read: false}
+		.on 'error', onError
+
+		.pipe plugins.protractor.protractor options.protractor
+
+	if citest
+		str.on 'error', ->
+			process.exit 1
+		str.on 'end', ->
+	else
+		str.on 'error', onError
+
+	str
 
 # Update E2E driver
-gulp.task 'e2e-driver-update', (done) ->
-	childProcess.spawn(getProtractorBinary('webdriver-manager'), [ 'update' ], stdio: 'inherit').once 'close', done
+gulp.task 'e2e-driver-update', plugins.protractor.webdriver_update
 
 # Process fonts
 gulp.task 'fonts', ['fontTypes'], ->
@@ -1219,7 +1244,9 @@ gulp.task 'templateCache', ['html'].concat(LANGUAGES.VIEWS), ->
 		.pipe gulp.dest TEMP_DIRECTORY
 		.on 'error', onError
 
-runTests = ->
+# Execute unit tests
+
+gulp.task 'test', ['e2e'], ->
 	# launch karma in a new process to avoid blocking gulp
 	command = windowsify '.\\node_modules\\.bin\\gulp.cmd', 'gulp'
 
@@ -1228,26 +1255,10 @@ runTests = ->
 	args  = ['karma'].concat args
 	karmaSpawn = childProcess.spawn command, args, {stdio: 'inherit'}
 
-	e2eSpawn = childProcess.spawn(getProtractorBinary('protractor'), ['protractor.config.coffee'], {stdio: 'inherit'})
-
-	[karmaSpawn, e2eSpawn]
-
-# Execute unit tests
-gulp.task 'internaltest', ['build'], ->
-	runTests()
-
-gulp.task 'test', ['server'], ->
-	spawns = runTests()
-	exitCodes = []
-	spawns.forEach (x) ->
-		x.on 'exit', (code, signal) ->
-			exitCodes.push code
-			if exitCodes.length is 2
-				if (exitCodes[0] isnt 0 or exitCodes[1] isnt 0)
-					process.exit 1
-				else
-					browserSync.exit()
-
+	if citest
+		karmaSpawn.on 'exit', (code) ->
+			process.exit code if code
+			browserSync.exit()
 
 # Compile TypeScript
 gulp.task 'typeScript', ['prepare'], ->
@@ -1302,7 +1313,7 @@ gulp.task 'views', ['html'].concat(LANGUAGES.VIEWS), ->
 
 # Watch and recompile on-the-fly
 gulp.task 'watch', ['build'], ->
-	tasks = ['reload'].concat if runSpecs then ['internaltest'] else []
+	tasks = ['reload'].concat if runSpecs then ['test'] else []
 
 	extensions = []
 		.concat EXTENSIONS.FONTS.COMPILED
@@ -1320,7 +1331,7 @@ gulp.task 'watch', ['build'], ->
 	stylesSources = [].concat ("**/*#{extension}" for extension in stylesExtensions)
 
 	watcher = gulp.watch sources, {cwd: SRC_DIRECTORY, maxListeners: 999}, tasks
-	watcher = gulp.watch sources, {cwd: E2E_DIRECTORY, maxListeners: 999}, ['internaltest']
+	watcher = gulp.watch sources, {cwd: E2E_DIRECTORY, maxListeners: 999}, ['test']
 	stylesWater = gulp.watch stylesSources, {cwd: SRC_DIRECTORY, maxListeners: 999}, [].concat(if injectCss then ['build'] else ['reload'])
 
 	watcher
