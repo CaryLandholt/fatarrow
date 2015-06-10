@@ -15,14 +15,7 @@ q                     = require 'q'
 url                   = require 'url'
 yargs                 = require 'yargs'
 
-plugins = require('gulp-load-plugins')
-	rename:
-		'gulp-minify-css'              : 'minifycss'
-		'gulp-gulp-minify-html'        : 'minifyhtml'
-		'gulp-ng-annotate'             : 'ngannotate'
-		'gulp-ng-classify'             : 'ngclassify'
-		'gulp-angular-templatecache'   : 'templatecache'
-		'gulp-if'                      : 'gulpif'
+plugins = require './tasks/plugins'
 
 BOWER_DIRECTORY       = 'bower_components/'
 BOWER_FILE            = 'bower.json'
