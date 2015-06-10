@@ -1,5 +1,10 @@
 yargs = require 'yargs'
 
+yargs.options 'specs',
+	default     : true
+	description : 'Run specs'
+	type        : 'boolean'
+
 getSwitchOption = (switches) ->
 	isArray = Array.isArray switches
 	keys    = if isArray then switches else [switches]
