@@ -1,5 +1,6 @@
-{APP_NAME} = require '../config'
-module.exports = (isProd, useBackendless) ->
+{APP_NAME}                  = require '../config'
+{isProd, useBackendless}    = require './options'
+module.exports =
 	appName: APP_NAME
 	isProd: isProd
 	useBackendless: useBackendless

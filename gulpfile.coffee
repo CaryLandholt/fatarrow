@@ -16,6 +16,7 @@ url                   = require 'url'
 yargs                 = require 'yargs'
 
 plugins = require './tasks/plugins'
+{onError, onRev, onScript, onStyle} = require('./tasks/events') plugins
 
 BOWER_DIRECTORY       = 'bower_components/'
 BOWER_FILE            = 'bower.json'
@@ -125,7 +126,6 @@ getBower       = getSwitchOption 'bower'
 injectCss	   = getSwitchOption 'injectcss'
 isProd         = getSwitchOption 'prod'
 isWindows      = /^win/.test(process.platform)
-manifest       = {}
 open           = getSwitchOption 'open'
 runStats       = !isProd and getSwitchOption 'stats'
 useBackendless = not (isProd or getSwitchOption 'backend')
@@ -140,48 +140,12 @@ return if showHelp
 ngClassifyOptions =
 	appName: APP_NAME
 
-templateOptions = require('./tasks/templateOptions') isProd, useBackendless
+templateOptions = require './tasks/templateOptions'
 
 getScriptSources = (ext) ->
 	["**/*#{ext}"]
 		.concat if not useBackendless then ["!**/*.backend#{ext}"] else []
 		.concat if not runSpecs       then ["!**/*.spec#{ext}"]    else []
-
-onError = (e) ->
-	isArray  = Array.isArray e
-	err      = e.message or e
-	errors   = if isArray then err else [err]
-	messages = (error for error in errors)
-
-	plugins.util.log plugins.util.colors.red message for message in messages
-	@emit 'end' unless isProd
-
-onRev = (file) ->
-	from           = path.relative file.revOrigBase, file.revOrigPath
-	to             = path.relative file.revOrigBase, file.path
-	manifest[from] = to
-
-	file
-
-onScript = (file) ->
-	filePath = path.relative file.base, file.path
-	filePath = path.join SCRIPTS_MIN_DIRECTORY, filePath if file.revOrigBase
-	filePath = unixifyPath filePath
-	endsWith = '.spec.js'
-	isSpec   = filePath.slice(-endsWith.length) is endsWith
-
-	templateOptions.scripts.push filePath if not isSpec
-
-	file
-
-onStyle = (file) ->
-	filePath = path.relative file.base, file.path
-	filePath = path.join STYLES_MIN_DIRECTORY, filePath if file.revOrigBase
-	filePath = unixifyPath filePath
-
-	templateOptions.styles.push filePath
-
-	file
 
 startServer = ->
 	return if browserSync.active
