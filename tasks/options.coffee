@@ -20,6 +20,11 @@ getSwitchOption = (switches) ->
 		else
 			def
 
+isProd         = getSwitchOption 'prod'
+useBackendless = not (isProd or getSwitchOption('backend'))
+runSpecs       = !isProd and useBackendless and getSwitchOption 'specs'
+
 module.exports =
-	isProd:          getSwitchOption 'prod'
-	useBackendless:  not (getSwitchOption('prod') or getSwitchOption('backend'))
+	isProd         : isProd
+	runSpecs       : runSpecs
+	useBackendless : useBackendless

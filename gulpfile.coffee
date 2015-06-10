@@ -166,36 +166,7 @@ unixifyPath = (p) ->
 windowsify = (windowsCommand, nonWindowsCommand) ->
 	if isWindows then windowsCommand else nonWindowsCommand
 
-gulp.task 'babel', ['prepare'], ->
-	sources = getScriptSources '.es6'
-	srcs    = []
-	options =
-		sourceMaps:
-			sourceRoot: './'
-
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.newer TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe plugins.sourcemaps.init()
-			.on 'error', onError
-
-			.pipe plugins.babel()
-			.on 'error', onError
-
-			.pipe plugins.sourcemaps.write './', options.sourceMaps
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
+gulp.task 'babel', ['prepare'], require('./tasks/scripts/babel') gulp, plugins
 
 # Get components via Bower
 gulp.task 'bower', ['clean:working'], ->
