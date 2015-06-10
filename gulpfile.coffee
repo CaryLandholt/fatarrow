@@ -35,50 +35,9 @@ STYLES_MIN_FILE       = 'styles.min.css'
 TEMP_DIRECTORY        = '.temp/'
 VENDOR_DIRECTORY      = 'vendor/'
 
-EXTENSIONS =
-	FONTS:
-		COMPILED: [
-			'.eot'
-			'.svg'
-			'.ttf'
-			'.woff'
-		]
-	IMAGES:
-		COMPILED: [
-			'.gif'
-			'.jpeg'
-			'.jpg'
-			'.png'
-		]
-	SCRIPTS:
-		COMPILED: [
-			'.js'
-		]
-		UNCOMPILED: [
-			'.coffee'
-			'.es6'
-			'.ls'
-			'.ts'
-		]
-	STYLES:
-		COMPILED: [
-			'.css'
-		]
-		UNCOMPILED: [
-			'.less'
-			'.scss'
-		]
-	VIEWS:
-		COMPILED: [
-			'.html'
-		]
-		UNCOMPILED: [
-			'.haml'
-			'.jade'
-			'.markdown'
-			'.md'
-		]
+EXTENSIONS = require './tasks/extensions'
 
+# belongs with testing tasks
 PREDEFINED_GLOBALS = [
 	'angular'
 	'beforeEach'
@@ -181,13 +140,7 @@ return if showHelp
 ngClassifyOptions =
 	appName: APP_NAME
 
-templateOptions = {
-	appName: APP_NAME
-	isProd
-	useBackendless
-	scripts: []
-	styles: []
-}
+templateOptions = require('./tasks/templateOptions') isProd, useBackendless
 
 getScriptSources = (ext) ->
 	["**/*#{ext}"]
