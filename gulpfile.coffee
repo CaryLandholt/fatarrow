@@ -285,35 +285,7 @@ gulp.task 'clean:working', ->
 gulp.task 'coffeeScript', ['prepare'], require('./tasks/scripts/coffeeScript') gulp, plugins
 
 # Compile CSS
-gulp.task 'css', ['prepare'], ->
-	sources = '**/*.css'
-	srcs    = []
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.newer TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe plugins.template templateOptions
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-	es
-		.merge.apply @, srcs
-		.on 'error', onError
-
-		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'error', onError
+gulp.task 'css', ['prepare'], require('./tasks/styles/css') gulp, plugins
 
 # Default build
 gulp.task 'default', [].concat(if runServer then ['server'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['test'] else [])
@@ -576,52 +548,7 @@ gulp.task 'karma', ->
 	karma.server.start options
 
 # Compile Less
-gulp.task 'less', ['prepare'], ->
-	options =
-		less:
-			paths: [
-				path.resolve SRC_DIRECTORY
-			]
-			sourceMap: true
-			sourceMapBasepath: path.resolve TEMP_DIRECTORY
-
-	sources = '**/*.less'
-	srcs    = []
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.newer TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe plugins.template templateOptions
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.newer TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
-	es
-		.merge.apply @, srcs
-		.on 'error', onError
-
-		.pipe plugins.less options.less
-		.on 'error', onError
-
-		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'error', onError
+gulp.task 'less', ['prepare'], require('./tasks/styles/less') gulp, plugins
 
 # Compile LiveScript
 gulp.task 'liveScript', ['prepare'], require('./tasks/scripts/liveScript') gulp, plugins
@@ -777,49 +704,7 @@ gulp.task 'reload', ['build'], ->
 	firstRun = false;
 
 # Compile Sass
-gulp.task 'sass', ['prepare'], ->
-	options =
-		sass:
-			errLogToConsole: true
-
-	sources = '**/*.scss'
-	srcs    = []
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.newer TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe plugins.template templateOptions
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.newer TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
-	es
-		.merge.apply @, srcs
-		.on 'error', onError
-
-		.pipe plugins.sass options.sass
-		.on 'error', onError
-
-		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'error', onError
-
+gulp.task 'sass', ['prepare'], require('./tasks/styles/sass') gulp, plugins
 # Process scripts
 gulp.task 'scripts', ['javaScript'].concat(LANGUAGES.SCRIPTS).concat(if isProd then 'templateCache' else []), ->
 	sources = do (ext ='.js') ->
