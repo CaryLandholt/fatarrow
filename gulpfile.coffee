@@ -361,73 +361,10 @@ gulp.task 'fontTypes', ['prepare'], ->
 		.on 'error', onError
 
 # Compile Haml
-gulp.task 'haml', ['prepare'], ->
-	sources = '**/*.haml'
-	srcs    = []
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.newer TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe plugins.template templateOptions
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
-	es
-		.merge.apply @, srcs
-		.on 'error', onError
-
-		.pipe plugins.haml()
-		.on 'error', onError
-
-		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'error', onError
+gulp.task 'haml', ['prepare'], require('./tasks/views/haml') gulp, plugins
 
 # Compile html
-gulp.task 'html', ['prepare'], ->
-	sources = [
-		'**/*.html'
-		'!index.html'
-	]
-
-	srcs = []
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.template templateOptions
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-	es
-		.merge.apply @, srcs
-		.on 'error', onError
-
-		.pipe plugins.newer TEMP_DIRECTORY
-		.on 'error', onError
-
-		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'error', onError
+gulp.task 'html', ['prepare'], require('./tasks/views/html') gulp, plugins
 
 # Process images
 gulp.task 'images', ['imageTypes'], ->
@@ -473,42 +410,7 @@ gulp.task 'imageTypes', ['prepare'], ->
 		.on 'error', onError
 
 # Compile Jade
-gulp.task 'jade', ['prepare'], ->
-	options =
-		jade:
-			pretty: true
-
-	sources = '**/*.jade'
-	srcs    = []
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.newer TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe plugins.template templateOptions
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-	es
-		.merge.apply @, srcs
-		.on 'error', onError
-
-		.pipe plugins.jade options.jade
-		.on 'error', onError
-
-		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'error', onError
+gulp.task 'jade', ['prepare'], require('./tasks/views/jade') gulp, plugins
 
 # Compile JavaScript
 gulp.task 'javaScript', ['prepare'], require('./tasks/scripts/javaScript') gulp, plugins
@@ -554,41 +456,7 @@ gulp.task 'less', ['prepare'], require('./tasks/styles/less') gulp, plugins
 gulp.task 'liveScript', ['prepare'], require('./tasks/scripts/liveScript') gulp, plugins
 
 # Compile Markdown
-gulp.task 'markdown', ['prepare'], ->
-	sources = '**/*.{md,markdown}'
-	srcs    = []
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.newer TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
-			.pipe plugins.template templateOptions
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-	es
-		.merge.apply @, srcs
-		.on 'error', onError
-
-		.pipe plugins.markdown()
-		.on 'error', onError
-
-		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'error', onError
-
-# Proxy for Markdown
-gulp.task 'md', ['markdown']
+gulp.task 'markdown', ['prepare'], require('./tasks/views/markdown') gulp, plugins
 
 # Normalize Bower components
 gulp.task 'normalizeComponents', ['bower'], ->
