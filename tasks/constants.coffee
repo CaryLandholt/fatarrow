@@ -6,4 +6,5 @@ module.exports =
 	SCRIPTS_MIN_DIRECTORY : 'scripts/'
 	SRC_DIRECTORY         : 'src/'
 	STYLES_MIN_DIRECTORY  : 'styles/'
+	STYLES_MIN_FILE       : 'styles.min.css'
 	TEMP_DIRECTORY        : '.temp/'

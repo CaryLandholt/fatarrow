@@ -5,6 +5,11 @@ yargs.options 'specs',
 	description : 'Run specs'
 	type        : 'boolean'
 
+yargs.options 'injectcss',
+	default     : false
+	description : 'Injects CSS without reloading'
+	type        : 'boolean'
+
 getSwitchOption = (switches) ->
 	isArray = Array.isArray switches
 	keys    = if isArray then switches else [switches]
@@ -25,11 +30,14 @@ getSwitchOption = (switches) ->
 		else
 			def
 
+injectCss	   = getSwitchOption 'injectcss'
 isProd         = getSwitchOption 'prod'
 useBackendless = not (isProd or getSwitchOption('backend'))
 runSpecs       = !isProd and useBackendless and getSwitchOption 'specs'
 
-module.exports =
-	isProd         : isProd
-	runSpecs       : runSpecs
-	useBackendless : useBackendless
+module.exports = {
+	injectCss
+	isProd
+	runSpecs
+	useBackendless	
+}
