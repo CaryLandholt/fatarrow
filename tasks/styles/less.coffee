@@ -1,5 +1,4 @@
 es                    = require 'event-stream'
-getScriptSources      = require('../utils').getScriptSources
 {COMPONENTS_DIRECTORY,
 	TEMP_DIRECTORY,
 	SRC_DIRECTORY}    = require '../constants'
