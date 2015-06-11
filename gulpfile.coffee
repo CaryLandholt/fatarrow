@@ -745,18 +745,7 @@ gulp.task 'test', ['e2e'], ->
 gulp.task 'typeScript', ['prepare'], require('./tasks/scripts/typeScript') gulp, plugins
 
 # Process views
-gulp.task 'views', ['html'].concat(LANGUAGES.VIEWS), ->
-	sources = [
-		'**/*.html'
-		'!index.html'
-	]
-
-	gulp
-		.src sources, {cwd: TEMP_DIRECTORY, nodir: true}
-		.on 'error', onError
-
-		.pipe gulp.dest DIST_DIRECTORY
-		.on 'error', onError
+gulp.task 'views', ['html'].concat(LANGUAGES.VIEWS), require('./tasks/views/views') gulp, plugins
 
 # Watch and recompile on-the-fly
 gulp.task 'watch', ['build'], ->
