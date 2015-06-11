@@ -624,41 +624,7 @@ gulp.task 'less', ['prepare'], ->
 		.on 'error', onError
 
 # Compile LiveScript
-gulp.task 'liveScript', ['prepare'], ->
-	sources = getScriptSources '.ls'
-	srcs    = []
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.template templateOptions
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
-	es
-		.merge.apply @, srcs
-		.on 'error', onError
-
-		.pipe plugins.newer TEMP_DIRECTORY
-		.on 'error', onError
-
-		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'error', onError
-
-		.pipe plugins.livescript()
-		.on 'error', onError
-
-		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'error', onError
+gulp.task 'liveScript', ['prepare'], require('./tasks/scripts/liveScript') gulp, plugins
 
 # Compile Markdown
 gulp.task 'markdown', ['prepare'], ->
@@ -1023,41 +989,7 @@ gulp.task 'test', ['e2e'], ->
 			browserSync.exit()
 
 # Compile TypeScript
-gulp.task 'typeScript', ['prepare'], ->
-	sources = getScriptSources '.ts'
-	srcs    = []
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.template templateOptions
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe gulp.dest TEMP_DIRECTORY
-			.on 'error', onError
-
-	es
-		.merge.apply @, srcs
-		.on 'error', onError
-
-		.pipe plugins.newer TEMP_DIRECTORY
-		.on 'error', onError
-
-		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'error', onError
-
-		.pipe plugins.typescript()
-		.on 'error', onError
-
-		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'error', onError
+gulp.task 'typeScript', ['prepare'], require('./tasks/scripts/typeScript') gulp, plugins
 
 # Process views
 gulp.task 'views', ['html'].concat(LANGUAGES.VIEWS), ->
