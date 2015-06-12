@@ -552,25 +552,7 @@ gulp.task 'stats', ['plato']
 gulp.task 'styles', ['css'].concat(LANGUAGES.STYLES), require('./tasks/styles/styles') gulp, plugins
 
 # Compile templateCache
-gulp.task 'templateCache', ['html'].concat(LANGUAGES.VIEWS), ->
-	options =
-		templateCache:
-			module: APP_NAME
-
-	sources = [
-		'**/*.html'
-		'!index.html'
-	]
-
-	gulp
-		.src sources, {cwd: TEMP_DIRECTORY, nodir: true}
-		.on 'error', onError
-
-		.pipe plugins.templatecache options.templateCache
-		.on 'error', onError
-
-		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'error', onError
+gulp.task 'templateCache', ['html'].concat(LANGUAGES.VIEWS), require('./tasks/views/templateCache') gulp, plugins
 
 # Execute unit tests
 
