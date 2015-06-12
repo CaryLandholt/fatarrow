@@ -30,8 +30,9 @@ getSwitchOption = (switches) ->
 		else
 			def
 
-firstRun = true
-injectCss	      = getSwitchOption 'injectcss'
+firstRun          = true
+getBower          = getSwitchOption 'bower'
+injectCss         = getSwitchOption 'injectcss'
 isProd            = getSwitchOption 'prod'
 useBackendless    = not (isProd or getSwitchOption('backend'))
 runSpecs          = !isProd and useBackendless and getSwitchOption 'specs'
@@ -40,6 +41,7 @@ ngClassifyOptions =
 
 module.exports = {
 	firstRun
+	getBower
 	injectCss
 	isProd
 	ngClassifyOptions

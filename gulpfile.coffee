@@ -210,26 +210,10 @@ gulp.task 'build', ['spa', 'fonts', 'images'], ->
 # Generate CHANGELOG
 gulp.task 'changelog', ['normalizeComponents', 'stats'], require('./tasks/changelog/changelog') gulp, plugins
 # Clean all build directories
-gulp.task 'clean', ['clean:working'], ->
-	sources = BOWER_DIRECTORY
-
-	gulp
-		.src sources, {read: false}
-		.on 'error', onError
-
-		.pipe plugins.rimraf()
-		.on 'error', onError
+gulp.task 'clean', ['clean:working'], require('./tasks/clean/clean') gulp, plugins
 
 # Clean working directories
-gulp.task 'clean:working', ->
-	sources = [].concat(if injectCss then [] else [DIST_DIRECTORY]).concat(if firstRun then [TEMP_DIRECTORY] else []).concat(if getBower and firstRun then [COMPONENTS_DIRECTORY, BOWER_FILE] else [])
-
-	gulp
-		.src sources, {read: false}
-		.on 'error', onError
-
-		.pipe plugins.rimraf()
-		.on 'error', onError
+gulp.task 'clean:working', require('./tasks/clean/cleanWorking') gulp, plugins
 
 # Compile CoffeeScript
 gulp.task 'coffeeScript', ['prepare'], require('./tasks/scripts/coffeeScript') gulp, plugins

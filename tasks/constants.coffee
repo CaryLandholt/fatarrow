@@ -1,6 +1,7 @@
 BOWER_DIRECTORY       = 'bower_components/'
 module.exports =
 	BOWER_DIRECTORY       : BOWER_DIRECTORY
+	BOWER_FILE            : 'bower.json'
 	CHANGELOG_FILE        : 'CHANGELOG.md'
 	COMPONENTS_DIRECTORY  : "#{BOWER_DIRECTORY}_/"
 	DIST_DIRECTORY        : 'dist/'
