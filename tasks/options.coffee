@@ -30,6 +30,7 @@ getSwitchOption = (switches) ->
 		else
 			def
 
+firstRun = true
 injectCss	      = getSwitchOption 'injectcss'
 isProd            = getSwitchOption 'prod'
 useBackendless    = not (isProd or getSwitchOption('backend'))
@@ -38,6 +39,7 @@ ngClassifyOptions =
 	appName: require('../config').APP_NAME
 
 module.exports = {
+	firstRun
 	injectCss
 	isProd
 	ngClassifyOptions
