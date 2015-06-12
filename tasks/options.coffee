@@ -30,14 +30,17 @@ getSwitchOption = (switches) ->
 		else
 			def
 
-injectCss	   = getSwitchOption 'injectcss'
-isProd         = getSwitchOption 'prod'
-useBackendless = not (isProd or getSwitchOption('backend'))
-runSpecs       = !isProd and useBackendless and getSwitchOption 'specs'
+injectCss	      = getSwitchOption 'injectcss'
+isProd            = getSwitchOption 'prod'
+useBackendless    = not (isProd or getSwitchOption('backend'))
+runSpecs          = !isProd and useBackendless and getSwitchOption 'specs'
+ngClassifyOptions =
+	appName: require('../config').APP_NAME
 
 module.exports = {
 	injectCss
 	isProd
+	ngClassifyOptions
 	runSpecs
-	useBackendless	
+	useBackendless
 }

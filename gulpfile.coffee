@@ -3,7 +3,6 @@
 bower                 = require 'bower'
 browserSync           = require 'browser-sync'
 childProcess          = require 'child_process'
-conventionalChangelog = require 'conventional-changelog'
 es                    = require 'event-stream'
 fs                    = require 'fs'
 gulp                  = require 'gulp'
@@ -20,7 +19,6 @@ plugins = require './tasks/plugins'
 
 BOWER_DIRECTORY       = 'bower_components/'
 BOWER_FILE            = 'bower.json'
-CHANGELOG_FILE        = 'CHANGELOG.md'
 COMPONENTS_DIRECTORY  = "#{BOWER_DIRECTORY}_/"
 DIST_DIRECTORY        = 'dist/'
 E2E_DIRECTORY         = 'e2e/'
@@ -29,7 +27,6 @@ PORT                  = process.env.PORT ? 8181
 SCRIPTS_MIN_DIRECTORY = 'scripts/'
 SCRIPTS_MIN_FILE      = 'scripts.min.js'
 SRC_DIRECTORY         = 'src/'
-STATS_DIRECTORY       = 'stats/stats/'
 STATS_DIST_DIRECTORY  = 'stats/'
 STYLES_MIN_DIRECTORY  = 'styles/'
 STYLES_MIN_FILE       = 'styles.min.css'
@@ -128,9 +125,6 @@ showHelp       = getSwitchOption 'help'
 
 return if showHelp
 	console.log '\n' + yargs.help()
-
-ngClassifyOptions =
-	appName: APP_NAME
 
 templateOptions = require './tasks/templateOptions'
 
@@ -249,16 +243,7 @@ gulp.task 'build', ['spa', 'fonts', 'images'], ->
 		.on 'error', onError
 
 # Generate CHANGELOG
-gulp.task 'changelog', ['normalizeComponents', 'stats'], ->
-	options =
-		repository: pkg.repository.url
-		version: pkg.version
-		file: CHANGELOG_FILE
-		log: plugins.util.log
-
-	conventionalChangelog options, (err, log) ->
-		fs.writeFile CHANGELOG_FILE, log
-
+gulp.task 'changelog', ['normalizeComponents', 'stats'], require('./tasks/changelog/changelog') gulp, plugins
 # Clean all build directories
 gulp.task 'clean', ['clean:working'], ->
 	sources = BOWER_DIRECTORY
@@ -502,66 +487,7 @@ gulp.task 'normalizeComponents', ['bower'], ->
 	es.merge.apply @, srcs
 
 # Execute Plato complexity analysis
-gulp.task 'plato', ['clean:working'], ->
-	options =
-		plato:
-			title: "#{pkg.name} v#{pkg.version}"
-
-	srcs = []
-
-	srcs.push src =
-		gulp
-			.src '**/*.coffee', {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.template templateOptions
-			.on 'error', onError
-
-			.pipe plugins.ngclassify ngClassifyOptions
-			.on 'error', onError
-
-			.pipe plugins.coffee()
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src '**/*.js', {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.template templateOptions
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src '**/*.ls', {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.template templateOptions
-			.on 'error', onError
-
-			.pipe plugins.livescript()
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src '**/*.ts', {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.template templateOptions
-			.on 'error', onError
-
-			.pipe plugins.typescript()
-			.on 'error', onError
-
-	es
-		.merge.apply @, srcs
-		.on 'error', onError
-
-		.pipe gulp.dest DIST_DIRECTORY
-		.on 'error', onError
-
-		.pipe plugins.plato STATS_DIRECTORY, options.plato
-		.on 'error', onError
+gulp.task 'plato', ['clean:working'], require('./tasks/plato/plato') gulp, plugins
 
 # Prepare for compilation
 gulp.task 'prepare', ['clean:working'].concat(if getBower then ['normalizeComponents'] else [])

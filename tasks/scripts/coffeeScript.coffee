@@ -1,11 +1,10 @@
 es                    = require 'event-stream'
 getScriptSources      = require('../utils').getScriptSources
 {COMPONENTS_DIRECTORY,
-	TEMP_DIRECTORY, 
+	TEMP_DIRECTORY,
 	SRC_DIRECTORY}    = require '../constants'
 templateOptions       = require '../templateOptions'
-ngClassifyOptions     =
-	appName: require('../../config').APP_NAME
+{ngClassifyOptions}   = require '../options'
 
 module.exports = (gulp, plugins) -> ->
 	{onError} = require('../events') plugins
