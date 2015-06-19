@@ -13,8 +13,7 @@ module.exports = (plugins) ->
 		messages = (error for error in errors)
 
 		plugins.util.log plugins.util.colors.red message for message in messages
-		# @emit 'end' unless isProd
-		console.log 'error', e
+		@emit 'end' unless isProd
 
 	onRev = (file) ->
 		from           = path.relative file.revOrigBase, file.revOrigPath

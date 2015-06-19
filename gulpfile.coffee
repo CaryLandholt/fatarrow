@@ -225,7 +225,28 @@ gulp.task 'css', ['prepare'], require('./tasks/styles/css') gulp, plugins
 gulp.task 'default', [].concat(if runServer then ['server'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['test'] else [])
 
 # Execute E2E tests
-gulp.task 'e2e', ['server'], require('./tasks/test/e2e') gulp, plugins
+gulp.task 'e2e', ['server'], ->
+	e2eConfigFile       = './protractor.config.coffee'
+	sources             = '**/*.spec.{coffee,js}'
+
+	options =
+		protractor:
+			configFile: e2eConfigFile
+
+	str = gulp
+		.src sources, {cwd: E2E_DIRECTORY, read: false}
+		.on 'error', onError
+
+		.pipe plugins.protractor.protractor options.protractor
+
+	if citest
+		str.on 'error', ->
+			process.exit 1
+		str.on 'end', ->
+	else
+		str.on 'error', onError
+
+	str
 
 # Update E2E driver
 gulp.task 'e2e-driver-update', plugins.protractor.webdriver_update
