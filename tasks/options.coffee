@@ -56,6 +56,7 @@ module.exports = {
 	citest
 	firstRun
 	getBower
+	getSwitchOption
 	injectCss
 	isProd
 	ngClassifyOptions

@@ -20,33 +20,13 @@ BOWER_DIRECTORY       = 'bower_components/'
 COMPONENTS_DIRECTORY  = "#{BOWER_DIRECTORY}_/"
 DIST_DIRECTORY        = 'dist/'
 E2E_DIRECTORY         = 'e2e/'
-SCRIPTS_MIN_DIRECTORY = 'scripts/'
-SCRIPTS_MIN_FILE      = 'scripts.min.js'
 SRC_DIRECTORY         = 'src/'
 STATS_DIST_DIRECTORY  = 'stats/'
 TEMP_DIRECTORY        = '.temp/'
 
+{getSwitchOption} = require './tasks/options'
+
 EXTENSIONS = require './tasks/extensions'
-
-getSwitchOption = (switches) ->
-	isArray = Array.isArray switches
-	keys    = if isArray then switches else [switches]
-	key     = keys[0]
-
-	for k in keys
-		hasSwitch = !!yargs.argv[k]
-		key       = k if hasSwitch
-
-	set = yargs.argv[key]
-	def = yargs.parse([])[key]
-
-	value =
-		if set is 'false' or set is false
-			false
-		else if set is 'true' or set is true
-			true
-		else
-			def
 
 yargs
 	.usage 'Run $0 with the following options.'
@@ -334,8 +314,6 @@ gulp.task 'test', ['e2e'], ->
 	args  = ("--#{key}=#{value}" for own key, value of yargs.argv when key isnt '_' and key isnt '$0')
 	args  = ['karma'].concat args
 	karmaSpawn = childProcess.spawn command, args, {stdio: 'inherit'}
-
-	console.log 'citest', citest
 
 	if citest
 		karmaSpawn.on 'exit', (code) ->
