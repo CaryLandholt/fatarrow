@@ -91,12 +91,7 @@ yargs.options 'stats',
 	description : 'Run statistics'
 	type        : 'boolean'
 
-yargs.options 'citest',
-	default     : false
-	description : 'Run tests and report exit codes'
-	type        : 'boolean'
-
-citest         = getSwitchOption 'citest'
+{citest}       = require './tasks/options'
 env            = plugins.util.env
 firstRun       = true
 getBower       = getSwitchOption 'bower'
@@ -112,8 +107,6 @@ showHelp       = getSwitchOption 'help'
 
 return if showHelp
 	console.log '\n' + yargs.help()
-
-templateOptions = require './tasks/templateOptions'
 
 getScriptSources = (ext) ->
 	["**/*#{ext}"]
@@ -341,6 +334,8 @@ gulp.task 'test', ['e2e'], ->
 	args  = ("--#{key}=#{value}" for own key, value of yargs.argv when key isnt '_' and key isnt '$0')
 	args  = ['karma'].concat args
 	karmaSpawn = childProcess.spawn command, args, {stdio: 'inherit'}
+
+	console.log 'citest', citest
 
 	if citest
 		karmaSpawn.on 'exit', (code) ->

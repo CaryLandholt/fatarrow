@@ -53,6 +53,7 @@ ngClassifyOptions =
 	appName: require('../config').APP_NAME
 
 module.exports = {
+	citest
 	firstRun
 	getBower
 	injectCss
