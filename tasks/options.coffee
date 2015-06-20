@@ -1,14 +1,20 @@
 yargs = require 'yargs'
 
-yargs.options 'specs',
-	default     : true
-	description : 'Run specs'
+yargs.options 'citest',
+	default     : false
+	description : 'Run tests and report exit codes'
 	type        : 'boolean'
 
 yargs.options 'injectcss',
 	default     : false
 	description : 'Injects CSS without reloading'
 	type        : 'boolean'
+
+yargs.options 'specs',
+	default     : true
+	description : 'Run specs'
+	type        : 'boolean'
+
 
 getSwitchOption = (switches) ->
 	isArray = Array.isArray switches
@@ -30,6 +36,7 @@ getSwitchOption = (switches) ->
 		else
 			def
 
+citest            = getSwitchOption 'citest'
 firstRun          = true
 getBower          = getSwitchOption 'bower'
 injectCss         = getSwitchOption 'injectcss'

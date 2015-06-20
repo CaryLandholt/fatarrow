@@ -33,7 +33,7 @@
     "gulp-imagemin": "^2.0.0",
     "gulp-jade": "0.10.0",
     "gulp-jshint": "^1.6.3",
-    "gulp-less": "^2.0.1",
+    "gulp-less": "^3.0.3",
     "gulp-livescript": "^2.2.1",
     "gulp-load-plugins": "^0.10.0",
     "gulp-markdown": "^1.0.0",

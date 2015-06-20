@@ -252,47 +252,10 @@ gulp.task 'e2e', ['server'], ->
 gulp.task 'e2e-driver-update', plugins.protractor.webdriver_update
 
 # Process fonts
-gulp.task 'fonts', ['fontTypes'], ->
-	sources = [].concat ("**/*#{extension}" for extension in EXTENSIONS.FONTS.COMPILED)
-
-	src =
-		gulp
-			.src sources, {cwd: TEMP_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-	return if isProd
-		src
-			.pipe plugins.flatten()
-			.on 'error', onError
-
-			.pipe gulp.dest path.join DIST_DIRECTORY, FONTS_DIRECTORY
-			.on 'error', onError
-
-	src
-		.pipe gulp.dest DIST_DIRECTORY
-		.on 'error', onError
+gulp.task 'fonts', ['fontTypes'], require('./tasks/fonts/fonts') gulp, plugins
 
 # Compile fontTypes
-gulp.task 'fontTypes', ['prepare'], ->
-	sources = [].concat ("**/*#{extension}" for extension in EXTENSIONS.FONTS.COMPILED)
-	srcs    = []
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-	es
-		.merge.apply @, srcs
-		.on 'error', onError
-
-		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'error', onError
+gulp.task 'fontTypes', ['prepare'], require('./tasks/fonts/fontTypes') gulp, plugins
 
 # Compile Haml
 gulp.task 'haml', ['prepare'], require('./tasks/views/haml') gulp, plugins
