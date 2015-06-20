@@ -4,12 +4,15 @@ browserSync = require 'browser-sync'
 {PROXY_CONFIG} = require '../../config'
 {DIST_DIRECTORY} = require '../constants'
 {open} = require '../options'
-{PORT} = require './config'
+
+exports.PORT = PORT = 8181
 
 module.exports = ->
 	return if browserSync.active
 
-	browserSync
+	bs = browserSync.create()
+
+	bs.init
 		middleware: PROXY_CONFIG.map (config) ->
 			options = url.parse config.url
 			options.route = config.route
@@ -17,4 +20,5 @@ module.exports = ->
 		open: open
 		port: PORT
 		server: DIST_DIRECTORY
-	, -> firstRun = false
+	, ->
+		firstRun = false
