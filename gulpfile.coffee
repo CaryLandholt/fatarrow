@@ -8,7 +8,7 @@ karma                 = require 'karma'
 yargs                 = require 'yargs'
 
 plugins = require './tasks/plugins'
-{onError, onRev, onScript, onStyle} = require('./tasks/events') plugins
+{onError} = require('./tasks/events') plugins
 
 BOWER_DIRECTORY       = 'bower_components/'
 COMPONENTS_DIRECTORY  = "#{BOWER_DIRECTORY}_/"
@@ -35,11 +35,6 @@ yargs.options 'bower',
 	description : 'Force retrieve of Bower components'
 	type        : 'boolean'
 
-yargs.options 'prod',
-	default     : false
-	description : 'Execute with all optimzations.  App will open in the browser but no file watching.'
-	type        : 'boolean'
-
 yargs.options 'serve',
 	default     : true
 	description : 'Serve the app'
@@ -55,7 +50,7 @@ env            = plugins.util.env
 firstRun       = true
 getBower       = getSwitchOption 'bower'
 {injectCss}	   = require './tasks/options'
-isProd         = getSwitchOption 'prod'
+{isProd}         = require './tasks/options'
 useBackendless = not (isProd or getSwitchOption 'backend')
 runServer      = getSwitchOption 'serve'
 runSpecs       = !isProd and useBackendless and getSwitchOption 'specs'
@@ -65,9 +60,6 @@ runWatch       = !isProd and runServer
 gulp.task 'help', (done) ->
 	console.log '\n' + yargs.help()
 	done()
-
-return if showHelp
-	console.log '\n' + yargs.help()
 
 windowsify = require('./tasks/utils').windowsify
 
