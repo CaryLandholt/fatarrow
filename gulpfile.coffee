@@ -320,39 +320,7 @@ gulp.task 'server', ['build'], ->
 	require('./tasks/server/server')()
 
 # Process SPA
-gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' else 'views'), ->
-	options =
-		minifyHtml:
-			conditionals: true
-			empty: true
-			quotes: true
-		template: JSON.parse JSON.stringify templateOptions
-
-	# clear scripts and styles for reload
-	templateOptions.scripts = []
-	templateOptions.styles  = []
-
-	sources = 'index.html'
-
-	src =
-		gulp
-			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-			.pipe plugins.template options.template
-			.on 'error', onError
-
-	return if isProd
-		src
-			.pipe plugins.minifyHtml options.minifyHtml
-			.on 'error', onError
-
-			.pipe gulp.dest DIST_DIRECTORY
-			.on 'error', onError
-
-	src
-		.pipe gulp.dest DIST_DIRECTORY
-		.on 'error', onError
+gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' else 'views'), require('./tasks/spa') gulp, plugins
 
 # Execute stats
 gulp.task 'stats', ['plato']
