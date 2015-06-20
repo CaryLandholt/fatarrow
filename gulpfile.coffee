@@ -9,7 +9,6 @@ gulp                  = require 'gulp'
 karma                 = require 'karma'
 path                  = require 'path'
 pkg                   = require './package.json'
-proxy                 = require 'proxy-middleware'
 q                     = require 'q'
 url                   = require 'url'
 yargs                 = require 'yargs'
@@ -18,20 +17,14 @@ plugins = require './tasks/plugins'
 {onError, onRev, onScript, onStyle} = require('./tasks/events') plugins
 
 BOWER_DIRECTORY       = 'bower_components/'
-BOWER_FILE            = 'bower.json'
 COMPONENTS_DIRECTORY  = "#{BOWER_DIRECTORY}_/"
 DIST_DIRECTORY        = 'dist/'
 E2E_DIRECTORY         = 'e2e/'
-FONTS_DIRECTORY       = 'fonts/'
-PORT                  = process.env.PORT ? 8181
 SCRIPTS_MIN_DIRECTORY = 'scripts/'
 SCRIPTS_MIN_FILE      = 'scripts.min.js'
 SRC_DIRECTORY         = 'src/'
 STATS_DIST_DIRECTORY  = 'stats/'
-STYLES_MIN_DIRECTORY  = 'styles/'
-STYLES_MIN_FILE       = 'styles.min.css'
 TEMP_DIRECTORY        = '.temp/'
-VENDOR_DIRECTORY      = 'vendor/'
 
 EXTENSIONS = require './tasks/extensions'
 
@@ -98,11 +91,6 @@ yargs.options 'stats',
 	description : 'Run statistics'
 	type        : 'boolean'
 
-yargs.options 'open',
-	default     : true
-	description : 'Open app from browser-sync'
-	type        : 'boolean'
-
 yargs.options 'citest',
 	default     : false
 	description : 'Run tests and report exit codes'
@@ -115,7 +103,6 @@ getBower       = getSwitchOption 'bower'
 injectCss	   = getSwitchOption 'injectcss'
 isProd         = getSwitchOption 'prod'
 isWindows      = /^win/.test(process.platform)
-open           = getSwitchOption 'open'
 runStats       = !isProd and getSwitchOption 'stats'
 useBackendless = not (isProd or getSwitchOption 'backend')
 runServer      = getSwitchOption 'serve'
@@ -132,19 +119,6 @@ getScriptSources = (ext) ->
 	["**/*#{ext}"]
 		.concat if not useBackendless then ["!**/*.backend#{ext}"] else []
 		.concat if not runSpecs       then ["!**/*.spec#{ext}"]    else []
-
-startServer = ->
-	return if browserSync.active
-
-	browserSync
-		middleware: PROXY_CONFIG.map (config) ->
-			options = url.parse config.url
-			options.route = config.route
-			proxy options
-		open: open
-		port: PORT
-		server: DIST_DIRECTORY
-	, -> firstRun = false
 
 unixifyPath = (p) ->
 	p.replace /\\/g, '/'
@@ -339,11 +313,11 @@ gulp.task 'scripts', ['javaScript'].concat(LANGUAGES.SCRIPTS).concat(if isProd t
 
 # Start a web server without rebuilding
 gulp.task 'serve', ['build'], ->
-	startServer()
+	require('./tasks/server/server')()
 
 # Start a web server
 gulp.task 'server', ['build'], ->
-	startServer()
+	require('./tasks/server/server')()
 
 # Process SPA
 gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' else 'views'), ->

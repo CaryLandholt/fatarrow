@@ -10,6 +10,11 @@ yargs.options 'injectcss',
 	description : 'Injects CSS without reloading'
 	type        : 'boolean'
 
+yargs.options 'open',
+	default     : true
+	description : 'Open app from browser-sync'
+	type        : 'boolean'
+
 yargs.options 'specs',
 	default     : true
 	description : 'Run specs'
@@ -41,6 +46,7 @@ firstRun          = true
 getBower          = getSwitchOption 'bower'
 injectCss         = getSwitchOption 'injectcss'
 isProd            = getSwitchOption 'prod'
+open              = getSwitchOption 'open'
 useBackendless    = not (isProd or getSwitchOption('backend'))
 runSpecs          = !isProd and useBackendless and getSwitchOption 'specs'
 ngClassifyOptions =
@@ -52,6 +58,7 @@ module.exports = {
 	injectCss
 	isProd
 	ngClassifyOptions
+	open
 	runSpecs
 	useBackendless
 }
