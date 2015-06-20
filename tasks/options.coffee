@@ -5,6 +5,11 @@ yargs.options 'citest',
 	description : 'Run tests and report exit codes'
 	type        : 'boolean'
 
+yargs.options 'help',
+	default     : false
+	description : 'Show help'
+	type        : 'boolean'
+
 yargs.options 'injectcss',
 	default     : false
 	description : 'Injects CSS without reloading'
@@ -44,6 +49,7 @@ getSwitchOption = (switches) ->
 citest            = getSwitchOption 'citest'
 firstRun          = true
 getBower          = getSwitchOption 'bower'
+showHelp          = getSwitchOption 'help'
 injectCss         = getSwitchOption 'injectcss'
 isProd            = getSwitchOption 'prod'
 open              = getSwitchOption 'open'
@@ -57,6 +63,7 @@ module.exports = {
 	firstRun
 	getBower
 	getSwitchOption
+	showHelp
 	injectCss
 	isProd
 	ngClassifyOptions

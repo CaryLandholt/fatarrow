@@ -1,16 +1,10 @@
 {APP_NAME, BOWER_COMPONENTS, LANGUAGES, PROXY_CONFIG, SCRIPTS, STYLES} = require './config.coffee'
 
-bower                 = require 'bower'
 browserSync           = require 'browser-sync'
 childProcess          = require 'child_process'
 es                    = require 'event-stream'
-fs                    = require 'fs'
 gulp                  = require 'gulp'
 karma                 = require 'karma'
-path                  = require 'path'
-pkg                   = require './package.json'
-q                     = require 'q'
-url                   = require 'url'
 yargs                 = require 'yargs'
 
 plugins = require './tasks/plugins'
@@ -41,16 +35,6 @@ yargs.options 'bower',
 	description : 'Force retrieve of Bower components'
 	type        : 'boolean'
 
-yargs.options 'help',
-	default     : false
-	description : 'Show help'
-	type        : 'boolean'
-
-yargs.options 'injectcss',
-	default     : false
-	description : 'Injects CSS without reloading'
-	type        : 'boolean'
-
 yargs.options 'prod',
 	default     : false
 	description : 'Execute with all optimzations.  App will open in the browser but no file watching.'
@@ -66,38 +50,26 @@ yargs.options 'specs',
 	description : 'Run specs'
 	type        : 'boolean'
 
-yargs.options 'stats',
-	default     :  false
-	description : 'Run statistics'
-	type        : 'boolean'
-
 {citest}       = require './tasks/options'
 env            = plugins.util.env
 firstRun       = true
 getBower       = getSwitchOption 'bower'
-injectCss	   = getSwitchOption 'injectcss'
+{injectCss}	   = require './tasks/options'
 isProd         = getSwitchOption 'prod'
-isWindows      = /^win/.test(process.platform)
-runStats       = !isProd and getSwitchOption 'stats'
 useBackendless = not (isProd or getSwitchOption 'backend')
 runServer      = getSwitchOption 'serve'
 runSpecs       = !isProd and useBackendless and getSwitchOption 'specs'
 runWatch       = !isProd and runServer
-showHelp       = getSwitchOption 'help'
+{showHelp}     = require './tasks/options'
+
+gulp.task 'help', (done) ->
+	console.log '\n' + yargs.help()
+	done()
 
 return if showHelp
 	console.log '\n' + yargs.help()
 
-getScriptSources = (ext) ->
-	["**/*#{ext}"]
-		.concat if not useBackendless then ["!**/*.backend#{ext}"] else []
-		.concat if not runSpecs       then ["!**/*.spec#{ext}"]    else []
-
-unixifyPath = (p) ->
-	p.replace /\\/g, '/'
-
-windowsify = (windowsCommand, nonWindowsCommand) ->
-	if isWindows then windowsCommand else nonWindowsCommand
+windowsify = require('./tasks/utils').windowsify
 
 gulp.task 'babel', ['prepare'], require('./tasks/scripts/babel') gulp, plugins
 
