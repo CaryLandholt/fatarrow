@@ -264,47 +264,10 @@ gulp.task 'haml', ['prepare'], require('./tasks/views/haml') gulp, plugins
 gulp.task 'html', ['prepare'], require('./tasks/views/html') gulp, plugins
 
 # Process images
-gulp.task 'images', ['imageTypes'], ->
-	sources = [].concat ("**/*#{extension}" for extension in EXTENSIONS.IMAGES.COMPILED)
-
-	src =
-		gulp
-			.src sources, {cwd: TEMP_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-	return if isProd
-		src
-			.pipe plugins.imagemin()
-			.on 'error', onError
-
-			.pipe gulp.dest DIST_DIRECTORY
-			.on 'error', onError
-
-	src
-		.pipe gulp.dest DIST_DIRECTORY
-		.on 'error', onError
+gulp.task 'images', ['imageTypes'], require('./tasks/images/images') gulp, plugins
 
 # Compile imageTypes
-gulp.task 'imageTypes', ['prepare'], ->
-	sources = [].concat ("**/*#{extension}" for extension in EXTENSIONS.IMAGES.COMPILED)
-	srcs    = []
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-	es
-		.merge.apply @, srcs
-		.on 'error', onError
-
-		.pipe gulp.dest TEMP_DIRECTORY
-		.on 'error', onError
+gulp.task 'imageTypes', ['prepare'], require('./tasks/images/imageTypes') gulp, plugins
 
 # Compile Jade
 gulp.task 'jade', ['prepare'], require('./tasks/views/jade') gulp, plugins
