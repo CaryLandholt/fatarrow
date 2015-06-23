@@ -4,7 +4,6 @@ browserSync           = require 'browser-sync'
 childProcess          = require 'child_process'
 es                    = require 'event-stream'
 gulp                  = require 'gulp'
-karma                 = require 'karma'
 yargs                 = require 'yargs'
 
 plugins = require './tasks/plugins'
@@ -89,28 +88,7 @@ gulp.task 'css', ['prepare'], require('./tasks/styles/css') gulp, plugins
 gulp.task 'default', [].concat(if runServer then ['server'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['test'] else [])
 
 # Execute E2E tests
-gulp.task 'e2e', ['server'], ->
-	e2eConfigFile       = './protractor.config.coffee'
-	sources             = '**/*.spec.{coffee,js}'
-
-	options =
-		protractor:
-			configFile: e2eConfigFile
-
-	str = gulp
-		.src sources, {cwd: E2E_DIRECTORY, read: false}
-		.on 'error', onError
-
-		.pipe plugins.protractor.protractor options.protractor
-
-	if citest
-		str.on 'error', ->
-			process.exit 1
-		str.on 'end', ->
-	else
-		str.on 'error', onError
-
-	str
+gulp.task 'e2e', ['server'], require('./tasks/test/e2e') gulp, plugins
 
 # Update E2E driver
 gulp.task 'e2e-driver-update', plugins.protractor.webdriver_update
@@ -138,40 +116,9 @@ gulp.task 'jade', ['prepare'], require('./tasks/views/jade') gulp, plugins
 
 # Compile JavaScript
 gulp.task 'javaScript', ['prepare'], require('./tasks/scripts/javaScript') gulp, plugins
+
 # Execute karma unit tests
-gulp.task 'karma', ->
-	sources = [].concat SCRIPTS, '**/*.html'
-
-	options =
-		autoWatch: false
-		background: true
-		basePath: DIST_DIRECTORY
-		browsers: [
-			'PhantomJS'
-		]
-		colors: true
-		exclude: ["#{STATS_DIST_DIRECTORY}**"]
-		files: sources
-		frameworks: [
-			'jasmine'
-		]
-		keepalive: false
-		logLevel: 'WARN'
-		ngHtml2JsPreprocessor:
-			stripPrefix: 'dist/'
-		preprocessors:
-			'**/*.html': 'ng-html2js'
-		reporters: [
-			'spec'
-		]
-		singleRun: true
-		transports: [
-			'flashsocket'
-			'xhr-polling'
-			'jsonp-polling'
-		]
-
-	karma.server.start options
+gulp.task 'karma', require('./tasks/test/karma') gulp, plugins
 
 # Compile Less
 gulp.task 'less', ['prepare'], require('./tasks/styles/less') gulp, plugins

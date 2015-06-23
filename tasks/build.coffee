@@ -18,8 +18,6 @@ module.exports = (gulp, plugins) -> ->
 
 	srcs = []
 
-	console.log 'cwd', process.cwd()
-
 	if not isProd
 		srcs.push src =
 			gulp
@@ -52,8 +50,6 @@ module.exports = (gulp, plugins) -> ->
 	es
 		.merge srcs
 		.on 'error', onError
-
-		.pipe plugins.debug()
 
 		.pipe gulp.dest DIST_DIRECTORY
 		.on 'error', onError
