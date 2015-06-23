@@ -1,5 +1,6 @@
 es = require 'event-stream'
 fs = require 'fs'
+q = require 'q'
 pkg = require '../../package.json'
 {BOWER_DIRECTORY, COMPONENTS_DIRECTORY, VENDOR_DIRECTORY} = require '../constants'
 {firstRun} = require '../options'

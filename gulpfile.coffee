@@ -47,7 +47,7 @@ yargs.options 'specs',
 
 {citest}       = require './tasks/options'
 env            = plugins.util.env
-firstRun       = true
+{firstRun}     = require './tasks/options'
 getBower       = getSwitchOption 'bower'
 {injectCss}	   = require './tasks/options'
 {isProd}         = require './tasks/options'
@@ -69,54 +69,7 @@ gulp.task 'babel', ['prepare'], require('./tasks/scripts/babel') gulp, plugins
 gulp.task 'bower', ['clean:working'], require('./tasks/bower/bower') gulp, plugins
 
 # build the app
-gulp.task 'build', ['spa', 'fonts', 'images'], ->
-	extensions = []
-		.concat EXTENSIONS.FONTS.COMPILED
-		.concat EXTENSIONS.IMAGES.COMPILED
-		.concat EXTENSIONS.SCRIPTS.COMPILED
-		.concat EXTENSIONS.STYLES.COMPILED
-		.concat EXTENSIONS.VIEWS.COMPILED
-
-	getSources = ->
-		['**/*.*'].concat ("!**/*#{extension}" for extension in extensions)
-
-	srcs = []
-
-	if not isProd
-		srcs.push src =
-			gulp
-				.src '**', cwd: STATS_DIST_DIRECTORY
-				.on 'error', onError
-
-	if not isProd
-		srcs.push src =
-			gulp
-				.src getSources(), {cwd: TEMP_DIRECTORY, nodir: true}
-				.on 'error', onError
-
-	extensions = extensions
-		.concat EXTENSIONS.SCRIPTS.UNCOMPILED
-		.concat EXTENSIONS.STYLES.UNCOMPILED
-		.concat EXTENSIONS.VIEWS.UNCOMPILED
-
-	sources = getSources()
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-	srcs.push src =
-		gulp
-			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
-			.on 'error', onError
-
-	es
-		.merge.apply @, srcs
-		.on 'error', onError
-
-		.pipe gulp.dest DIST_DIRECTORY
-		.on 'error', onError
+gulp.task 'build', ['spa', 'fonts', 'images'], require('./tasks/build') gulp, plugins
 
 # Generate CHANGELOG
 gulp.task 'changelog', ['normalizeComponents', 'stats'], require('./tasks/changelog/changelog') gulp, plugins
@@ -291,29 +244,4 @@ gulp.task 'typeScript', ['prepare'], require('./tasks/scripts/typeScript') gulp,
 gulp.task 'views', ['html'].concat(LANGUAGES.VIEWS), require('./tasks/views/views') gulp, plugins
 
 # Watch and recompile on-the-fly
-gulp.task 'watch', ['build'], ->
-	tasks = ['reload'].concat if runSpecs then ['test'] else []
-
-	extensions = []
-		.concat EXTENSIONS.FONTS.COMPILED
-		.concat EXTENSIONS.IMAGES.COMPILED
-		.concat EXTENSIONS.SCRIPTS.COMPILED
-		.concat EXTENSIONS.SCRIPTS.UNCOMPILED
-		.concat EXTENSIONS.VIEWS.COMPILED
-		.concat EXTENSIONS.VIEWS.UNCOMPILED
-
-	stylesExtensions = []
-		.concat EXTENSIONS.STYLES.COMPILED
-		.concat EXTENSIONS.STYLES.UNCOMPILED
-
-	sources = [].concat ("**/*#{extension}" for extension in extensions)
-	stylesSources = [].concat ("**/*#{extension}" for extension in stylesExtensions)
-
-	watcher = gulp.watch sources, {cwd: SRC_DIRECTORY, maxListeners: 999}, tasks
-	watcher = gulp.watch sources, {cwd: E2E_DIRECTORY, maxListeners: 999}, ['test']
-	stylesWater = gulp.watch stylesSources, {cwd: SRC_DIRECTORY, maxListeners: 999}, [].concat(if injectCss then ['build'] else ['reload'])
-
-	watcher
-		.on 'change', (event) ->
-			firstRun = true if event.type is 'deleted'
-		.on 'error', onError
+gulp.task 'watch', ['build'], require('./tasks/watch') gulp, plugins

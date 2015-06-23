@@ -10,9 +10,7 @@ exports.PORT = PORT = 8181
 module.exports = ->
 	return if browserSync.active
 
-	bs = browserSync.create()
-
-	bs.init
+	browserSync
 		middleware: PROXY_CONFIG.map (config) ->
 			options = url.parse config.url
 			options.route = config.route

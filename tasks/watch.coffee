@@ -1,8 +1,9 @@
-{firstRun, injectCss, runSpecs} = require '../options'
-EXTENSIONS = require '../EXTENSIONS'
-{E2E_DIRECTORY, SRC_DIRECTORY} = require '../constants'
+{firstRun, injectCss, runSpecs} = require './options'
+EXTENSIONS = require './extensions'
+{E2E_DIRECTORY, SRC_DIRECTORY} = require './constants'
 
 module.exports = (gulp, plugins) -> ->
+	{onError} = require('./events') plugins
 	tasks = ['reload'].concat if runSpecs then ['test'] else []
 
 	extensions = []
@@ -20,10 +21,12 @@ module.exports = (gulp, plugins) -> ->
 	sources = [].concat ("**/*#{extension}" for extension in extensions)
 	stylesSources = [].concat ("**/*#{extension}" for extension in stylesExtensions)
 
-	watcher = gulp.watch sources, {cwd: SRC_DIRECTORY, maxListeners: 999}, tasks
-	watcher = gulp.watch sources, {cwd: E2E_DIRECTORY, maxListeners: 999}, ['test']
-	stylesWater = gulp.watch stylesSources, {cwd: SRC_DIRECTORY, maxListeners: 999}, [].concat(if injectCss then ['build'] else ['reload'])
+	console.log 'E2E_DIRECTORY', E2E_DIRECTORY
 
+	watcher       = gulp.watch sources, {cwd: SRC_DIRECTORY, maxListeners: 999}, tasks
+	e2eWatcher    = gulp.watch sources, {cwd: E2E_DIRECTORY, maxListeners: 999}, ['test']
+	stylesWatcher = gulp.watch stylesSources, {cwd: SRC_DIRECTORY, maxListeners: 999}, [].concat(if injectCss then ['build'] else ['reload'])
+	#
 	watcher
 		.on 'change', (event) ->
 			firstRun = true if event.type is 'deleted'
