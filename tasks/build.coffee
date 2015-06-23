@@ -21,12 +21,6 @@ module.exports = (gulp, plugins) -> ->
 	if not isProd
 		srcs.push src =
 			gulp
-				.src '**', cwd: STATS_DIST_DIRECTORY
-				.on 'error', onError
-
-	if not isProd
-		srcs.push src =
-			gulp
 				.src getSources(), {cwd: TEMP_DIRECTORY, nodir: true}
 				.on 'error', onError
 
