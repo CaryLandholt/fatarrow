@@ -1,67 +1,17 @@
-{APP_NAME, BOWER_COMPONENTS, LANGUAGES, PROXY_CONFIG, SCRIPTS, STYLES} = require './config.coffee'
-
-browserSync           = require 'browser-sync'
-childProcess          = require 'child_process'
-es                    = require 'event-stream'
 gulp                  = require 'gulp'
 yargs                 = require 'yargs'
 
+{APP_NAME, BOWER_COMPONENTS, LANGUAGES, PROXY_CONFIG, SCRIPTS, STYLES} = require './config'
+{getBower, isProd, useBackendless, runServer, runSpecs, runWatch, showHelp} = require './tasks/options'
+
 plugins = require './tasks/plugins'
-{onError} = require('./tasks/events') plugins
 
-BOWER_DIRECTORY       = 'bower_components/'
-COMPONENTS_DIRECTORY  = "#{BOWER_DIRECTORY}_/"
-DIST_DIRECTORY        = 'dist/'
-E2E_DIRECTORY         = 'e2e/'
-SRC_DIRECTORY         = 'src/'
-STATS_DIST_DIRECTORY  = 'stats/'
-TEMP_DIRECTORY        = '.temp/'
+taskRequire = (taskPath) ->
+	require(taskPath) gulp, plugins
 
-{getSwitchOption} = require './tasks/options'
+gulp.task 'help', require('./tasks/help') gulp
 
-EXTENSIONS = require './tasks/extensions'
-
-yargs
-	.usage 'Run $0 with the following options.'
-
-yargs.options 'backend',
-	default     : false
-	description : 'Use your own backend.  No backendless.'
-	type        : 'boolean'
-
-yargs.options 'bower',
-	default     : true
-	description : 'Force retrieve of Bower components'
-	type        : 'boolean'
-
-yargs.options 'serve',
-	default     : true
-	description : 'Serve the app'
-	type        : 'boolean'
-
-yargs.options 'specs',
-	default     : true
-	description : 'Run specs'
-	type        : 'boolean'
-
-{citest}       = require './tasks/options'
-env            = plugins.util.env
-{firstRun}     = require './tasks/options'
-getBower       = getSwitchOption 'bower'
-{injectCss}	   = require './tasks/options'
-{isProd}         = require './tasks/options'
-useBackendless = not (isProd or getSwitchOption 'backend')
-runServer      = getSwitchOption 'serve'
-runSpecs       = !isProd and useBackendless and getSwitchOption 'specs'
-runWatch       = !isProd and runServer
-{showHelp}     = require './tasks/options'
-
-gulp.task 'help', (done) ->
-	console.log '\n' + yargs.help()
-	done()
-
-windowsify = require('./tasks/utils').windowsify
-
+# Compile ESNext
 gulp.task 'babel', ['prepare'], require('./tasks/scripts/babel') gulp, plugins
 
 # Get components via Bower
@@ -79,7 +29,7 @@ gulp.task 'clean', ['clean:working'], require('./tasks/clean/clean') gulp, plugi
 gulp.task 'clean:working', require('./tasks/clean/cleanWorking') gulp, plugins
 
 # Compile CoffeeScript
-gulp.task 'coffeeScript', ['prepare'], require('./tasks/scripts/coffeeScript') gulp, plugins
+gulp.task 'coffeeScript', ['prepare'], taskRequire './tasks/scripts/coffeeScript'
 
 # Compile CSS
 gulp.task 'css', ['prepare'], require('./tasks/styles/css') gulp, plugins
@@ -139,22 +89,19 @@ gulp.task 'plato', ['clean:working'], require('./tasks/plato/plato') gulp, plugi
 gulp.task 'prepare', ['clean:working'].concat(if getBower then ['normalizeComponents'] else [])
 
 # Reload the app in the default browser
-gulp.task 'reload', ['build'], ->
-	browserSync.reload()
-	firstRun = false;
+gulp.task 'reload', ['build'], require('./tasks/reload') gulp
 
 # Compile Sass
 gulp.task 'sass', ['prepare'], require('./tasks/styles/sass') gulp, plugins
+
 # Process scripts
 gulp.task 'scripts', ['javaScript'].concat(LANGUAGES.SCRIPTS).concat(if isProd then 'templateCache' else []), require('./tasks/scripts/scripts') gulp, plugins
 
 # Start a web server without rebuilding
-gulp.task 'serve', ['build'], ->
-	require('./tasks/server/server')()
+gulp.task 'serve', -> require('./tasks/server/server')()
 
 # Start a web server
-gulp.task 'server', ['build'], ->
-	require('./tasks/server/server')()
+gulp.task 'server', ['build'], -> require('./tasks/server/server')()
 
 # Process SPA
 gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' else 'views'), require('./tasks/spa') gulp, plugins
@@ -169,20 +116,7 @@ gulp.task 'styles', ['css'].concat(LANGUAGES.STYLES), require('./tasks/styles/st
 gulp.task 'templateCache', ['html'].concat(LANGUAGES.VIEWS), require('./tasks/views/templateCache') gulp, plugins
 
 # Execute unit tests
-
-gulp.task 'test', ['e2e'], ->
-	# launch karma in a new process to avoid blocking gulp
-	command = windowsify '.\\node_modules\\.bin\\gulp.cmd', 'gulp'
-
-	# get args from parent process to pass on to child process
-	args  = ("--#{key}=#{value}" for own key, value of yargs.argv when key isnt '_' and key isnt '$0')
-	args  = ['karma'].concat args
-	karmaSpawn = childProcess.spawn command, args, {stdio: 'inherit'}
-
-	if citest
-		karmaSpawn.on 'exit', (code) ->
-			process.exit code if code
-			browserSync.exit()
+gulp.task 'test', ['e2e'], require('./tasks/test/test') gulp, plugins
 
 # Compile TypeScript
 gulp.task 'typeScript', ['prepare'], require('./tasks/scripts/typeScript') gulp, plugins

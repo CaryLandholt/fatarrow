@@ -1,5 +1,18 @@
 yargs = require 'yargs'
 
+yargs
+	.usage 'Run $0 with the following options.'
+
+yargs.options 'backend',
+	default     : false
+	description : 'Use your own backend.  No backendless.'
+	type        : 'boolean'
+
+yargs.options 'bower',
+	default     : true
+	description : 'Force retrieve of Bower components'
+	type        : 'boolean'
+
 yargs.options 'citest',
 	default     : false
 	description : 'Run tests and report exit codes'
@@ -18,6 +31,11 @@ yargs.options 'injectcss',
 yargs.options 'open',
 	default     : true
 	description : 'Open app from browser-sync'
+	type        : 'boolean'
+
+yargs.options 'serve',
+	default     : true
+	description : 'Serve the app'
 	type        : 'boolean'
 
 yargs.options 'specs',
@@ -54,7 +72,9 @@ injectCss         = getSwitchOption 'injectcss'
 isProd            = getSwitchOption 'prod'
 open              = getSwitchOption 'open'
 useBackendless    = not (isProd or getSwitchOption('backend'))
+runServer         = getSwitchOption 'serve'
 runSpecs          = !isProd and useBackendless and getSwitchOption 'specs'
+runWatch          = !isProd and runServer
 ngClassifyOptions =
 	appName: require('../config').APP_NAME
 
@@ -69,5 +89,6 @@ module.exports = {
 	ngClassifyOptions
 	open
 	runSpecs
+	runWatch
 	useBackendless
 }
