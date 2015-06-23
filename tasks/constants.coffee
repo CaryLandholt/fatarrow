@@ -6,6 +6,7 @@ module.exports =
 	COMPONENTS_DIRECTORY  : "#{BOWER_DIRECTORY}_/"
 	DIST_DIRECTORY        : 'dist/'
 	E2E_DIRECTORY         : 'e2e/'
+	FONTS_DIRECTORY       : 'fonts/'
 	SCRIPTS_MIN_FILE      : 'scripts.min.js'
 	SCRIPTS_MIN_DIRECTORY : 'scripts/'
 	SRC_DIRECTORY         : 'src/'

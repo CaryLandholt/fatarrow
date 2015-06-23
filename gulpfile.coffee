@@ -9,120 +9,120 @@ plugins = require './tasks/plugins'
 taskRequire = (taskPath) ->
 	require(taskPath) gulp, plugins
 
-gulp.task 'help', require('./tasks/help') gulp
+gulp.task 'help', require('./tasks/help') gulp, plugins
 
 # Compile ESNext
-gulp.task 'babel', ['prepare'], require('./tasks/scripts/babel') gulp, plugins
+gulp.task 'babel', ['prepare'], taskRequire './tasks/scripts/babel'
 
 # Get components via Bower
-gulp.task 'bower', ['clean:working'], require('./tasks/bower/bower') gulp, plugins
+gulp.task 'bower', ['clean:working'], taskRequire './tasks/bower/bower'
 
 # build the app
-gulp.task 'build', ['spa', 'fonts', 'images'], require('./tasks/build') gulp, plugins
+gulp.task 'build', ['spa', 'fonts', 'images'], taskRequire './tasks/build'
 
 # Generate CHANGELOG
-gulp.task 'changelog', ['normalizeComponents', 'stats'], require('./tasks/changelog/changelog') gulp, plugins
+gulp.task 'changelog', ['normalizeComponents', 'stats'], taskRequire './tasks/changelog/changelog'
 # Clean all build directories
-gulp.task 'clean', ['clean:working'], require('./tasks/clean/clean') gulp, plugins
+gulp.task 'clean', ['clean:working'], taskRequire './tasks/clean/clean'
 
 # Clean working directories
-gulp.task 'clean:working', require('./tasks/clean/cleanWorking') gulp, plugins
+gulp.task 'clean:working', taskRequire './tasks/clean/cleanWorking'
 
 # Compile CoffeeScript
 gulp.task 'coffeeScript', ['prepare'], taskRequire './tasks/scripts/coffeeScript'
 
 # Compile CSS
-gulp.task 'css', ['prepare'], require('./tasks/styles/css') gulp, plugins
+gulp.task 'css', ['prepare'], taskRequire './tasks/styles/css'
 
 # Default build
 gulp.task 'default', [].concat(if runServer then ['server'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['test'] else [])
 
 # Execute E2E tests
-gulp.task 'e2e', ['server'], require('./tasks/test/e2e') gulp, plugins
+gulp.task 'e2e', ['server'], taskRequire './tasks/test/e2e'
 
 # Update E2E driver
 gulp.task 'e2e-driver-update', plugins.protractor.webdriver_update
 
 # Process fonts
-gulp.task 'fonts', ['fontTypes'], require('./tasks/fonts/fonts') gulp, plugins
+gulp.task 'fonts', ['fontTypes'], taskRequire './tasks/fonts/fonts'
 
 # Compile fontTypes
-gulp.task 'fontTypes', ['prepare'], require('./tasks/fonts/fontTypes') gulp, plugins
+gulp.task 'fontTypes', ['prepare'], taskRequire './tasks/fonts/fontTypes'
 
 # Compile Haml
-gulp.task 'haml', ['prepare'], require('./tasks/views/haml') gulp, plugins
+gulp.task 'haml', ['prepare'], taskRequire './tasks/views/haml'
 
 # Compile html
-gulp.task 'html', ['prepare'], require('./tasks/views/html') gulp, plugins
+gulp.task 'html', ['prepare'], taskRequire './tasks/views/html'
 
 # Process images
-gulp.task 'images', ['imageTypes'], require('./tasks/images/images') gulp, plugins
+gulp.task 'images', ['imageTypes'], taskRequire './tasks/images/images'
 
 # Compile imageTypes
-gulp.task 'imageTypes', ['prepare'], require('./tasks/images/imageTypes') gulp, plugins
+gulp.task 'imageTypes', ['prepare'], taskRequire './tasks/images/imageTypes'
 
 # Compile Jade
-gulp.task 'jade', ['prepare'], require('./tasks/views/jade') gulp, plugins
+gulp.task 'jade', ['prepare'], taskRequire './tasks/views/jade'
 
 # Compile JavaScript
-gulp.task 'javaScript', ['prepare'], require('./tasks/scripts/javaScript') gulp, plugins
+gulp.task 'javaScript', ['prepare'], taskRequire './tasks/scripts/javaScript'
 
 # Execute karma unit tests
-gulp.task 'karma', require('./tasks/test/karma') gulp, plugins
+gulp.task 'karma', taskRequire './tasks/test/karma'
 
 # Compile Less
-gulp.task 'less', ['prepare'], require('./tasks/styles/less') gulp, plugins
+gulp.task 'less', ['prepare'], taskRequire './tasks/styles/less'
 
 # Compile LiveScript
-gulp.task 'liveScript', ['prepare'], require('./tasks/scripts/liveScript') gulp, plugins
+gulp.task 'liveScript', ['prepare'], taskRequire './tasks/scripts/liveScript'
 
 # Compile Markdown
-gulp.task 'markdown', ['prepare'], require('./tasks/views/markdown') gulp, plugins
+gulp.task 'markdown', ['prepare'], taskRequire './tasks/views/markdown'
 
 # Normalize Bower components
-gulp.task 'normalizeComponents', ['bower'], require('./tasks/bower/normalizeComponents') gulp, plugins
+gulp.task 'normalizeComponents', ['bower'], taskRequire './tasks/bower/normalizeComponents'
 
 # Execute Plato complexity analysis
-gulp.task 'plato', ['clean:working'], require('./tasks/plato/plato') gulp, plugins
+gulp.task 'plato', ['clean:working'], taskRequire './tasks/plato/plato'
 
 # Prepare for compilation
 gulp.task 'prepare', ['clean:working'].concat(if getBower then ['normalizeComponents'] else [])
 
 # Reload the app in the default browser
-gulp.task 'reload', ['build'], require('./tasks/reload') gulp
+gulp.task 'reload', ['build'], taskRequire './tasks/reload'
 
 # Compile Sass
-gulp.task 'sass', ['prepare'], require('./tasks/styles/sass') gulp, plugins
+gulp.task 'sass', ['prepare'], taskRequire './tasks/styles/sass'
 
 # Process scripts
-gulp.task 'scripts', ['javaScript'].concat(LANGUAGES.SCRIPTS).concat(if isProd then 'templateCache' else []), require('./tasks/scripts/scripts') gulp, plugins
+gulp.task 'scripts', ['javaScript'].concat(LANGUAGES.SCRIPTS).concat(if isProd then 'templateCache' else []), taskRequire './tasks/scripts/scripts'
 
 # Start a web server without rebuilding
-gulp.task 'serve', -> require('./tasks/server/server')()
+gulp.task 'serve', ->  require('./tasks/server/server')()
 
 # Start a web server
 gulp.task 'server', ['build'], -> require('./tasks/server/server')()
 
 # Process SPA
-gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' else 'views'), require('./tasks/spa') gulp, plugins
+gulp.task 'spa', ['scripts', 'styles'].concat(if isProd then 'templateCache' else 'views'), taskRequire './tasks/spa'
 
 # Execute stats
 gulp.task 'stats', ['plato']
 
 # Process styles
-gulp.task 'styles', ['css'].concat(LANGUAGES.STYLES), require('./tasks/styles/styles') gulp, plugins
+gulp.task 'styles', ['css'].concat(LANGUAGES.STYLES), taskRequire './tasks/styles/styles'
 
 # Compile templateCache
-gulp.task 'templateCache', ['html'].concat(LANGUAGES.VIEWS), require('./tasks/views/templateCache') gulp, plugins
+gulp.task 'templateCache', ['html'].concat(LANGUAGES.VIEWS), taskRequire './tasks/views/templateCache'
 
 # Execute unit tests
-gulp.task 'test', ['e2e'], require('./tasks/test/test') gulp, plugins
+gulp.task 'test', ['e2e'], taskRequire './tasks/test/test'
 
 # Compile TypeScript
-gulp.task 'typeScript', ['prepare'], require('./tasks/scripts/typeScript') gulp, plugins
+gulp.task 'typeScript', ['prepare'], taskRequire './tasks/scripts/typeScript'
 
 # Process views
-gulp.task 'views', ['html'].concat(LANGUAGES.VIEWS), require('./tasks/views/views') gulp, plugins
+gulp.task 'views', ['html'].concat(LANGUAGES.VIEWS), taskRequire './tasks/views/views'
 
 # Watch and recompile on-the-fly
-gulp.task 'watch', ['build'], require('./tasks/watch') gulp, plugins
+gulp.task 'watch', ['build'], taskRequire './tasks/watch'

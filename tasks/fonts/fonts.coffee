@@ -1,3 +1,4 @@
+path = require 'path'
 EXTENSIONS = require '../EXTENSIONS'
 {DIST_DIRECTORY, FONTS_DIRECTORY, TEMP_DIRECTORY} = require '../constants'
 {isProd} = require '../options'
