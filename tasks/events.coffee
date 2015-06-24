@@ -7,6 +7,7 @@ unixifyPath              = require('./utils').unixifyPath
 
 module.exports = (plugins) ->
 	onError = (e) ->
+		return unless e
 		isArray  = Array.isArray e
 		err      = e.message or e
 		errors   = if isArray then err else [err]

@@ -1,12 +1,9 @@
+del = require 'del'
 {BOWER_DIRECTORY} = require '../constants'
 
-module.exports = (gulp, plugins) -> ->
+module.exports = (gulp, plugins) -> (cb) ->
 	{onError} = require('../events') plugins
+
 	sources = BOWER_DIRECTORY
-
-	gulp
-		.src sources, {read: false}
-		.on 'error', onError
-
-		.pipe plugins.rimraf()
-		.on 'error', onError
+	del sources, (err) ->
+		cb err
