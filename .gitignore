@@ -1,6 +1,7 @@
 .temp/
 bower_components/
 dist/
+coverage/
 node_modules/
 npm-debug.log
 phantomjsdriver.log
