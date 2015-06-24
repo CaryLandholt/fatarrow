@@ -1,7 +1,7 @@
 es = require 'event-stream'
 {isProd} = require '../options'
 {COMPONENTS_DIRECTORY, SRC_DIRECTORY, TEMP_DIRECTORY} = require '../constants'
-EXTENSIONS = require '../EXTENSIONS'
+EXTENSIONS = require '../extensions'
 
 module.exports = (gulp, plugins) -> ->
 	{onError} = require('../events') gulp, plugins
