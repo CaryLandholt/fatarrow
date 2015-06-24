@@ -1,0 +1,36 @@
+getScriptSources = require('../utils').getScriptSources
+{TEMP_DIRECTORY, SRC_DIRECTORY} = require '../constants'
+
+module.exports = (gulp, plugins) -> ->
+	{onError} = require('../events') plugins
+	sources = getScriptSources '.es6'
+	srcs    = []
+	options =
+		sourceMaps:
+			sourceRoot: './'
+
+	console.log 'TEMP_DIRECTORY', TEMP_DIRECTORY
+
+
+	srcs.push src =
+		gulp
+			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
+			.on 'error', onError
+
+			.pipe plugins.newer TEMP_DIRECTORY
+			.on 'error', onError
+
+			.pipe gulp.dest TEMP_DIRECTORY
+			.on 'error', onError
+
+			.pipe plugins.sourcemaps.init()
+			.on 'error', onError
+
+			.pipe plugins.babel()
+			.on 'error', onError
+
+			.pipe plugins.sourcemaps.write './', options.sourceMaps
+			.on 'error', onError
+
+			.pipe gulp.dest TEMP_DIRECTORY
+			.on 'error', onError
