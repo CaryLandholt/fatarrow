@@ -1,5 +1,5 @@
 es = require 'event-stream'
-EXTENSIONS = require '../EXTENSIONS'
+EXTENSIONS = require '../extensions'
 {COMPONENTS_DIRECTORY, SRC_DIRECTORY, TEMP_DIRECTORY} = require '../constants'
 
 module.exports = (gulp, plugins) -> ->
