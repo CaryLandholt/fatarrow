@@ -7,7 +7,7 @@ module.exports = (gulp, plugins) -> ->
 	{onError, onRev, onScript} = require('../events') plugins
 	sources = do (ext ='.js') ->
 		SCRIPTS
-			.concat if not useBackendless then ["!**/angular-mocks#{ext}"] else []
+			.concat if not runSpecs       then ["!**/angular-mocks#{ext}"] else []
 			.concat if not useBackendless then ["!**/*.backend#{ext}"]     else []
 			.concat if not runSpecs       then ["!**/*.spec#{ext}"]        else []
 

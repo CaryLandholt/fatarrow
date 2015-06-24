@@ -73,7 +73,8 @@ isProd            = getSwitchOption 'prod'
 open              = getSwitchOption 'open'
 useBackendless    = not (isProd or getSwitchOption('backend'))
 runServer         = getSwitchOption 'serve'
-runSpecs          = !isProd and useBackendless and getSwitchOption 'specs'
+rune2e            = !isProd and useBackendless and getSwitchOption 'specs'
+runSpecs          = !isProd and getSwitchOption 'specs'
 runWatch          = !isProd and runServer
 ngClassifyOptions =
 	appName: require('../config').APP_NAME
@@ -88,6 +89,7 @@ module.exports = {
 	isProd
 	ngClassifyOptions
 	open
+	rune2e
 	runSpecs
 	runServer
 	runWatch
