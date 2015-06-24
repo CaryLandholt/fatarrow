@@ -42,7 +42,6 @@
     "gulp-newer": "^0.5.0",
     "gulp-ng-annotate": "0.4.3",
     "gulp-ng-classify": "^4.0.0",
-    "gulp-plato": "^1.0.0",
     "gulp-protractor": "^1.0.0",
     "gulp-rev": "^2.0.1",
     "gulp-rimraf": "0.1.1",
@@ -58,6 +57,7 @@
     "karma-phantomjs-launcher": "0.1.4",
     "karma-spec-reporter": "0.0.13",
     "phantomjs": "^1.9.7-15",
+    "plato": "^1.5.0",
     "proxy-middleware": "^0.11.0",
     "q": "^2.0.2",
     "yargs": "^1.2.6"

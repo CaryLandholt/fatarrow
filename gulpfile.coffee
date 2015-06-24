@@ -83,7 +83,7 @@ gulp.task 'markdown', ['prepare'], taskRequire './tasks/views/markdown'
 gulp.task 'normalizeComponents', ['bower'], taskRequire './tasks/bower/normalizeComponents'
 
 # Execute Plato complexity analysis
-gulp.task 'plato', ['clean:working'], taskRequire './tasks/plato/plato'
+gulp.task 'plato', ['scripts'], taskRequire './tasks/plato/plato'
 
 # Prepare for compilation
 gulp.task 'prepare', ['clean:working'].concat(if getBower then ['normalizeComponents'] else [])
