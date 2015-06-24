@@ -89,6 +89,7 @@ module.exports = {
 	ngClassifyOptions
 	open
 	runSpecs
+	runServer
 	runWatch
 	useBackendless
 }
