@@ -1,6 +1,4 @@
-yargs = require 'yargs'
-
-yargs
+options = require 'yargs'
 	.usage 'Run gulp with the following options.'
 	.help '?'
 	.alias '?', 'help'
@@ -55,9 +53,10 @@ yargs
 	.example 'gulp test --citest --no-open', 'Run Karma and Protractor tests during a CI build.'
 	.example 'gulp --injectcss', 'Use Browsersync to inject CSS http://www.browsersync.io/docs/gulp/#gulp-sass-css.'
 	.epilog 'If you find an issue, feel free to file it at https://github.com/CaryLandholt/fatarrow/issues'
+	.argv
 
 getSwitchOption = (option) ->
-	yargs.argv[option]
+	options[option]
 
 citest            = getSwitchOption 'citest'
 firstRun          = true
