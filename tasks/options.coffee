@@ -1,73 +1,68 @@
 yargs = require 'yargs'
 
 yargs
-	.usage 'Run $0 with the following options.'
+	.usage 'Run gulp with the following options.'
+	.help '?'
+	.alias '?', 'help'
+	.option 'backend',
+		alias       : 'b'
+		default     : false
+		description : 'Use your own backend'
+		type        : 'boolean'
+	.option 'bower',
+		alias       : 'w'
+		default     : true
+		description : 'Force retrieve of Bower components'
+		type        : 'boolean'
+	.option 'citest',
+		alias       : 'c'
+		default     : false
+		description : 'Run tests and report exit codes'
+		type        : 'boolean'
+	.option 'help',
+		alias       : 'h'
+		default     : true
+		description : 'Show help'
+		type        : 'boolean'
+	.option 'injectcss',
+		alias       : 'i'
+		default     : false
+		description : 'Injects CSS without reloading'
+		type        : 'boolean'
+	.option 'open',
+		alias       : 'o'
+		default     : true
+		description : 'Open app from browser-sync'
+		type        : 'boolean'
+	.option 'prod',
+		alias       : 'p'
+		default     : false
+		description : 'Make a production build'
+		type        : 'boolean'
+	.option 'serve',
+		alias       : 'v'
+		default     : true
+		description : 'Serve the app'
+		type        : 'boolean'
+	.option 'specs',
+		alias       : 's'
+		default     : true
+		description : 'Run specs'
+		type        : 'boolean'
+	.example 'gulp', 'Run with fake data with $httpBackend'
+	.example 'gulp --backend', 'Run with real data from an api. See config.coffee for proxy configuraton.'
+	.example 'gulp --prod --no-serve', 'Make a production build on a CI server without running the web server.'
+	.example 'gulp test --citest --no-open', 'Run Karma and Protractor tests during a CI build.'
+	.example 'gulp --injectcss', 'Use Browsersync to inject CSS http://www.browsersync.io/docs/gulp/#gulp-sass-css.'
+	.epilog 'If you find an issue, feel free to file it at https://github.com/CaryLandholt/fatarrow/issues'
 
-yargs.options 'backend',
-	default     : false
-	description : 'Use your own backend.  No backendless.'
-	type        : 'boolean'
-
-yargs.options 'bower',
-	default     : true
-	description : 'Force retrieve of Bower components'
-	type        : 'boolean'
-
-yargs.options 'citest',
-	default     : false
-	description : 'Run tests and report exit codes'
-	type        : 'boolean'
-
-yargs.options 'help',
-	default     : false
-	description : 'Show help'
-	type        : 'boolean'
-
-yargs.options 'injectcss',
-	default     : false
-	description : 'Injects CSS without reloading'
-	type        : 'boolean'
-
-yargs.options 'open',
-	default     : true
-	description : 'Open app from browser-sync'
-	type        : 'boolean'
-
-yargs.options 'serve',
-	default     : true
-	description : 'Serve the app'
-	type        : 'boolean'
-
-yargs.options 'specs',
-	default     : true
-	description : 'Run specs'
-	type        : 'boolean'
-
-
-getSwitchOption = (switches) ->
-	isArray = Array.isArray switches
-	keys    = if isArray then switches else [switches]
-	key     = keys[0]
-
-	for k in keys
-		hasSwitch = !!yargs.argv[k]
-		key       = k if hasSwitch
-
-	set = yargs.argv[key]
-	def = yargs.parse([])[key]
-
-	value =
-		if set is 'false' or set is false
-			false
-		else if set is 'true' or set is true
-			true
-		else
-			def
+getSwitchOption = (option) ->
+	yargs.argv[option]
 
 citest            = getSwitchOption 'citest'
 firstRun          = true
 getBower          = getSwitchOption 'bower'
-showHelp          = getSwitchOption 'help'
+showHelp          = !isProd and getSwitchOption 'help'
 injectCss         = getSwitchOption 'injectcss'
 isProd            = getSwitchOption 'prod'
 open              = getSwitchOption 'open'

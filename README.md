@@ -45,10 +45,18 @@ $ npm install
 
 ## Running
 Enter the following in the terminal:
+* With a fake backend
 ```bash
 $ gulp
 ```
-
+* With a real backend
+```bash
+$ gulp --backend
+```
+* Build for production
+```bash
+$ gulp --prod --no-serve
+```
 
 ## Scripting
 Your choice of scripting languages.
