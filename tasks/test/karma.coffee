@@ -13,6 +13,9 @@ module.exports = (gulp, plugins) -> ->
 			'PhantomJS'
 		]
 		colors: true
+		coverageReporter:
+			type: 'html'
+			dir : '../coverage/'
 		exclude: ["#{STATS_DIST_DIRECTORY}**"]
 		files: sources
 		frameworks: [
@@ -24,8 +27,10 @@ module.exports = (gulp, plugins) -> ->
 			stripPrefix: 'dist/'
 		preprocessors:
 			'**/*.html': 'ng-html2js'
+			'**/*.js'  : 'coverage'
 		reporters: [
 			'spec'
+			'coverage'
 		]
 		singleRun: true
 		transports: [
