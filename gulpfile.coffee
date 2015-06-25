@@ -35,7 +35,7 @@ gulp.task 'coffeeScript', ['prepare'], taskRequire './tasks/scripts/coffeeScript
 gulp.task 'css', ['prepare'], taskRequire './tasks/styles/css'
 
 # Default build
-gulp.task 'default', [].concat(if runServer then ['server'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['test'] else [])
+gulp.task 'default', [].concat(if runServer then ['server'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['test'] else []).concat(if showHelp then ['help'] else [])
 
 # Execute E2E tests
 gulp.task 'e2e', ['server'], taskRequire './tasks/test/e2e'
