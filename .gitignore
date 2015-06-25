@@ -8,3 +8,5 @@ npm-debug.log
 phantomjsdriver.log
 test-results.xml
 bower.json
+protractorScreenshots
+testResults

@@ -7,6 +7,7 @@ module.exports =
 	DIST_DIRECTORY        : 'dist/'
 	E2E_DIRECTORY         : 'e2e/'
 	FONTS_DIRECTORY       : 'fonts/'
+	PROTRACTOR_SCREENSHOTS: 'protractorScreenshots'
 	SCRIPTS_MIN_FILE      : 'scripts.min.js'
 	SCRIPTS_MIN_DIRECTORY : 'scripts/'
 	SRC_DIRECTORY         : 'src/'
