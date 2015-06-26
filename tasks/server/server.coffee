@@ -22,8 +22,6 @@ expression = extensions
 	.map (x) -> ".*\\#{x}"
 	.join '|'
 
-console.log 'expression', expression
-
 module.exports = ->
 	return if browserSync.active
 
