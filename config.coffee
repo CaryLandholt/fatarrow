@@ -39,8 +39,7 @@ LANGUAGES =
 	]
 
 PROXY_CONFIG = [
-	route: '/api'
-	url: 'http://localhost:8182/api'
+	'^/api$ http://localhost:8182/api [P, L]'
 ]
 
 SCRIPTS = [

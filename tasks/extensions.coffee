@@ -41,3 +41,7 @@ module.exports =
 			'.markdown'
 			'.md'
 		]
+	SOURCEMAPS:
+		COMPILED: [
+			'.map'
+		]
