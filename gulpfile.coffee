@@ -120,6 +120,7 @@ gulp.task 'templateCache', ['html'].concat(LANGUAGES.VIEWS), taskRequire './task
 
 # Execute unit tests
 gulp.task 'test', [].concat(if rune2e then ['e2e'] else ['build']), taskRequire './tasks/test/test'
+gulp.task 'unittest', [].concat(['spa']), taskRequire './tasks/test/test'
 
 # Compile TypeScript
 gulp.task 'typeScript', ['prepare'], taskRequire './tasks/scripts/typeScript'
