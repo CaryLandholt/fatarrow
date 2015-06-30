@@ -27,7 +27,6 @@ module.exports = (gulp, plugins) -> ->
 		str.on 'error', onError
 		str.on 'error', ->
 			testsErrored = yes
-			console.log "testsErrored: #{testsErrored}"
 			notify 'Protractor tests failed', false
 		str.on 'close', (code) ->
 			notify "Protractor tests passed", true unless testsErrored

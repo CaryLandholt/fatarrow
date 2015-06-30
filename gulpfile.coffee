@@ -39,6 +39,7 @@ gulp.task 'default', [].concat(if runServer then ['server'] else ['build']).conc
 
 # Execute E2E tests
 gulp.task 'e2e', ['server'], taskRequire './tasks/test/e2e'
+gulp.task 'protractor', taskRequire './tasks/test/e2e'
 
 gulp.task 'protractor', taskRequire './tasks/test/e2e'
 
