@@ -1,4 +1,5 @@
 karma     = require 'karma'
+notify    = require('../utils').notify
 {SCRIPTS} = require '../../config'
 {DIST_DIRECTORY, STATS_DIST_DIRECTORY} = require '../constants'
 
@@ -39,4 +40,9 @@ module.exports = (gulp, plugins) -> ->
 			'jsonp-polling'
 		]
 
-	karma.server.start options
+	karma.server.start options, (code) ->
+		console.log "Karma exited with code: #{code}"
+		if code > 0
+			notify 'Karma tests failed', false
+		else
+			notify 'Karma tests passed', true

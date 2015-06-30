@@ -19,8 +19,3 @@ module.exports = (gulp, plugins) -> ->
 		if citest
 			process.exit code if code
 			browserSync.exit()
-		else
-			if code
-				notify 'Karma tests failed', false
-			else
-				notify 'Karma tests passed', true

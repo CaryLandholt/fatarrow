@@ -4,6 +4,7 @@ path      = require 'path'
 {citest} = require '../options'
 
 module.exports = (gulp, plugins) -> ->
+	testsErrored = false
 	{onError} = require('../events') plugins
 	e2eConfigFile       = './protractor.config.coffee'
 	sources             = '**/*.spec.{coffee,js}'
@@ -25,7 +26,10 @@ module.exports = (gulp, plugins) -> ->
 	else
 		str.on 'error', onError
 		str.on 'error', ->
+			testsErrored = yes
+			console.log "testsErrored: #{testsErrored}"
 			notify 'Protractor tests failed', false
-		str.on 'end', (code) ->
-			notify 'Protractor tests passed', true unless code
+		str.on 'close', (code) ->
+			notify "Protractor tests passed", true unless testsErrored
+			testsErrored = false
 	str
