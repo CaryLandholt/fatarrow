@@ -1,5 +1,6 @@
 es                    = require 'event-stream'
 getScriptSources      = require('../utils').getScriptSources
+lintNotify          = require './reporters/lintNotify'
 {COMPONENTS_DIRECTORY,
 	TEMP_DIRECTORY,
 	SRC_DIRECTORY}    = require '../constants'
@@ -45,6 +46,9 @@ module.exports = (gulp, plugins) -> ->
 			.on 'error', onError
 
 			.pipe plugins.jshint.reporter 'default'
+			.on 'error', onError
+
+		.pipe lintNotify 'jshint'
 			.on 'error', onError
 
 			.pipe plugins.template templateOptions
