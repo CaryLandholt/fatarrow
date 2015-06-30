@@ -42,16 +42,16 @@ module.exports = (gulp, plugins) -> ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
+			.pipe plugins.template templateOptions
+			.on 'error', onError
+
 			.pipe plugins.jshint options.jsHint
 			.on 'error', onError
 
 			.pipe plugins.jshint.reporter 'default'
 			.on 'error', onError
 
-		.pipe lintNotify 'jshint'
-			.on 'error', onError
-
-			.pipe plugins.template templateOptions
+			.pipe lintNotify 'jshint'
 			.on 'error', onError
 
 	srcs.push src =

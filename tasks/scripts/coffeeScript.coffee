@@ -32,12 +32,6 @@ module.exports = (gulp, plugins) -> ->
 			.src sources, {cwd: SRC_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-			.pipe plugins.coffeelint options.coffeeLint
-			.on 'error', onError
-
-			.pipe plugins.coffeelint.reporter 'default'
-			.on 'error', onError
-
 			.pipe lintNotify 'coffeelint'
 			.on 'error', onError
 
@@ -47,6 +41,12 @@ module.exports = (gulp, plugins) -> ->
 			.pipe plugins.ngclassify ngClassifyOptions
 			.on 'error', onError
 
+			.pipe plugins.coffeelint options.coffeeLint
+			.on 'error', onError
+
+			.pipe plugins.coffeelint.reporter 'default'
+			.on 'error', onError
+			
 	srcs.push src =
 		gulp
 			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
