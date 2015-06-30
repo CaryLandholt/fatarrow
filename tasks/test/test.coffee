@@ -20,4 +20,7 @@ module.exports = (gulp, plugins) -> ->
 			process.exit code if code
 			browserSync.exit()
 		else
-			notify 'Karma tests failing' if code
+			if code
+				notify 'Karma tests failed'
+			else
+				notify 'Karma tests passed'

@@ -25,5 +25,7 @@ module.exports = (gulp, plugins) -> ->
 	else
 		str.on 'error', onError
 		str.on 'error', ->
-			notify 'Protractor tests failing'
+			notify 'Protractor tests failed'
+		str.on 'end', (code) ->
+			notify 'Protractor tests passed' unless code
 	str
