@@ -3,7 +3,7 @@ class YouTubePlayer extends Factory
 		apiReady = false
 		players  = {}
 
-		onApiReady = =>
+		onApiReady = ->
 			apiReady = true
 
 			$rootScope.$broadcast playerId for playerId, videoId of players
