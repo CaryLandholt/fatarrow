@@ -6,4 +6,4 @@ describe 'Home Page', ->
 		@page.visitPage()
 
 	it 'should have title', ->
-		expect(@page.getTitle()).toEqual('fataow')
+		expect(@page.getTitle()).toEqual('fatarrow')

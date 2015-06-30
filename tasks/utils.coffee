@@ -13,7 +13,6 @@ exports.notify = (message, success = true) ->
 		title    : 'Fatarrow'
 		message  : message
 		icon     : path.join __dirname, if success then 'assets/gulp.png' else 'assets/gulp-error.png'
-		sound    : true
 
 exports.unixifyPath = (p) ->
 	p.replace /\\/g, '/'

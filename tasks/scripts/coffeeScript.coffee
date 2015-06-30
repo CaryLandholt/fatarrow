@@ -1,5 +1,6 @@
 es                    = require 'event-stream'
 getScriptSources      = require('../utils').getScriptSources
+lintNotify          = require './reporters/lintNotify'
 {COMPONENTS_DIRECTORY,
 	TEMP_DIRECTORY,
 	SRC_DIRECTORY}    = require '../constants'
@@ -11,6 +12,8 @@ module.exports = (gulp, plugins) -> ->
 	options =
 		coffeeLint:
 			arrow_spacing:
+				level: 'error'
+			braces_spacing:
 				level: 'error'
 			indentation:
 				value: 1
@@ -30,6 +33,12 @@ module.exports = (gulp, plugins) -> ->
 			.on 'error', onError
 
 			.pipe plugins.coffeelint options.coffeeLint
+			.on 'error', onError
+
+			.pipe plugins.coffeelint.reporter 'default'
+			.on 'error', onError
+
+			.pipe lintNotify 'coffeelint'
 			.on 'error', onError
 
 			.pipe plugins.template templateOptions
