@@ -41,7 +41,6 @@ module.exports = (gulp, plugins) -> ->
 		]
 
 	karma.server.start options, (code) ->
-		console.log "Karma exited with code: #{code}"
 		if code > 0
 			notify 'Karma tests failed', false
 		else
