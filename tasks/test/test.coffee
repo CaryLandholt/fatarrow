@@ -1,8 +1,10 @@
-childProcess          = require 'child_process'
-browserSync = require 'browser-sync'
-windowsify  = require('../utils').windowsify
-yargs       = require 'yargs'
-{citest}    = require '../options'
+childProcess  = require 'child_process'
+browserSync   = require 'browser-sync'
+path          = require 'path'
+notify        = require('../utils').notify
+windowsify    = require('../utils').windowsify
+yargs         = require 'yargs'
+{citest}      = require '../options'
 
 module.exports = (gulp, plugins) -> ->
 	# launch karma in a new process to avoid blocking gulp
@@ -13,7 +15,9 @@ module.exports = (gulp, plugins) -> ->
 	args  = ['karma'].concat args
 	karmaSpawn = childProcess.spawn command, args, {stdio: 'inherit'}
 
-	if citest
-		karmaSpawn.on 'exit', (code) ->
+	karmaSpawn.on 'exit', (code) ->
+		if citest
 			process.exit code if code
 			browserSync.exit()
+		else
+			notify 'Karma tests failing' if code
