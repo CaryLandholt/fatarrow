@@ -39,6 +39,9 @@ gulp.task 'default', [].concat(if runServer then ['server'] else ['build']).conc
 
 # Execute E2E tests
 gulp.task 'e2e', ['server'], taskRequire './tasks/test/e2e'
+gulp.task 'protractor', taskRequire './tasks/test/e2e'
+
+gulp.task 'protractor', taskRequire './tasks/test/e2e'
 
 # Update E2E driver
 gulp.task 'e2e-driver-update', plugins.protractor.webdriver_update
@@ -117,6 +120,7 @@ gulp.task 'templateCache', ['html'].concat(LANGUAGES.VIEWS), taskRequire './task
 
 # Execute unit tests
 gulp.task 'test', [].concat(if rune2e then ['e2e'] else ['build']), taskRequire './tasks/test/test'
+gulp.task 'unittest', [].concat(['spa']), taskRequire './tasks/test/test'
 
 # Compile TypeScript
 gulp.task 'typeScript', ['prepare'], taskRequire './tasks/scripts/typeScript'
