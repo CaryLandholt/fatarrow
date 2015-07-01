@@ -1,22 +1,44 @@
-proxy = require 'proxy-middleware'
+modRewrite = require 'connect-modrewrite'
 url = require 'url'
 browserSync = require 'browser-sync'
 {PROXY_CONFIG} = require '../../config'
 {DIST_DIRECTORY} = require '../constants'
 {open} = require '../options'
+{FONTS, IMAGES, SCRIPTS, SOURCEMAPS, STYLES, VIEWS} = require '../extensions'
+PORT = 8181
 
-exports.PORT = PORT = 8181
+extensions = []
+	.concat FONTS.COMPILED
+	.concat IMAGES.COMPILED
+	.concat SCRIPTS.COMPILED
+	.concat SCRIPTS.UNCOMPILED
+	.concat SOURCEMAPS.COMPILED
+	.concat STYLES.COMPILED
+	.concat STYLES.UNCOMPILED
+	.concat VIEWS.COMPILED
+	.concat VIEWS.UNCOMPILED
+
+expression = extensions
+	.map (x) -> ".*\\#{x}"
+	.join '|'
 
 module.exports = ->
 	return if browserSync.active
 
+	modRewriteConfig = [
+		'^/img/.*$ - [L]'
+		'^/fonts/.*$ - [L]'
+		"^(#{expression})$ - [L]"
+		'^.*$ /index.html [L]'
+	].concat PROXY_CONFIG
+
 	browserSync
-		middleware: PROXY_CONFIG.map (config) ->
-			options = url.parse config.url
-			options.route = config.route
-			proxy options
 		open: open
 		port: PORT
-		server: DIST_DIRECTORY
+		server:
+			baseDir: DIST_DIRECTORY
+			middleware: [
+				modRewrite modRewriteConfig
+			]
 	, ->
 		firstRun = false
