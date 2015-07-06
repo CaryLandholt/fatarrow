@@ -1,20 +1,11 @@
 # fatarrow
+###An [AngularJS](http://angularjs.org/) large application Reference Architecture
 [![License][license-image]][license-url]
 [![Version][version-image]][version-url]
 [![Build Status][build-image]][build-url]
 [![Dependency Status][dependencies-image]][dependencies-url]
-> An [AngularJS](http://angularjs.org/) large application Reference Architecture
 
-> <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/AngularJS_logo.svg/695px-AngularJS_logo.svg.png" height="100px" />
-
-> <img src="http://www.jqueryscript.net/images/collective/gulp.js.png" height="100px" />
-> <img src="http://bower.io/img/bower-logo.png" height="100px" />
-> <img src="http://onesime.fr/images/yeoman.svg" height="100px" />
-> <img src="http://jasmine.github.io/images/jasmine-horizontal.svg" height="100px" />
-> <img src="http://pascalprecht.github.io/full-spectrum-testing-slides/styles/karma-logo.svg" height="100px" />
-> <img src="http://pascalprecht.github.io/full-spectrum-testing-slides/styles/protractor-logo-large.png" height="100px" />
-
-Build large [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http://coffeescript.org/) - **without the ceremony**.  By the way, you can write JavaScript too.
+Build large [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http://coffeescript.org/) - **without the ceremony**. By the way, you can write JavaScript too.
 
 
 ## Table of Contents
@@ -30,30 +21,34 @@ Before running, you must install and configure the following one-time dependenci
 
 * [Git](http://git-scm.com/)
 * [Node.js](http://nodejs.org/)
-* [gulp.js](http://gulpjs.com/) - use the terminal command below
+
+Enter the following in the terminal
+
 ```bash
 $ npm install -g gulp
-```
-
-Once the dependencies have been installed, enter the following in the terminal:
-```bash
 $ git clone git@github.com:CaryLandholt/fatarrow.git
 $ cd fatarrow
 $ npm install
 ```
 
-
 ## Running
-Enter the following in the terminal:
-* With a fake backend
+Get all commands and options by typing
+
+```bash
+$ gulp help
+```
+
+Here are some useful commands to get started:
+
+Running with With a fake backend ( [$httpBackend](https://docs.angularjs.org/api/ngMockE2E/service/$httpBackend))
 ```bash
 $ gulp
 ```
-* With a real backend
+With a real backend (gulp will proxy calls to the backend of your choice)
 ```bash
 $ gulp --backend
 ```
-* Build for production
+Build for production
 ```bash
 $ gulp --prod --no-serve
 ```
@@ -61,38 +56,26 @@ $ gulp --prod --no-serve
 ## Scripting
 Your choice of scripting languages.
 
-* <img src="https://pbs.twimg.com/profile_images/567000326444556290/-1wfGjNw.png" height="100px" />
-
-* <img src="http://drtom.ch/talks/2012/06/jazoon/images/coffeescript_logo.svg" height="100px" />
-
-* **LiveScript** <img src="http://livescript.net/images/icon.png" height="16px" />
-
-* <img src="http://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" height="100px" />
-
-* <img src="http://www.typescriptlang.org/content/images/logo_small.png" height="100px" />
-
+* **[Babel](https://babeljs.io/)**
+* **[CoffeeScript](coffeescript.org)**
+* **[LiveScript](livescript.net)**
+* **JavaScript**
+* **[TypeScript](http://www.typescriptlang.org/)**
 
 ## Styling
 Your choice of styling languages.
 
-* <img src="http://www.logotypes101.com/logos/194/830812341256B99B32E1A9F242BB9F5F/css3logo.png" height="100px" />
-
-* <img src="http://moduscreate.com/wp-content/uploads/2012/01/less-css-logo.png" height="100px" />
-
-* <img src="http://static.dyp.im/KkDwGPALQw/282646bf181e9d5fa2b4bf83f0d80f3e.png" height="100px" />
-
+* **CSS**
+* **[LESS](http://lesscss.org/)**
+* **[Sass](http://sass-lang.com/)**
 
 ## Templating
 Your choice of templating engines.
 
-* <img src="http://haml.info/images/haml.png" height="100px" />
-
-* <img src="http://www.w3.org/html/logo/downloads/HTML5_Logo_512.png" height="100px" />
-
-* <img src="http://jade-lang.com/public/images/logo.png" height="100px" />
-
-* <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/208px-Markdown-mark.svg.png" height="100px" />
-
+* **HTML**
+* **[Haml](http://haml.info/)**
+* **[Jade](http://jade-lang.com/)**
+* **[Markdown](http://daringfireball.net/projects/markdown/)**
 
 ## Contributing
 See [CONTRIBUTING.md](CONTRIBUTING.md)
