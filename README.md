@@ -1,20 +1,11 @@
 # fatarrow
+###An [AngularJS](http://angularjs.org/) application Reference Architecture
 [![License][license-image]][license-url]
 [![Version][version-image]][version-url]
 [![Build Status][build-image]][build-url]
 [![Dependency Status][dependencies-image]][dependencies-url]
-> An [AngularJS](http://angularjs.org/) large application Reference Architecture
 
-> <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/c/ca/AngularJS_logo.svg/695px-AngularJS_logo.svg.png" height="100px" />
-
-> <img src="http://www.jqueryscript.net/images/collective/gulp.js.png" height="100px" />
-> <img src="http://bower.io/img/bower-logo.png" height="100px" />
-> <img src="http://onesime.fr/images/yeoman.svg" height="100px" />
-> <img src="http://jasmine.github.io/images/jasmine-horizontal.svg" height="100px" />
-> <img src="http://pascalprecht.github.io/full-spectrum-testing-slides/styles/karma-logo.svg" height="100px" />
-> <img src="http://pascalprecht.github.io/full-spectrum-testing-slides/styles/protractor-logo-large.png" height="100px" />
-
-Build large [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http://coffeescript.org/) - **without the ceremony**.  By the way, you can write JavaScript too.
+Build [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http://coffeescript.org/) - **without the ceremony**. By the way, you can write JavaScript too.
 
 
 ## Table of Contents
@@ -30,69 +21,151 @@ Before running, you must install and configure the following one-time dependenci
 
 * [Git](http://git-scm.com/)
 * [Node.js](http://nodejs.org/)
-* [gulp.js](http://gulpjs.com/) - use the terminal command below
+
+Enter the following in the terminal
+
+Option 1: Using Yeoman Generator (Recommended)
 ```bash
-$ npm install -g gulp
+$ npm install -g gulp yo bower
+$ npm install -g generator-fatarrow
+$ mkdir my-new-project && cd $_
+$ yo fatarrow
 ```
 
-Once the dependencies have been installed, enter the following in the terminal:
+Option 2: Clone this repo
 ```bash
+$ npm install -g gulp
 $ git clone git@github.com:CaryLandholt/fatarrow.git
 $ cd fatarrow
 $ npm install
 ```
 
-
 ## Running
-Enter the following in the terminal:
-* With a fake backend
+Here are some useful commands to get started:
+
+Get all commands and options by typing
+
+```bash
+$ gulp help
+```
+
+Running with With a fake backend ( [$httpBackend](https://docs.angularjs.org/api/ngMockE2E/service/$httpBackend))
 ```bash
 $ gulp
 ```
-* With a real backend
+With a real backend (gulp will proxy calls to the backend of your choice)
 ```bash
 $ gulp --backend
 ```
-* Build for production
+Build for production
 ```bash
 $ gulp --prod --no-serve
+```
+Run tests on your build server
+```bash
+$ gulp test --citest --no-open
 ```
 
 ## Scripting
 Your choice of scripting languages.
 
-* <img src="https://pbs.twimg.com/profile_images/567000326444556290/-1wfGjNw.png" height="100px" />
-
-* <img src="http://drtom.ch/talks/2012/06/jazoon/images/coffeescript_logo.svg" height="100px" />
-
-* **LiveScript** <img src="http://livescript.net/images/icon.png" height="16px" />
-
-* <img src="http://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" height="100px" />
-
-* <img src="http://www.typescriptlang.org/content/images/logo_small.png" height="100px" />
-
+* **[Babel](https://babeljs.io/)**
+* **[CoffeeScript](coffeescript.org)**
+* **[LiveScript](livescript.net)**
+* **JavaScript**
+* **[TypeScript](http://www.typescriptlang.org/)**
 
 ## Styling
 Your choice of styling languages.
 
-* <img src="http://www.logotypes101.com/logos/194/830812341256B99B32E1A9F242BB9F5F/css3logo.png" height="100px" />
-
-* <img src="http://moduscreate.com/wp-content/uploads/2012/01/less-css-logo.png" height="100px" />
-
-* <img src="http://static.dyp.im/KkDwGPALQw/282646bf181e9d5fa2b4bf83f0d80f3e.png" height="100px" />
-
+* **CSS**
+* **[LESS](http://lesscss.org/)**
+* **[Sass](http://sass-lang.com/)**
 
 ## Templating
 Your choice of templating engines.
 
-* <img src="http://haml.info/images/haml.png" height="100px" />
+* **HTML**
+* **[Haml](http://haml.info/)**
+* **[Jade](http://jade-lang.com/)**
+* **[Markdown](http://daringfireball.net/projects/markdown/)**
 
-* <img src="http://www.w3.org/html/logo/downloads/HTML5_Logo_512.png" height="100px" />
+## Directory structure
+- File extensions supported by fatarrow:
+  - Scripts: `.coffee`, `.js`, `.ls`, `.ts`, `.es6`
+  - Styles: `.less`, `.css`, `.scss`
+  - Templates: `.html`, `.haml`, `.jade`
 
-* <img src="http://jade-lang.com/public/images/logo.png" height="100px" />
+**(Note: to keep the example succint, `.coffee`, `.html` and `.less` extension is used below. However, all of the file extensions listed above can be used, and even can be mixed-and-matched. )**
 
-* <img src="http://upload.wikimedia.org/wikipedia/commons/thumb/4/48/Markdown-mark.svg/208px-Markdown-mark.svg.png" height="100px" />
+The root directory generated for a fatarrow app:
+<pre>
+├──  src/
+│   ├──  components/
+│   │   └──  comp/
+│   │   │   ├──  test
+│   │   │   ├──  └──  comp.spec.coffee
+│   │   │   ├──  comp.coffee
+│   │   │   └──  comp.html
+│   │   │   └──  comp.backend.coffee
+│   │   │   └──  comp.less
+│   ├──  app/
+│   │   ├──  app.coffee
+│   │   ├──  appRoutes.coffee
+│   │   └──  views.backend.coffee
+│   ├──  home/
+│   │   ├──  homeController.coffee
+│   │   ├──  homeRoutes.coffee
+│   │   └──  home.html
+│   ├──  img/
+│   │   └──  angularjs.jpg
+│   └──  index.html
+├──  tasks/
+├──  e2e/
+│   ├──  home/
+│   │   ├──  home.spec.coffee
+│   │   ├──  homePage.coffee
+├──  bower_components/
+├──  nodes_modules/
+├──  .bowerrc
+├──  .gitignore
+├──  bower.json
+├──  gulpfile.coffee
+├──  protractor.conf.coffee
+├──  package.json
+</pre>
 
+Explanation of the folders:
+- *`app`*: Angular module for the app. All app level config should go here.
+- *`home`*: Each feature of the app should go in its own folder. It should contain all scripts, styles, templates and tests within the feature folder.
+- *`components`*: Reusable components (directives, factories, styles, etc.)
+- *`e2e`*: Protractor tests. They should also be separated by features/components.
+
+## Features provided by the gulpfile
+- *Fake data*: Running `gulp` will include the `.backend.coffee` files and therefore Angular's $httpBackend will be utilized. This should be used for backendless development.
+- *Real data*: Running `gulp --backend` will proxy all backend calls to the backend of your choice. [See below](#conf) for configuration instructions.
+- *Production build*: Running `gulp --prod` will produce builds for production. This includes:
+	- *ngAnnotate* : make your angular code minification proof
+	- *[ngClassify](https://github.com/CaryLandholt/ng-classify)* : CoffeeScript classes for angular
+	- *minification* : JS, CSS and HTML
+	- *image minification*: images from teh `img` folder are compressed
+	- *rev*: minified files are rev'ed for browser cache busting
+	- *templatecache* : take all angular templates and include them in the minified scripts
+- *Dev Workflow*:
+	- *watch* : watch your `src` folder and rebuild and reload automatically
+	- *linting* : lint `.js` and `.coffee` files
+	- *test* : run e2e (protractor) and unit (karma) tests
+	- *[browserSync](http://www.browsersync.io/)* : test on multiple devices simultaneously
+	- *newer*: only process changed files
+
+## Configuration<a name="conf"></a>
+### `config.coffee`
+- *`APP_NAME`*: name of the angular module for the app
+- *`BOWER_COMPONENTS`*: consume dependencies from bower by specifying dependency name, version, dependency type (scripts, styles, etc.) and a list of files to be consumed (cherry picking files).
+- *`LANGUAGES`*: disable compilers not in use to optimize your build
+- *`PROXY_CONFIG`*: [connect-modrewrite](https://www.npmjs.com/package/connect-modrewrite) config to proxy api calls during development.
+- *`SCRIPTS`*: load order for scripts
+- *`STYLES`*: load order for styles
 
 ## Contributing
 See [CONTRIBUTING.md](CONTRIBUTING.md)
