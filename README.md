@@ -11,6 +11,11 @@ Build [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http:/
 ## Table of Contents
 * [Installing](#installing)
 * [Running](#running)
+* [Scripting](#scripting)
+* [Styling](#styling)
+* [Templating](#templating)
+* [Structure](#structure)
+* [Features](#features)
 * [Contributing](#contributing)
 * [Changelog](#changelog)
 * [License](#license)
@@ -90,7 +95,7 @@ Your choice of templating engines.
 * **[Jade](http://jade-lang.com/)**
 * **[Markdown](http://daringfireball.net/projects/markdown/)**
 
-## Directory structure
+## Structure
 - File extensions supported by fatarrow:
   - Scripts: `.coffee`, `.js`, `.ls`, `.ts`, `.es6`
   - Styles: `.less`, `.css`, `.scss`
@@ -141,7 +146,7 @@ Explanation of the folders:
 - *`components`*: Reusable components (directives, factories, styles, etc.)
 - *`e2e`*: Protractor tests. They should also be separated by features/components.
 
-## Features provided by the gulpfile
+## Features
 - *Fake data*: Running `gulp` will include the `.backend.coffee` files and therefore Angular's $httpBackend will be utilized. This should be used for backendless development.
 - *Real data*: Running `gulp --backend` will proxy all backend calls to the backend of your choice. [See below](#conf) for configuration instructions.
 - *Production build*: Running `gulp --prod` will produce builds for production. This includes:
@@ -166,6 +171,36 @@ Explanation of the folders:
 - *`PROXY_CONFIG`*: [connect-modrewrite](https://www.npmjs.com/package/connect-modrewrite) config to proxy api calls during development.
 - *`SCRIPTS`*: load order for scripts
 - *`STYLES`*: load order for styles
+
+### Add Bower Component
+You need three pieces of information for each Bower component to include in your app.
+
+1. The Bower component name (e.g. *restangular*)
+2. The version of the component (e.g. *1.4.0*)
+3. The files within the component to include in your app (e.g. *restangular.min.js*)
+
+The following will include the **restangular** component, version **1.4.0**, and place the `dist/restangular.min.js` file in the `vendor/scripts` directory.  By default, all Bower components will be placed in the `vendor` directory.
+```coffee
+BOWER_COMPONENTS =
+	'restangular': '1.4.0':
+		scripts: 'dist/restangular.min.js'
+```
+
+If load order is important, include a reference to the file in the **SCRIPTS** section.
+
+The following will ensure **restangular** is loaded prior to `app.js`.
+```coffee
+SCRIPTS =
+	'**/angular.min.js'
+	'**/restangular.min.js'
+	'**/app.js'
+	'**/*.js'
+```
+
+For AngularJS components, include a reference to the module within your application.  For example:
+```coffee
+angular.module('app', ['restangular']);
+```
 
 ## Contributing
 See [CONTRIBUTING.md](CONTRIBUTING.md)
