@@ -96,7 +96,7 @@ Your choice of templating engines.
   - Styles: `.less`, `.css`, `.scss`
   - Templates: `.html`, `.haml`, `.jade`
 
-**(Note: to keep the example succint, `.coffee`, `.html` and `.less` extension is used below. However, all of the file extensions listed above can be used, and even can be mixed-and-matched. )**
+**(Note: to keep the example succint, `.coffee`, `.html` and `.less` extensions are used below. However, all of the file extensions listed above can be used, and even can be mix-and-matched. )**
 
 The root directory generated for a fatarrow app:
 <pre>
