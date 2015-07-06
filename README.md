@@ -24,6 +24,15 @@ Before running, you must install and configure the following one-time dependenci
 
 Enter the following in the terminal
 
+Option 1: Using Yeoman Generator (Recommended)
+```bash
+$ npm install -g gulp yo bower
+$ npm install -g generator-fatarrow
+$ mkdir my-new-project && cd $_
+$ yo fatarrow
+```
+
+Option 2: Clone this repo
 ```bash
 $ npm install -g gulp
 $ git clone git@github.com:CaryLandholt/fatarrow.git
@@ -32,13 +41,13 @@ $ npm install
 ```
 
 ## Running
+Here are some useful commands to get started:
+
 Get all commands and options by typing
 
 ```bash
 $ gulp help
 ```
-
-Here are some useful commands to get started:
 
 Running with With a fake backend ( [$httpBackend](https://docs.angularjs.org/api/ngMockE2E/service/$httpBackend))
 ```bash
@@ -76,6 +85,48 @@ Your choice of templating engines.
 * **[Haml](http://haml.info/)**
 * **[Jade](http://jade-lang.com/)**
 * **[Markdown](http://daringfireball.net/projects/markdown/)**
+
+## Directory structure
+- All of the following file extensions are supported and will be processed by gulp:
+  - Scripts: `.coffee`, `.js`, `.ls`, `.ts`, `.es6`
+  - Styles: `.less`, `.css`, `.scss`
+  - Templates: `.html`, `.haml`, `.jade`
+
+**(Note: to keep the example succint, `.coffee`, `.html` and `.less` extension is used below)**
+
+The root directory generated for a fatarrow app:
+<pre>
+├──  src/
+│   ├──  components/
+│   │   └──  comp/
+│   │   │   ├──  test
+│   │   │   ├──  └──  comp.spec.coffee
+│   │   │   ├──  comp.coffee
+│   │   │   └──  comp.html
+│   │   │   └──  comp.backend.coffee
+│   │   │   └──  comp.less
+│   ├──  app/
+│   │   ├──  app.coffee
+│   │   ├──  appRoutes.coffee
+│   │   └──  views.backend.coffee
+│   ├──  home/
+│   │   ├──  homeController.coffee
+│   │   ├──  homeRoutes.coffee
+│   │   └──  home.html
+│   ├──  img/
+│   │   └──  angularjs.jpg
+│   └──  index.html
+├──  gulp/
+├──  e2e/
+├──  bower_components/
+├──  nodes_modules/
+├──  .bowerrc
+├──  .gitignore
+├──  bower.json
+├──  gulpfile.coffee
+├──  protractor.conf.coffee
+├──  package.json
+</pre>
 
 ## Contributing
 See [CONTRIBUTING.md](CONTRIBUTING.md)
