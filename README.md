@@ -1,11 +1,11 @@
 # fatarrow
-###An [AngularJS](http://angularjs.org/) large application Reference Architecture
+###An [AngularJS](http://angularjs.org/) application Reference Architecture
 [![License][license-image]][license-url]
 [![Version][version-image]][version-url]
 [![Build Status][build-image]][build-url]
 [![Dependency Status][dependencies-image]][dependencies-url]
 
-Build large [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http://coffeescript.org/) - **without the ceremony**. By the way, you can write JavaScript too.
+Build [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http://coffeescript.org/) - **without the ceremony**. By the way, you can write JavaScript too.
 
 
 ## Table of Contents
@@ -61,6 +61,10 @@ Build for production
 ```bash
 $ gulp --prod --no-serve
 ```
+Run tests on your build server
+```bash
+$ gulp test --citest --no-open
+```
 
 ## Scripting
 Your choice of scripting languages.
@@ -87,12 +91,12 @@ Your choice of templating engines.
 * **[Markdown](http://daringfireball.net/projects/markdown/)**
 
 ## Directory structure
-- All of the following file extensions are supported and will be processed by gulp:
+- File extensions supported by fatarrow:
   - Scripts: `.coffee`, `.js`, `.ls`, `.ts`, `.es6`
   - Styles: `.less`, `.css`, `.scss`
   - Templates: `.html`, `.haml`, `.jade`
 
-**(Note: to keep the example succint, `.coffee`, `.html` and `.less` extension is used below)**
+**(Note: to keep the example succint, `.coffee`, `.html` and `.less` extension is used below. However, all of the file extensions listed above can be used, and even can be mixed-and-matched. )**
 
 The root directory generated for a fatarrow app:
 <pre>
@@ -116,8 +120,11 @@ The root directory generated for a fatarrow app:
 │   ├──  img/
 │   │   └──  angularjs.jpg
 │   └──  index.html
-├──  gulp/
+├──  tasks/
 ├──  e2e/
+│   ├──  home/
+│   │   ├──  home.spec.coffee
+│   │   ├──  homePage.coffee
 ├──  bower_components/
 ├──  nodes_modules/
 ├──  .bowerrc
@@ -127,6 +134,38 @@ The root directory generated for a fatarrow app:
 ├──  protractor.conf.coffee
 ├──  package.json
 </pre>
+
+Explanation of the folders:
+- *`app`*: Angular module for the app. All app level config should go here.
+- *`home`*: Each feature of the app should go in its own folder. It should contain all scripts, styles, templates and tests within the feature folder.
+- *`components`*: Reusable components (directives, factories, styles, etc.)
+- *`e2e`*: Protractor tests. They should also be separated by features/components.
+
+## Features provided by the gulpfile
+- *Fake data*: Running `gulp` will include the `.backend.coffee` files and therefore Angular's $httpBackend will be utilized. This should be used for backendless development.
+- *Real data*: Running `gulp --backend` will proxy all backend calls to the backend of your choice. [See below](#conf) for configuration instructions.
+- *Production build*: Running `gulp --prod` will produce builds for production. This includes:
+	- *ngAnnotate* : make your angular code minification proof
+	- *[ngClassify](https://github.com/CaryLandholt/ng-classify)* : CoffeeScript classes for angular
+	- *minification* : JS, CSS and HTML
+	- *image minification*: images from teh `img` folder are compressed
+	- *rev*: minified files are rev'ed for browser cache busting
+	- *templatecache* : take all angular templates and include them in the minified scripts
+- *Dev Workflow*:
+	- *watch* : watch your `src` folder and rebuild and reload automatically
+	- *linting* : lint `.js` and `.coffee` files
+	- *test* : run e2e (protractor) and unit (karma) tests
+	- *[browserSync](http://www.browsersync.io/)* : test on multiple devices simultaneously
+	- *newer*: only process changed files
+
+## Configuration<a name="conf"></a>
+### `config.coffee`
+- *`APP_NAME`*: name of the angular module for the app
+- *`BOWER_COMPONENTS`*: consume dependencies from bower by specifying dependency name, version, dependency type (scripts, styles, etc.) and a list of files to be consumed (cherry picking files).
+- *`LANGUAGES`*: disable compilers not in use to optimize your build
+- *`PROXY_CONFIG`*: [connect-modrewrite](https://www.npmjs.com/package/connect-modrewrite) config to proxy api calls during development.
+- *`SCRIPTS`*: load order for scripts
+- *`STYLES`*: load order for styles
 
 ## Contributing
 See [CONTRIBUTING.md](CONTRIBUTING.md)
