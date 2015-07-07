@@ -41,8 +41,6 @@ gulp.task 'default', [].concat(if runServer then ['server'] else ['build']).conc
 gulp.task 'e2e', ['server'], taskRequire './tasks/test/e2e'
 gulp.task 'protractor', taskRequire './tasks/test/e2e'
 
-gulp.task 'protractor', taskRequire './tasks/test/e2e'
-
 # Update E2E driver
 gulp.task 'e2e-driver-update', plugins.protractor.webdriver_update
 
