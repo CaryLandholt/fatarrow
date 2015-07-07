@@ -39,6 +39,8 @@ module.exports = (gulp, plugins) -> ->
 			'xhr-polling'
 			'jsonp-polling'
 		]
+		proxies:
+			'/img': '/src/img'
 
 	karma.server.start options, (code) ->
 		if code > 0
