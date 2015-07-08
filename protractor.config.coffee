@@ -1,5 +1,4 @@
 jasmineReporters = require 'jasmine-reporters'
-{citest} = require './tasks/options'
 
 exports.config =
 	specs: ['e2e/**/*.spec.coffee']
@@ -18,12 +17,11 @@ exports.config =
 			showStack: true
 		)
 
-		if citest
-			# this is for jenkins
-			jasmine.getEnv().addReporter(
-				new jasmineReporters.JUnitXmlReporter(
-					consolidateAll: true,
-					filePrefix: 'xmloutput'
-					savePath: 'testResults'
-				)
+		# this is for jenkins
+		jasmine.getEnv().addReporter(
+			new jasmineReporters.JUnitXmlReporter(
+				consolidateAll: true,
+				filePrefix: 'protractor-results'
+				savePath: 'testResults'
 			)
+		)
