@@ -34,6 +34,7 @@
     "gulp-if": "^1.2.5",
     "gulp-imagemin": "^2.0.0",
     "gulp-jade": "0.10.0",
+    "gulp-jscs": "^1.6.0",
     "gulp-jshint": "^1.6.3",
     "gulp-less": "^3.0.3",
     "gulp-livescript": "^2.2.1",
@@ -64,10 +65,18 @@
     "phantomjs": "^1.9.7-15",
     "plato": "^1.5.0",
     "q": "^2.0.2",
+    "s3": "^4.4.0",
     "yargs": "^3.13.0"
   },
   "scripts": {
+    "dev": "gulp --no-serve --no-specs",
+    "prod": "gulp --prod --no-serve",
+    "predeploy": "npm test && npm run prod",
+    "deploy": "gulp deploy",
+    "predevdeploy": "npm test && npm run dev",
+    "devdeploy": "gulp deploy",
     "postinstall": "gulp e2e-driver-update",
-    "test": "gulp test --no-open --citest"
+    "test": "gulp test --no-open --citest",
+    "posttest": "gulp clean && gulp clean:working"
   }
 }
