@@ -1,6 +1,6 @@
 es                    = require 'event-stream'
 getScriptSources      = require('../utils').getScriptSources
-lintNotify          = require './reporters/lintNotify'
+lintNotify            = require './reporters/lintNotify'
 {COMPONENTS_DIRECTORY,
 	TEMP_DIRECTORY,
 	SRC_DIRECTORY}    = require '../constants'
@@ -33,6 +33,12 @@ module.exports = (gulp, plugins) -> ->
 			undef: true
 			unused: true
 			predef: PREDEFINED_GLOBALS
+		jscs:
+			preset: 'airbnb'
+			validateIndentation:
+				value: '\t'
+				includeEmptyLines: true
+			fix: true
 
 	sources = getScriptSources '.js'
 	srcs    = []
@@ -43,6 +49,15 @@ module.exports = (gulp, plugins) -> ->
 			.on 'error', onError
 
 			.pipe plugins.template templateOptions
+			.on 'error', onError
+
+			.pipe plugins.jscs options.jscs
+			.on 'error', onError
+
+			.pipe lintNotify 'jscs'
+			.on 'error', onError
+
+			.pipe gulp.dest SRC_DIRECTORY
 			.on 'error', onError
 
 			.pipe plugins.jshint options.jsHint
