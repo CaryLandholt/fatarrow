@@ -5,10 +5,20 @@ lintNotify            = require './reporters/lintNotify'
 	TEMP_DIRECTORY,
 	SRC_DIRECTORY}    = require '../constants'
 PREDEFINED_GLOBALS = [
+	'after'
+	'afterEach'
 	'angular'
+	'before'
 	'beforeEach'
 	'describe'
+	'expect'
+	'inject'
 	'it'
+	'jasmine'
+	'module'
+	'spyOn'
+	'xdescribe'
+	'xit'
 ]
 templateOptions       = require '../templateOptions'
 
