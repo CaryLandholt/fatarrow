@@ -70,14 +70,23 @@ Run tests on your build server
 ```bash
 $ gulp test --citest --no-open
 ```
+Deploy your app<a name="deploy"></a>
+```bash
+$ gulp test --citest --no-open
+$ gulp --prod --no-serve
+# deploy to a path (configuration in /config/locationConfig.coffee)
+$ gulp deploy
+# deploy to S3 (configurtion in /config/s3Config.coffee)
+$ gulp deploy --target s3
+```
 
 ## Scripting
 Your choice of scripting languages.
 
+* **JavaScript**
 * **[Babel](https://babeljs.io/)**
 * **[CoffeeScript](coffeescript.org)**
 * **[LiveScript](livescript.net)**
-* **JavaScript**
 * **[TypeScript](http://www.typescriptlang.org/)**
 
 ## Styling
@@ -101,7 +110,7 @@ Your choice of templating engines.
   - Styles: `.less`, `.css`, `.scss`
   - Templates: `.html`, `.haml`, `.jade`
 
-**(Note: to keep the example succint, `.coffee`, `.html` and `.less` extensions are used below. However, all of the file extensions listed above can be used, and even can be mix-and-matched. )**
+**(Note: to keep the example succint, `.coffee`, `.html` and `.less` extensions are used below. However, all of the file extensions listed above can be used, and even can be mix-and-matched.)**
 
 The root directory generated for a fatarrow app:
 <pre>
@@ -156,12 +165,14 @@ Explanation of the folders:
 	- *image minification*: images from teh `img` folder are compressed
 	- *rev*: minified files are rev'ed for browser cache busting
 	- *templatecache* : take all angular templates and include them in the minified scripts
+	- *deploy*: deploy to a path or to [AWS S3](http://aws.amazon.com/s3/). [see above](#deploy) for commands.
 - *Dev Workflow*:
 	- *watch* : watch your `src` folder and rebuild and reload automatically
-	- *linting* : lint `.js` and `.coffee` files
+	- *linting* : lint `.js` and `.coffee` files. style checking and fixing with [JSCS](http://jscs.info/)
 	- *test* : run e2e (protractor) and unit (karma) tests
 	- *[browserSync](http://www.browsersync.io/)* : test on multiple devices simultaneously
 	- *newer*: only process changed files
+	- *HTML5Mode*: [Angular's html5Mode](https://docs.angularjs.org/guide/$location) is supported on the BrowserSync server. Be sure to [configure your production wev server](https://docs.angularjs.org/guide/$location).
 
 ## Configuration<a name="conf"></a>
 ### `config.coffee`
