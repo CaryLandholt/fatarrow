@@ -25,12 +25,13 @@ expression = extensions
 module.exports = ->
 	return if browserSync.active
 
-	modRewriteConfig = [
-		'^/img/.*$ - [L]'
-		'^/fonts/.*$ - [L]'
-		"^(#{expression})$ - [L]"
-		'^.*$ /index.html [L]'
-	].concat PROXY_CONFIG
+	modRewriteConfig = PROXY_CONFIG
+		.concat [
+			'^/img/.*$ - [L]'
+			'^/fonts/.*$ - [L]'
+			"^(#{expression})$ - [L]"
+			'^.*$ /index.html [L]'
+		]
 
 	browserSync
 		open: open

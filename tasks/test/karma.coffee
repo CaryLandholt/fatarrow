@@ -2,6 +2,7 @@ karma     = require 'karma'
 notify    = require('../utils').notify
 {SCRIPTS} = require '../../config'
 {DIST_DIRECTORY, STATS_DIST_DIRECTORY} = require '../constants'
+{citest} = require '../options'
 
 module.exports = (gulp, plugins) -> ->
 	sources = [].concat SCRIPTS, '**/*.html'
@@ -39,8 +40,16 @@ module.exports = (gulp, plugins) -> ->
 			'xhr-polling'
 			'jsonp-polling'
 		]
+		proxies:
+			'/img': '/src/img'
+
+	options.reporters.push 'junit'
+	options.junitReporter =
+		outputFile: '../testResults/karma-results.xml'
+		suite: 'Karma Tests'
 
 	karma.server.start options, (code) ->
+		return if citest
 		if code > 0
 			notify 'Karma tests failed', false
 		else

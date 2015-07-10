@@ -23,7 +23,7 @@ module.exports = (gulp, plugins) -> ->
 		.concat '!**/*.spec.{js,coffee}'
 
 	testSources = []
-		.concat ("**/*.{js,coffee}" for extension in extensions)
+		.concat ("**/*.{spec.js,spec.coffee}" for extension in extensions)
 
 	stylesSources = [].concat ("**/*#{extension}" for extension in stylesExtensions)
 

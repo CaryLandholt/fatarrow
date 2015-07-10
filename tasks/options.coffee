@@ -47,11 +47,16 @@ options = require 'yargs'
 		default     : true
 		description : 'Run specs'
 		type        : 'boolean'
+	.option 'target',
+		alias       : 't'
+		description : 'Deployment target'
+		type        : 'string'
 	.example 'gulp', 'Run with fake data with $httpBackend'
 	.example 'gulp --backend', 'Run with real data from an api. See config.coffee for proxy configuraton.'
 	.example 'gulp --prod --no-serve', 'Make a production build on a CI server without running the web server.'
 	.example 'gulp test --citest --no-open', 'Run Karma and Protractor tests during a CI build.'
 	.example 'gulp --injectcss', 'Use Browsersync to inject CSS http://www.browsersync.io/docs/gulp/#gulp-sass-css.'
+	.example 'npm run deploy [-- --target location | s3]', 'Deploy to a target.'
 	.epilog 'If you find an issue, feel free to file it at https://github.com/CaryLandholt/fatarrow/issues'
 	.argv
 
@@ -70,6 +75,7 @@ runServer         = getSwitchOption 'serve'
 rune2e            = !isProd and useBackendless and getSwitchOption 'specs'
 runSpecs          = !isProd and getSwitchOption 'specs'
 runWatch          = !isProd and runServer
+target            = getSwitchOption 'target'
 ngClassifyOptions =
 	appName: require('../config').APP_NAME
 
@@ -88,4 +94,5 @@ module.exports = {
 	runServer
 	runWatch
 	useBackendless
+	target
 }

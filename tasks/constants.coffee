@@ -16,4 +16,5 @@ module.exports =
 	STYLES_MIN_DIRECTORY  : 'styles/'
 	STYLES_MIN_FILE       : 'styles.min.css'
 	TEMP_DIRECTORY        : '.temp/'
+	TEST_RESULTS_DIRECTORY: 'testResults'
 	VENDOR_DIRECTORY      : 'vendor/'
