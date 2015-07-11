@@ -6,7 +6,7 @@ path      = require 'path'
 module.exports = (gulp, plugins) -> ->
 	testsErrored = false
 	{onError} = require('../events') plugins
-	e2eConfigFile       = './protractor.config.coffee'
+	e2eConfigFile       = './config/e2e.coffee'
 	sources             = '**/*.spec.{coffee,js}'
 
 	options =
