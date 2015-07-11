@@ -1,4 +1,4 @@
-config   = require '../../config/locationConfig.coffee'
+config   = require '../../config/locationDeploy.coffee'
 {SRC_DIRECTORY,
 	DIST_DIRECTORY}  = require '../constants'
 
