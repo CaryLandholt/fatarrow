@@ -77,7 +77,7 @@ runSpecs          = !isProd and getSwitchOption 'specs'
 runWatch          = !isProd and runServer
 target            = getSwitchOption 'target'
 ngClassifyOptions =
-	appName: require('../config').APP_NAME
+	appName: require('../config/app').APP_NAME
 
 module.exports = {
 	citest

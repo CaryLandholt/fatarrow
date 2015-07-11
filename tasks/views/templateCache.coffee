@@ -1,4 +1,4 @@
-{APP_NAME} = require '../../config'
+{APP_NAME} = require '../../config/app'
 {TEMP_DIRECTORY} = require '../constants'
 
 module.exports = (gulp, plugins) -> ->
