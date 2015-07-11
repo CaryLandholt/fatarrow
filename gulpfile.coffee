@@ -1,7 +1,8 @@
 gulp                  = require 'gulp'
 yargs                 = require 'yargs'
 
-{BOWER_COMPONENTS, LANGUAGES, PROXY_CONFIG, SCRIPTS, STYLES} = require './config'
+{BOWER_COMPONENTS, PROXY_CONFIG, SCRIPTS, STYLES} = require './config'
+{LANGUAGES} = require './config/languages'
 {getBower, isProd, useBackendless, rune2e, runServer, runSpecs, runWatch, showHelp, target} = require './tasks/options'
 
 plugins = require './tasks/plugins'

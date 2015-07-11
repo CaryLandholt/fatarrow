@@ -21,27 +21,6 @@ BOWER_COMPONENTS =
 	'showdown': '0.3.1':
 		scripts: 'src/showdown.js'
 
-LANGUAGES =
-	SCRIPTS: [
-		# 'babel'
-		'coffeeScript'
-		# 'liveScript'
-		# 'typeScript'
-	]
-	STYLES: [
-		'less'
-		# 'sass'
-	]
-	VIEWS: [
-		# 'haml'
-		# 'jade'
-		'markdown'
-	]
-
-PROXY_CONFIG = [
-	'^/api$ http://localhost:8182/api [P, L]'
-]
-
 SCRIPTS = [
 	'**/angular.min.js'
 	'**/angular-animate.min.js'
@@ -58,4 +37,4 @@ STYLES = [
 	'**/*.css'
 ]
 
-module.exports = {APP_NAME, BOWER_COMPONENTS, LANGUAGES, PROXY_CONFIG, SCRIPTS, STYLES}
+module.exports = {APP_NAME, BOWER_COMPONENTS, SCRIPTS, STYLES}
