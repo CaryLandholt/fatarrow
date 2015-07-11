@@ -1,7 +1,7 @@
 bower = require 'bower'
 {firstRun} = require '../options'
 {BOWER_DIRECTORY} = require '../constants'
-{BOWER_COMPONENTS} = require '../../config'
+{BOWER_COMPONENTS} = require '../../config/bower'
 q = require 'q'
 
 module.exports = (gulp, plugins) -> ->

@@ -4,7 +4,7 @@ q = require 'q'
 pkg = require '../../package.json'
 {BOWER_DIRECTORY, COMPONENTS_DIRECTORY, VENDOR_DIRECTORY} = require '../constants'
 {firstRun} = require '../options'
-{BOWER_COMPONENTS} = require '../../config'
+{BOWER_COMPONENTS} = require '../../config/bower'
 path = require 'path'
 
 module.exports = (gulp, plugins) -> ->
