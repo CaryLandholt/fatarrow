@@ -145,6 +145,7 @@ The root directory generated for a fatarrow app:
 ├──  .bowerrc
 ├──  .gitignore
 ├──  bower.json
+├──  config.coffee
 ├──  gulpfile.coffee
 ├──  protractor.conf.coffee
 ├──  package.json
