@@ -1,28 +1,15 @@
 es                    = require 'event-stream'
 getScriptSources      = require('../utils').getScriptSources
-lintNotify          = require './reporters/lintNotify'
+lintNotify            = require './reporters/lintNotify'
 {COMPONENTS_DIRECTORY,
 	TEMP_DIRECTORY,
 	SRC_DIRECTORY}    = require '../constants'
 templateOptions       = require '../templateOptions'
 {ngClassifyOptions}   = require '../options'
+{options}             = require '../../config/coffeeScript'
 
 module.exports = (gulp, plugins) -> ->
 	{onError} = require('../events') plugins
-	options =
-		coffeeLint:
-			arrow_spacing:
-				level: 'error'
-			braces_spacing:
-				level: 'error'
-			indentation:
-				value: 1
-			max_line_length:
-				level: 'ignore'
-			no_tabs:
-				level: 'ignore'
-		sourceMaps:
-			sourceRoot: './'
 
 	sources = getScriptSources '.coffee'
 	srcs    = []
@@ -46,7 +33,7 @@ module.exports = (gulp, plugins) -> ->
 
 			.pipe plugins.coffeelint.reporter 'default'
 			.on 'error', onError
-			
+
 	srcs.push src =
 		gulp
 			.src sources, {cwd: COMPONENTS_DIRECTORY, nodir: true}
