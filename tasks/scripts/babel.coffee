@@ -1,16 +1,11 @@
 getScriptSources = require('../utils').getScriptSources
 {TEMP_DIRECTORY, SRC_DIRECTORY} = require '../constants'
+{options} = require '../../config/babel'
 
 module.exports = (gulp, plugins) -> ->
 	{onError} = require('../events') plugins
 	sources = getScriptSources '.es6'
 	srcs    = []
-	options =
-		sourceMaps:
-			sourceRoot: './'
-
-	console.log 'TEMP_DIRECTORY', TEMP_DIRECTORY
-
 
 	srcs.push src =
 		gulp
@@ -26,7 +21,7 @@ module.exports = (gulp, plugins) -> ->
 			.pipe plugins.sourcemaps.init()
 			.on 'error', onError
 
-			.pipe plugins.babel()
+			.pipe plugins.babel options
 			.on 'error', onError
 
 			.pipe plugins.sourcemaps.write './', options.sourceMaps
