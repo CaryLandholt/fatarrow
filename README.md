@@ -16,6 +16,7 @@ Build [AngularJS](http://angularjs.org/) applications with [CoffeeScript](http:/
 * [Templating](#templating)
 * [Structure](#structure)
 * [Features](#features)
+* [Configuration](#conf)
 * [Contributing](#contributing)
 * [Changelog](#changelog)
 * [License](#license)
