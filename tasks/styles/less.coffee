@@ -4,16 +4,11 @@ es                    = require 'event-stream'
 	SRC_DIRECTORY}    = require '../constants'
 templateOptions       = require '../templateOptions'
 path                  = require 'path'
+options               = require '../../config/less'
 
 module.exports = (gulp, plugins) -> ->
 	{onError} = require('../events') plugins
-	options =
-		less:
-			paths: [
-				path.resolve SRC_DIRECTORY
-			]
-			sourceMap: true
-			sourceMapBasepath: path.resolve TEMP_DIRECTORY
+
 
 	sources = '**/*.less'
 	srcs    = []
@@ -47,7 +42,7 @@ module.exports = (gulp, plugins) -> ->
 		.merge.apply @, srcs
 		.on 'error', onError
 
-		.pipe plugins.less options.less
+		.pipe plugins.less options
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY
