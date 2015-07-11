@@ -4,51 +4,17 @@ lintNotify            = require './reporters/lintNotify'
 {COMPONENTS_DIRECTORY,
 	TEMP_DIRECTORY,
 	SRC_DIRECTORY}    = require '../constants'
-PREDEFINED_GLOBALS = [
-	'after'
-	'afterEach'
-	'angular'
-	'before'
-	'beforeEach'
-	'describe'
-	'expect'
-	'inject'
-	'it'
-	'jasmine'
-	'module'
-	'spyOn'
-	'xdescribe'
-	'xit'
-]
+{jsHint} = require '../../config/jsHint'
+{jscs} = require '../../config/jscs'
+
 templateOptions       = require '../templateOptions'
 
 module.exports = (gulp, plugins) -> ->
 	{onError} = require('../events') plugins
-	options =
-		jsHint:
-			camelcase: true
-			curly: true
-			eqeqeq: true
-			forin: true
-			freeze: true
-			immed: true
-			indent: 1
-			latedef: true
-			newcap: true
-			noarg: true
-			noempty: true
-			nonbsp: true
-			nonew: true
-			plusplus: true
-			undef: true
-			unused: true
-			predef: PREDEFINED_GLOBALS
-		jscs:
-			preset: 'airbnb'
-			validateIndentation:
-				value: '\t'
-				includeEmptyLines: true
-			fix: true
+	options = {
+		jsHint
+		jscs
+	}
 
 	sources = getScriptSources '.js'
 	srcs    = []
