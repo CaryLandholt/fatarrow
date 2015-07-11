@@ -1,6 +1,6 @@
 karma     = require 'karma'
 notify    = require('../utils').notify
-{SCRIPTS} = require '../../config'
+{SCRIPTS} = require '../../config/scripts'
 {DIST_DIRECTORY, STATS_DIST_DIRECTORY} = require '../constants'
 {citest} = require '../options'
 

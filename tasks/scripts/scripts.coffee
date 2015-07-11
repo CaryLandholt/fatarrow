@@ -1,7 +1,7 @@
 {DIST_DIRECTORY, TEMP_DIRECTORY, SCRIPTS_MIN_DIRECTORY, SCRIPTS_MIN_FILE} = require '../constants'
 {isProd, useBackendless, runSpecs} = require '../options'
 path = require 'path'
-{SCRIPTS} = require '../../config'
+{SCRIPTS} = require '../../config/scripts'
 
 module.exports = (gulp, plugins) -> ->
 	{onError, onRev, onScript} = require('../events') plugins

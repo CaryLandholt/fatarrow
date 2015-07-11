@@ -3,7 +3,7 @@ browserSync = require 'browser-sync'
 {isProd, injectCss} = require '../options'
 path = require 'path'
 templateOptions       = require '../templateOptions'
-{STYLES} = require '../../config'
+{STYLES} = require '../../config/styles'
 
 module.exports = (gulp, plugins) -> ->
 	{onError, onRev, onStyle} = require('../events') plugins
