@@ -1,17 +1,17 @@
 LANGUAGES =
 	SCRIPTS: [
-		# 'babel'
+		'babel'
 		'coffeeScript'
-		# 'liveScript'
-		# 'typeScript'
+		'liveScript'
+		'typeScript'
 	]
 	STYLES: [
 		'less'
-		# 'sass'
+		'sass'
 	]
 	VIEWS: [
-		# 'haml'
-		# 'jade'
+		'haml'
+		'jade'
 		'markdown'
 	]
 

@@ -1,0 +1,13 @@
+coffeeLint =
+	arrow_spacing:
+		level: 'error'
+	braces_spacing:
+		level: 'error'
+	indentation:
+		value: 1
+	max_line_length:
+		level: 'ignore'
+	no_tabs:
+		level: 'ignore'
+
+module.exports = {coffeeLint}

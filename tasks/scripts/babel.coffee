@@ -1,11 +1,14 @@
 getScriptSources = require('../utils').getScriptSources
 {TEMP_DIRECTORY, SRC_DIRECTORY} = require '../constants'
-{options} = require '../../config/babel'
 
 module.exports = (gulp, plugins) -> ->
 	{onError} = require('../events') plugins
 	sources = getScriptSources '.es6'
 	srcs    = []
+
+	options =
+		sourceMaps:
+			sourceRoot: './'
 
 	srcs.push src =
 		gulp

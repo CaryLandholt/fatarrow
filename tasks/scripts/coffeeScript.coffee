@@ -6,13 +6,18 @@ lintNotify            = require './reporters/lintNotify'
 	SRC_DIRECTORY}    = require '../constants'
 templateOptions       = require '../templateOptions'
 {ngClassifyOptions}   = require '../options'
-{options}             = require '../../config/coffeeScript'
+{coffeeLint}          = require '../../config/coffeeLint'
 
 module.exports = (gulp, plugins) -> ->
 	{onError} = require('../events') plugins
 
 	sources = getScriptSources '.coffee'
 	srcs    = []
+
+	options =
+		sourceMaps:
+			sourceRoot: './'
+
 
 	srcs.push src =
 		gulp
@@ -28,7 +33,7 @@ module.exports = (gulp, plugins) -> ->
 			.pipe plugins.ngclassify ngClassifyOptions
 			.on 'error', onError
 
-			.pipe plugins.coffeelint options.coffeeLint
+			.pipe plugins.coffeelint coffeeLint
 			.on 'error', onError
 
 			.pipe plugins.coffeelint.reporter 'default'
