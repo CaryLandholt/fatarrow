@@ -55,7 +55,7 @@ Get all commands and options by typing
 $ gulp help
 ```
 
-Running with With a fake backend ( [$httpBackend](https://docs.angularjs.org/api/ngMockE2E/service/$httpBackend))
+Running with With a fake backend ([$httpBackend](https://docs.angularjs.org/api/ngMockE2E/service/$httpBackend))
 ```bash
 $ gulp
 ```
@@ -115,6 +115,8 @@ Your choice of templating engines.
 
 The root directory generated for a fatarrow app:
 <pre>
+├──  e2e/
+├──  config/
 ├──  src/
 │   ├──  components/
 │   │   └──  comp/
@@ -136,26 +138,21 @@ The root directory generated for a fatarrow app:
 │   │   └──  angularjs.jpg
 │   └──  index.html
 ├──  tasks/
-├──  e2e/
-│   ├──  home/
-│   │   ├──  home.spec.coffee
-│   │   ├──  homePage.coffee
 ├──  bower_components/
 ├──  nodes_modules/
 ├──  .bowerrc
 ├──  .gitignore
 ├──  bower.json
-├──  config.coffee
 ├──  gulpfile.coffee
-├──  protractor.conf.coffee
 ├──  package.json
 </pre>
 
 Explanation of the folders:
-- *`app`*: Angular module for the app. All app level config should go here.
-- *`home`*: Each feature of the app should go in its own folder. It should contain all scripts, styles, templates and tests within the feature folder.
-- *`components`*: Reusable components (directives, factories, styles, etc.)
+- *`src/app`*: Angular module for the app. All app level config should go here.
+- *`src/home`*: Each feature of the app should go in its own folder. It should contain all scripts, styles, templates and tests within the feature folder.
+- *`src/components`*: Reusable components (directives, factories, styles, etc.)
 - *`e2e`*: Protractor tests. They should also be separated by features/components.
+- *`config`*: Configurtion for gulp tasks broken up by each task.
 
 ## Features
 - *Fake data*: Running `gulp` will include the `.backend.coffee` files and therefore Angular's $httpBackend will be utilized. This should be used for backendless development.
@@ -177,12 +174,25 @@ Explanation of the folders:
 	- *HTML5Mode*: [Angular's html5Mode](https://docs.angularjs.org/guide/$location) is supported on the BrowserSync server. Be sure to [configure your production web server](https://docs.angularjs.org/guide/$location).
 
 ## Configuration<a name="conf"></a>
-### `config.coffee`
-- *`APP_NAME`*: name of the angular module for the app
-- *`BOWER_COMPONENTS`*: consume dependencies from bower by specifying dependency name, version, dependency type (scripts, styles, etc.) and a list of files to be consumed (cherry picking files).
-- *`LANGUAGES`*: disable compilers not in use to optimize your build
-- *`PROXY_CONFIG`*: [connect-modrewrite](https://www.npmjs.com/package/connect-modrewrite) config to proxy api calls during development.
+**(Note: Configuration for all gulp plug-ins lives in the `config` folder.)**
+- *app.coffee*
+    - *`APP_NAME`*: name of the angular module for the app
+- *bower.coffee*
+    - *`BOWER_COMPONENTS`*: consume dependencies from bower by specifying dependency name, version, dependency type (scripts, styles, etc.) and a list of files to be consumed (cherry picking files).
+- *coffeeLint.coffee*: options for linting CoffeeScript. [See reference](http://www.coffeelint.org/#options)
+- *e2e.coffee*: options for protractor. [See reference](https://github.com/angular/protractor/blob/master/docs/referenceConf.js).
+- *jscs.coffee*: options for JSCS. [See reference](http://jscs.info/rules.html)
+- *jsHint.coffee*: options for jsHint. [See reference](http://jshint.com/docs/options/)
+- *karma.coffee*: options for karma. [See reference](http://karma-runner.github.io/0.8/config/configuration-file.html)
+- *languages.coffee*: disable compilers not in use to optimize your build
+- *less.coffee*: options for the less compiler. [See reference](http://lesscss.org/usage/)
+- *locationDeploy.coffee*: deploy app to a path
+- *plato.coffee*: options for plato. [See reference](https://github.com/es-analysis/plato)
+- *s3Deploy.coffee*: options to deploy to AWS S3. [See reference](https://www.npmjs.com/package/s3)
 - *`SCRIPTS`*: load order for scripts
+- *server.coffee*: options for browser-sync development server
+    - *`PROXY_CONFIG`*: proxy backend calls during development with connect-modrewrite. [See reference](https://www.npmjs.com/package/connect-modrewrite)
+    - *`PORT`*: run app on a specific port (default: 8181)
 - *`STYLES`*: load order for styles
 
 ### Add Bower Component
