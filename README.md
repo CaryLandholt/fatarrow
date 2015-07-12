@@ -171,7 +171,7 @@ Explanation of the folders:
 	- *test* : run e2e (protractor) and unit (karma) tests
 	- *[browserSync](http://www.browsersync.io/)* : test on multiple devices simultaneously
 	- *newer*: only process changed files
-	- *HTML5Mode*: [Angular's html5Mode](https://docs.angularjs.org/guide/$location) is supported on the BrowserSync server. Be sure to [configure your production web server](https://docs.angularjs.org/guide/$location).
+	- *HTML5Mode*: [Angular's html5Mode](https://docs.angularjs.org/guide/$location) is supported on the BrowserSync server. Be sure to [configure your production web server](https://docs.angularjs.org/guide/$location). HTMO5Mode is turned on by default. See Angular's documentation to turn it off for browser compatibility.
 	- *plato*: perform code visualization, static analysis, and complexity analysis
 
 ## Configuration<a name="conf"></a>

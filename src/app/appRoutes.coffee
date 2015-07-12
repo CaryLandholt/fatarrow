@@ -1,5 +1,6 @@
 class AppRoutes extends Config
-	constructor: ($routeProvider) ->
+	constructor: ($locationProvider, $routeProvider) ->
+		$locationProvider.html5Mode on
 		$routeProvider
 		.otherwise
 			redirectTo: '/'

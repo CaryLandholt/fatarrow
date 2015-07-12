@@ -1,6 +1,6 @@
 module.exports = class
 	constructor: ->
 		@visitPage = ->
-			browser.get '/#/'
+			browser.get '/'
 		@getTitle = ->
 			browser.getTitle()
