@@ -172,13 +172,14 @@ Explanation of the folders:
 	- *[browserSync](http://www.browsersync.io/)* : test on multiple devices simultaneously
 	- *newer*: only process changed files
 	- *HTML5Mode*: [Angular's html5Mode](https://docs.angularjs.org/guide/$location) is supported on the BrowserSync server. Be sure to [configure your production web server](https://docs.angularjs.org/guide/$location).
+	- *plato*: perform code visualization, static analysis, and complexity analysis
 
 ## Configuration<a name="conf"></a>
 **(Note: Configuration for all gulp plug-ins lives in the `config` folder.)**
 - *app.coffee*
-    - *`APP_NAME`*: name of the angular module for the app
+	- *`APP_NAME`*: name of the angular module for the app
 - *bower.coffee*
-    - *`BOWER_COMPONENTS`*: consume dependencies from bower by specifying dependency name, version, dependency type (scripts, styles, etc.) and a list of files to be consumed (cherry picking files).
+	- *`BOWER_COMPONENTS`*: consume dependencies from bower by specifying dependency name, version, dependency type (scripts, styles, etc.) and a list of files to be consumed (cherry picking files).
 - *coffeeLint.coffee*: options for linting CoffeeScript. [See reference](http://www.coffeelint.org/#options)
 - *e2e.coffee*: options for protractor. [See reference](https://github.com/angular/protractor/blob/master/docs/referenceConf.js).
 - *jscs.coffee*: options for JSCS. [See reference](http://jscs.info/rules.html)
@@ -191,8 +192,8 @@ Explanation of the folders:
 - *s3Deploy.coffee*: options to deploy to AWS S3. [See reference](https://www.npmjs.com/package/s3)
 - *`SCRIPTS`*: load order for scripts
 - *server.coffee*: options for browser-sync development server
-    - *`PROXY_CONFIG`*: proxy backend calls during development with connect-modrewrite. [See reference](https://www.npmjs.com/package/connect-modrewrite)
-    - *`PORT`*: run app on a specific port (default: 8181)
+	- *`PROXY_CONFIG`*: proxy backend calls during development with connect-modrewrite. [See reference](https://www.npmjs.com/package/connect-modrewrite)
+	- *`PORT`*: run app on a specific port (default: 8181)
 - *`STYLES`*: load order for styles
 
 ### Add Bower Component
