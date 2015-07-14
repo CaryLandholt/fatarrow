@@ -6,7 +6,6 @@ stats/
 node_modules/
 npm-debug.log
 phantomjsdriver.log
-test-results.xml
 bower.json
 protractorScreenshots
-testResults
+testResults/
