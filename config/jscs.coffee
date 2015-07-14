@@ -1,8 +1,6 @@
 jscs =
-	preset: 'airbnb'
+	preset: 'google'
 	validateIndentation:
 		value: '\t'
-		includeEmptyLines: true
-	fix: true
 
 module.exports = {jscs}

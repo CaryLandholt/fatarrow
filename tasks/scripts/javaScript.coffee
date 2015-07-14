@@ -33,9 +33,6 @@ module.exports = (gulp, plugins) -> ->
 			.pipe lintNotify 'jscs'
 			.on 'error', onError
 
-			.pipe gulp.dest SRC_DIRECTORY
-			.on 'error', onError
-
 			.pipe plugins.jshint options.jsHint
 			.on 'error', onError
 
