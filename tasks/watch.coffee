@@ -1,4 +1,4 @@
-{firstRun, injectCss, runSpecs} = require './options'
+{injectCss, runSpecs} = require './options'
 EXTENSIONS = require './extensions'
 {E2E_DIRECTORY, SRC_DIRECTORY} = require './constants'
 
@@ -34,5 +34,5 @@ module.exports = (gulp, plugins) -> ->
 	#
 	watcher
 		.on 'change', (event) ->
-			firstRun = true if event.type is 'deleted'
+			require('../options').firstRun = true if event.type is 'deleted'
 		.on 'error', onError

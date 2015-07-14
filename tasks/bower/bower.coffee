@@ -1,5 +1,4 @@
 bower = require 'bower'
-{firstRun} = require '../options'
 {BOWER_DIRECTORY} = require '../constants'
 {BOWER_COMPONENTS} = require '../../config/bower'
 q = require 'q'
@@ -7,12 +6,10 @@ q = require 'q'
 module.exports = (gulp, plugins) -> ->
 	{onError} = require('../events') plugins
 	# we only want the bower task to run ones
-	unless firstRun
+	unless require('../options').firstRun
 		deferred = q.defer()
 		deferred.resolve()
 		return deferred
-
-	firstRun = no
 
 	options =
 		directory: BOWER_DIRECTORY

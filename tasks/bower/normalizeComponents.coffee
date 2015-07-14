@@ -2,14 +2,13 @@ es = require 'event-stream'
 fs = require 'fs'
 q = require 'q'
 pkg = require '../../package.json'
-{BOWER_DIRECTORY, COMPONENTS_DIRECTORY, VENDOR_DIRECTORY} = require '../constants'
-{firstRun} = require '../options'
+{BOWER_DIRECTORY, BOWER_FILE, COMPONENTS_DIRECTORY, VENDOR_DIRECTORY} = require '../constants'
 {BOWER_COMPONENTS} = require '../../config/bower'
 path = require 'path'
 
 module.exports = (gulp, plugins) -> ->
 	{onError} = require('../events') plugins
-	unless firstRun
+	unless require('../options').firstRun
 		deferred = q.defer()
 		deferred.resolve()
 		return deferred
@@ -35,7 +34,7 @@ module.exports = (gulp, plugins) -> ->
 					components[key] = [] if not components[key]
 					components[key] = components[key].concat filesToAdd
 
-		fs.writeFile 'bower.json', JSON.stringify bowerJson, {}, '\t'
+		fs.writeFile BOWER_FILE, JSON.stringify bowerJson, {}, '\t'
 
 		components
 
