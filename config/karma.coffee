@@ -27,7 +27,8 @@ options =
 		'**/*.js'  : 'coverage'
 	reporters: [
 		'spec'
-		'coverage'
+		'coverage',
+		'junit'
 	]
 	singleRun: true
 	transports: [
@@ -37,5 +38,8 @@ options =
 	]
 	proxies:
 		'/img': '/src/img'
+	junitReporter:
+		outputDir: '../testResults'
+		suite: 'Karma Tests'
 
 module.exports = {options}
