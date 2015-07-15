@@ -77,6 +77,6 @@
     "devdeploy": "gulp deploy",
     "postinstall": "gulp e2e-driver-update",
     "test": "gulp test --no-open --citest",
-    "posttest": "gulp clean && gulp clean:working"
+    "posttest": "gulp clean:bower && gulp clean:working"
   }
 }
