@@ -42,5 +42,4 @@ module.exports = ->
 			middleware: [
 				modRewrite modRewriteConfig
 			]
-	, ->
-		firstRun = false
+	require('../options').firstRun = false
