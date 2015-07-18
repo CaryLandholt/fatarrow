@@ -34,5 +34,5 @@ module.exports = (gulp, plugins) -> ->
 	#
 	watcher
 		.on 'change', (event) ->
-			require('../options').firstRun = true if event.type is 'deleted'
+			require('./options').firstRun = true if event.type is 'deleted'
 		.on 'error', onError
