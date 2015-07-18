@@ -175,15 +175,16 @@ Explanation of the folders:
 	- *plato*: perform code visualization, static analysis, and complexity analysis
 
 ## Configuration<a name="conf"></a>
-**(Note: Configuration for all gulp plug-ins lives in the `config` folder.)**
+- *.jscsrc*: options for JSCS. [See reference](http://jscs.info/rules.html)
+- *.jshintrc*: options for jsHint. [See reference](http://jshint.com/docs/options/)
+
+**(Note: Configuration for the rest of the gulp plug-ins lives in the `config` folder.)**
 - *app.coffee*
 	- *`APP_NAME`*: name of the angular module for the app
 - *bower.coffee*
 	- *`BOWER_COMPONENTS`*: consume dependencies from bower by specifying dependency name, version, dependency type (scripts, styles, etc.) and a list of files to be consumed (cherry picking files).
 - *coffeeLint.coffee*: options for linting CoffeeScript. [See reference](http://www.coffeelint.org/#options)
 - *e2e.coffee*: options for protractor. [See reference](https://github.com/angular/protractor/blob/master/docs/referenceConf.js).
-- *jscs.coffee*: options for JSCS. [See reference](http://jscs.info/rules.html)
-- *jsHint.coffee*: options for jsHint. [See reference](http://jshint.com/docs/options/)
 - *karma.coffee*: options for karma. [See reference](http://karma-runner.github.io/0.8/config/configuration-file.html)
 - *languages.coffee*: disable compilers not in use to optimize your build
 - *less.coffee*: options for the less compiler. [See reference](http://lesscss.org/usage/)
