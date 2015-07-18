@@ -4,17 +4,12 @@ lintNotify            = require './reporters/lintNotify'
 {COMPONENTS_DIRECTORY,
 	TEMP_DIRECTORY,
 	SRC_DIRECTORY}    = require '../constants'
-{jsHint} = require '../../config/jsHint'
-{jscs} = require '../../config/jscs'
 
 templateOptions       = require '../templateOptions'
 
 module.exports = (gulp, plugins) -> ->
 	{onError} = require('../events') plugins
-	options = {
-		jsHint
-		jscs
-	}
+
 
 	sources = getScriptSources '.js'
 	srcs    = []
@@ -27,13 +22,13 @@ module.exports = (gulp, plugins) -> ->
 			.pipe plugins.template templateOptions
 			.on 'error', onError
 
-			.pipe plugins.jscs options.jscs
+			.pipe plugins.jscs()
 			.on 'error', onError
 
 			.pipe lintNotify 'jscs'
 			.on 'error', onError
 
-			.pipe plugins.jshint options.jsHint
+			.pipe plugins.jshint()
 			.on 'error', onError
 
 			.pipe plugins.jshint.reporter 'default'

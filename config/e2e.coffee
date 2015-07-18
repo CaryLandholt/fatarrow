@@ -6,7 +6,7 @@ exports.config =
 	jasmineNodeOpts:
 		silent: true
 	capabilities:
-		browserName: 'phantomjs'
+		browserName: 'chrome'
 		'phantomjs.binary.path': if /^win/.test(process.platform) then 'node_modules\\.bin\\phantomjs.cmd' else 'node_modules/phantomjs/bin/phantomjs'
 	baseUrl: "http://localhost:8181"
 	onPrepare: ->
