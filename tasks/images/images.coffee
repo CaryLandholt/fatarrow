@@ -11,14 +11,6 @@ module.exports = (gulp, plugins) -> ->
 			.src sources, {cwd: TEMP_DIRECTORY, nodir: true}
 			.on 'error', onError
 
-	return if isProd
-		src
-			.pipe plugins.imagemin()
-			.on 'error', onError
-
-			.pipe gulp.dest DIST_DIRECTORY
-			.on 'error', onError
-
 	src
 		.pipe gulp.dest DIST_DIRECTORY
 		.on 'error', onError

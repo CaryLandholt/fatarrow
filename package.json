@@ -32,7 +32,6 @@
     "gulp-flatten": "0.1.0",
     "gulp-haml": "0.1.5",
     "gulp-if": "^1.2.5",
-    "gulp-imagemin": "^2.0.0",
     "gulp-jade": "1.0.1",
     "gulp-jscs": "^1.6.0",
     "gulp-jshint": "^1.6.3",
