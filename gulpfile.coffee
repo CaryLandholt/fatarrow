@@ -80,7 +80,8 @@ gulp.task 'javaScript', ['prepare'], taskRequire './tasks/scripts/javaScript'
 gulp.task 'karma', taskRequire './tasks/test/karma'
 
 # Compile Less
-gulp.task 'less', ['prepare'], taskRequire './tasks/styles/less'
+gulp.task 'copy:less', ['prepare'], taskRequire './tasks/styles/copyLess'
+gulp.task 'less', ['copy:less'], taskRequire './tasks/styles/less'
 
 # Compile LiveScript
 gulp.task 'liveScript', ['prepare'], taskRequire './tasks/scripts/liveScript'
