@@ -4,6 +4,7 @@ module.exports =
 	BOWER_FILE            : 'bower.json'
 	CHANGELOG_FILE        : 'CHANGELOG.md'
 	COMPONENTS_DIRECTORY  : "#{BOWER_DIRECTORY}_/"
+	COVERAGE_DIRECTORY    : 'coverage/'
 	DIST_DIRECTORY        : 'dist/'
 	E2E_DIRECTORY         : 'e2e/'
 	FONTS_DIRECTORY       : 'fonts/'
