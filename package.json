@@ -69,12 +69,9 @@
     "yargs": "^3.13.0"
   },
   "scripts": {
-    "dev": "gulp --no-serve --no-specs",
     "prod": "gulp --prod --no-serve",
     "predeploy": "npm test && npm run prod",
     "deploy": "gulp deploy",
-    "predevdeploy": "npm test && npm run dev",
-    "devdeploy": "gulp deploy",
     "postinstall": "gulp e2e-driver-update",
     "test": "gulp test --no-open --citest",
     "posttest": "gulp clean:bower && gulp clean:working"
