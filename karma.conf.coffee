@@ -6,7 +6,7 @@ module.exports = (config) ->
 	config.set
 		autoWatch: false
 		background: true
-		basePath: DIST_DIRECTORY
+		basePath: 'dist'
 		browsers: [
 			'PhantomJS'
 		]
@@ -14,7 +14,7 @@ module.exports = (config) ->
 		coverageReporter:
 			type: 'html'
 			dir : '../coverage/'
-		exclude: ["#{STATS_DIST_DIRECTORY}**"]
+		exclude: ['stats/**']
 		files: sources
 		frameworks: [
 			'jasmine'

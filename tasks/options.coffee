@@ -12,11 +12,6 @@ options = require 'yargs'
 		default     : true
 		description : 'Force retrieve of Bower components'
 		type        : 'boolean'
-	.option 'citest',
-		alias       : 'c'
-		default     : false
-		description : 'Run tests and report exit codes'
-		type        : 'boolean'
 	.option 'help',
 		alias       : 'h'
 		default     : true
@@ -54,7 +49,7 @@ options = require 'yargs'
 	.example 'gulp', 'Run with fake data with $httpBackend'
 	.example 'gulp --backend', 'Run with real data from an api. See config.coffee for proxy configuraton.'
 	.example 'gulp --prod --no-serve', 'Make a production build on a CI server without running the web server.'
-	.example 'gulp test --citest --no-open', 'Run Karma and Protractor tests during a CI build.'
+	.example 'npm test', 'Run Karma and Protractor tests during a CI build.'
 	.example 'gulp --injectcss', 'Use Browsersync to inject CSS http://www.browsersync.io/docs/gulp/#gulp-sass-css.'
 	.example 'npm run deploy [-- --target location | s3]', 'Deploy to a target.'
 	.epilog 'If you find an issue, feel free to file it at https://github.com/CaryLandholt/fatarrow/issues'
@@ -63,7 +58,6 @@ options = require 'yargs'
 getSwitchOption = (option) ->
 	options[option]
 
-citest            = getSwitchOption 'citest'
 firstRun          = true
 getBower          = getSwitchOption 'bower'
 showHelp          = !isProd and getSwitchOption 'help'
@@ -79,7 +73,6 @@ ngClassifyOptions =
 	appName: require('../config/app').APP_NAME
 
 module.exports = {
-	citest
 	firstRun
 	getBower
 	getSwitchOption

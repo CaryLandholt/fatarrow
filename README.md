@@ -69,11 +69,11 @@ $ gulp --prod --no-serve
 ```
 Run tests on your build server
 ```bash
-$ gulp test --citest --no-open
+$ npm test
 ```
 Deploy your app<a name="deploy"></a>
 ```bash
-$ gulp test --citest --no-open
+$ npm test
 $ gulp --prod --no-serve
 # deploy to a path (configuration in /config/locationConfig.coffee)
 $ gulp deploy

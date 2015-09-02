@@ -1,14 +1,9 @@
 karma     = require 'karma'
 notify    = require('../utils').notify
-{citest}  = require '../options'
-{options} = require '../../config/karma'
+path      = require 'path'
 
 module.exports = (gulp, plugins) -> ->
-	karma.server.start options, (code) ->
-		if citest
-			process.exit code if code
-			return
-
+	karma.server.start {configFile: path.join __dirname, '../../karma.conf.coffee'}, (code) ->
 		if code > 0
 			notify 'Karma tests failed', false
 		else
