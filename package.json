@@ -73,7 +73,6 @@
     "predeploy": "npm test && npm run prod",
     "deploy": "gulp deploy",
     "postinstall": "gulp e2e-driver-update",
-    "test": "gulp test --no-open --citest",
-    "posttest": "gulp clean:bower && gulp clean:working"
+    "test": "gulp test --no-open --citest"
   }
 }
