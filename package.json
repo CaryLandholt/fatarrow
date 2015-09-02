@@ -53,7 +53,7 @@
     "gulp-uglify": "^1.4.0",
     "gulp-util": "^3.0.0",
     "jasmine-reporters": "^2.0.6",
-    "karma": "0.13.9",
+    "karma": "0.12.37",
     "karma-coverage": "^0.5.1",
     "karma-jasmine": "0.3.6",
     "karma-junit-reporter": "^0.3.4",
