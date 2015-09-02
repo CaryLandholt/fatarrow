@@ -72,7 +72,6 @@ isProd            = getSwitchOption 'prod'
 open              = getSwitchOption 'open'
 useBackendless    = not (isProd or getSwitchOption('backend'))
 runServer         = getSwitchOption 'serve'
-rune2e            = !isProd and useBackendless and getSwitchOption 'specs'
 runSpecs          = !isProd and getSwitchOption 'specs'
 runWatch          = !isProd and runServer
 target            = getSwitchOption 'target'
@@ -89,7 +88,6 @@ module.exports = {
 	isProd
 	ngClassifyOptions
 	open
-	rune2e
 	runSpecs
 	runServer
 	runWatch

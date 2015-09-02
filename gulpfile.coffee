@@ -5,7 +5,7 @@ yargs              = require 'yargs'
 {STYLES}           = require './config/styles'
 {BOWER_COMPONENTS} = require './config/bower'
 {LANGUAGES}        = require './config/languages'
-{getBower, isProd, useBackendless, rune2e, runServer, runSpecs, runWatch, showHelp, target} = require './tasks/options'
+{getBower, isProd, useBackendless, runServer, runSpecs, runWatch, showHelp, target} = require './tasks/options'
 
 plugins = require './tasks/plugins'
 
@@ -46,7 +46,7 @@ gulp.task 's3Deploy', taskRequire './tasks/deploy/s3Deploy'
 gulp.task 'deploy', [].concat(if target is 's3' then ['s3Deploy'] else ['locationDeploy'])
 
 # Execute E2E tests
-gulp.task 'e2e', ['server'], taskRequire './tasks/test/e2e'
+gulp.task 'e2e', taskRequire './tasks/test/e2e'
 gulp.task 'protractor', taskRequire './tasks/test/e2e'
 
 # Update E2E driver
@@ -126,7 +126,7 @@ gulp.task 'styles', ['css'].concat(LANGUAGES.STYLES), taskRequire './tasks/style
 gulp.task 'templateCache', ['html'].concat(LANGUAGES.VIEWS), taskRequire './tasks/views/templateCache'
 
 # Execute unit tests
-gulp.task 'test', [].concat(if rune2e then ['e2e'] else ['build']), taskRequire './tasks/test/test'
+gulp.task 'test', [].concat(['build']), taskRequire './tasks/test/test'
 gulp.task 'unittest', [].concat(['spa']), taskRequire './tasks/test/test'
 
 # Compile TypeScript
