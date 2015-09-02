@@ -5,7 +5,10 @@ notify    = require('../utils').notify
 
 module.exports = (gulp, plugins) -> ->
 	karma.server.start options, (code) ->
-		return if citest
+		if citest
+			process.exit code if code
+			return
+
 		if code > 0
 			notify 'Karma tests failed', false
 		else
