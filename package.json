@@ -52,6 +52,7 @@
     "gulp-typescript": "^2.8.1",
     "gulp-uglify": "^1.4.0",
     "gulp-util": "^3.0.0",
+    "jasmine-core": "^2.3.4",
     "jasmine-reporters": "^2.0.6",
     "karma": "0.12.37",
     "karma-coverage": "^0.5.1",
@@ -60,6 +61,7 @@
     "karma-ng-html2js-preprocessor": "0.1.2",
     "karma-phantomjs-launcher": "0.2.1",
     "karma-spec-reporter": "0.0.20",
+    "livescript": "^1.4.0",
     "node-notifier": "^4.2.3",
     "phantomjs": "^1.9.18",
     "plato": "^1.5.0",
@@ -84,6 +86,6 @@
     "start": "gulp"
   },
   "precommit": [
-      "precommit"
+    "precommit"
   ]
 }
