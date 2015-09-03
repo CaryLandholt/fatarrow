@@ -91,7 +91,7 @@ gulp.task 'liveScript', ['prepare'], taskRequire './tasks/scripts/liveScript'
 gulp.task 'markdown', ['prepare'], taskRequire './tasks/views/markdown'
 
 # Normalize Bower components
-gulp.task 'normalizeComponents', taskRequire './tasks/bower/normalizeComponents'
+gulp.task 'normalizeComponents', ['clean:working'], taskRequire './tasks/bower/normalizeComponents'
 
 # Execute Plato complexity analysis
 gulp.task 'plato', taskRequire './tasks/plato/plato'
