@@ -1,6 +1,6 @@
 {injectCss, runSpecs} = require './options'
 EXTENSIONS = require './extensions'
-{E2E_DIRECTORY, SRC_DIRECTORY} = require './constants'
+{SRC_DIRECTORY} = require './constants'
 
 module.exports = (gulp, plugins) -> ->
 	{onError} = require('./events') plugins

@@ -10,4 +10,4 @@ module.exports = (gulp, plugins) -> ->
 		if code > 0
 			notify 'Karma tests failed', false
 		else
-			notify 'Karma tests passed', true
+			notify 'Karma tests passed'

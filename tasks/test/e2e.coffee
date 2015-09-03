@@ -3,7 +3,7 @@ path      = require 'path'
 {E2E_DIRECTORY} = require '../constants'
 
 module.exports = (gulp, plugins) -> ->
-	testsErrored = false
+	testsErrored = no
 	{onError} = require('../events') plugins
 	sources             = '**/*.spec.{coffee,js}'
 
@@ -22,6 +22,6 @@ module.exports = (gulp, plugins) -> ->
 		testsErrored = yes
 		notify 'Protractor tests failed', false
 	str.on 'close', (code) ->
-		notify "Protractor tests passed", true unless testsErrored
-		testsErrored = false
+		notify "Protractor tests passed" unless testsErrored
+		testsErrored = no
 	str
