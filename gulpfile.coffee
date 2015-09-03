@@ -46,8 +46,9 @@ gulp.task 's3Deploy', taskRequire './tasks/deploy/s3Deploy'
 gulp.task 'deploy', [].concat(if target is 's3' then ['s3Deploy'] else ['locationDeploy'])
 
 # Execute E2E tests
-gulp.task 'protractor', taskRequire './tasks/test/e2e'
-gulp.task 'e2e', ['protractor'], taskRequire './tasks/test/e2eWatch'
+gulp.task 'protractor', taskRequire './tasks/test/protractor'
+gulp.task 'protractor:watch', ['protractor'], taskRequire './tasks/test/protractorWatch'
+gulp.task 'protractor:ci', ['serve'], taskRequire './tasks/test/protractorCI'
 
 # Update E2E driver
 gulp.task 'e2e-driver-update', plugins.protractor.webdriver_update

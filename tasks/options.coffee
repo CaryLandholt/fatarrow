@@ -24,7 +24,7 @@ options = require 'yargs'
 		type        : 'boolean'
 	.option 'open',
 		alias       : 'o'
-		default     : true
+		default     : false
 		description : 'Open app from browser-sync'
 		type        : 'boolean'
 	.option 'prod',

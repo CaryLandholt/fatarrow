@@ -11,6 +11,6 @@ module.exports = (gulp, plugins) -> ->
 	sources = []
 		.concat ("**/*#{extension}" for extension in extensions)
 
-	watcher = gulp.watch sources, {cwd: E2E_DIRECTORY, maxListeners: 999}, ['e2e']
+	watcher = gulp.watch sources, {cwd: E2E_DIRECTORY, maxListeners: 999}, ['protractor']
 	watcher
 		.on 'error', onError

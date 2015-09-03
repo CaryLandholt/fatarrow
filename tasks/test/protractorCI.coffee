@@ -4,24 +4,19 @@ path      = require 'path'
 
 module.exports = (gulp, plugins) -> ->
 	testsErrored = no
-	{onError} = require('../events') plugins
-	sources             = '**/*.spec.{coffee,js}'
+	sources = '**/*.spec.{coffee,js}'
 
 	options =
 		protractor:
-			configFile: './config/e2e.coffee'
+			configFile: './protractor.conf.coffee'
 
 	str = gulp
 		.src sources, {cwd: E2E_DIRECTORY, read: false}
-		.on 'error', onError
-
 		.pipe plugins.protractor.protractor options.protractor
 
-	str.on 'error', onError
 	str.on 'error', ->
 		testsErrored = yes
-		notify 'Protractor tests failed', false
+		process.exit 1
 	str.on 'close', (code) ->
-		notify "Protractor tests passed" unless testsErrored
+		process.exit 0 unless testsErrored
 		testsErrored = no
-	str
