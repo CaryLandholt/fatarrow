@@ -80,6 +80,7 @@
     "test": "karma start karma.conf.coffee && gulp protractor:ci",
     "posttest": "npm run clean",
     "precommit": "karma start karma.conf.coffee && gulp protractor:ci",
+    "plato": "gulp plato",
     "start": "gulp"
   },
   "precommit": [
