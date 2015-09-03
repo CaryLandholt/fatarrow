@@ -70,14 +70,16 @@
     "yargs": "^3.23.0"
   },
   "scripts": {
+    "clean": "gulp clean:working && gulp clean:bower",
     "prod": "gulp --prod --no-serve",
     "predeploy": "npm test && npm run prod",
     "deploy": "gulp deploy",
     "postinstall": "gulp e2e-driver-update",
     "pretest": "gulp build",
     "test": "karma start karma.conf.coffee && gulp protractor:ci",
-    "posttest": "gulp clean:working",
-    "precommit": "karma start karma.conf.coffee && gulp protractor:ci"
+    "posttest": "npm run clean",
+    "precommit": "karma start karma.conf.coffee && gulp protractor:ci",
+    "start": "gulp"
   },
   "precommit": [
       "precommit"
