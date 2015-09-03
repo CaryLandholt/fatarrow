@@ -79,7 +79,7 @@
     "posttest": "gulp clean:working",
     "precommit": "karma start karma.conf.coffee && gulp protractor:ci"
   },
-  "precommit": {
+  "precommit": [
       "precommit"
-  }
+  ]
 }
