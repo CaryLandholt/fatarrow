@@ -18,7 +18,7 @@ gulp.task 'help', require('./tasks/help') gulp, plugins
 gulp.task 'babel', ['prepare'], taskRequire './tasks/scripts/babel'
 
 # Get components via Bower
-gulp.task 'bower', ['clean:bower'], taskRequire './tasks/bower/bower'
+gulp.task 'bower', taskRequire './tasks/bower/bower'
 
 # build the app
 gulp.task 'build', ['spa', 'fonts', 'images'], taskRequire './tasks/build'
@@ -91,7 +91,7 @@ gulp.task 'liveScript', ['prepare'], taskRequire './tasks/scripts/liveScript'
 gulp.task 'markdown', ['prepare'], taskRequire './tasks/views/markdown'
 
 # Normalize Bower components
-gulp.task 'normalizeComponents', ['bower'], taskRequire './tasks/bower/normalizeComponents'
+gulp.task 'normalizeComponents', taskRequire './tasks/bower/normalizeComponents'
 
 # Execute Plato complexity analysis
 gulp.task 'plato', ['scripts'], taskRequire './tasks/plato/plato'
