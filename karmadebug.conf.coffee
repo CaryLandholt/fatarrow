@@ -4,16 +4,11 @@ sources = [].concat SCRIPTS, '**/*.html'
 
 module.exports = (config) ->
 	config.set
-		autoWatch: true
 		basePath: 'dist'
 		browsers: [
 			'Chrome'
 		]
-		colors: true
-		coverageReporter:
-			type: 'html'
-			dir : '../coverage/'
-		exclude: ['stats/**', 'dist/vendor/**']
+		exclude: ['stats/**']
 		files: sources
 		frameworks: [
 			'jasmine'
@@ -23,16 +18,9 @@ module.exports = (config) ->
 			stripPrefix: 'dist/'
 		preprocessors:
 			'**/*.html': 'ng-html2js'
-			'**/*.js'  : ['coverage', 'sourcemap']
+			'**/*.js'  : ['sourcemap']
 		reporters: [
 			'spec'
-			'coverage',
-		]
-		singleRun: false
-		transports: [
-			'flashsocket'
-			'xhr-polling'
-			'jsonp-polling'
 		]
 		proxies:
 			'/img': '/src/img'

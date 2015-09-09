@@ -9,11 +9,10 @@ module.exports = (config) ->
 		browsers: [
 			'PhantomJS'
 		]
-		colors: true
 		coverageReporter:
 			type: 'html'
 			dir : '../coverage/'
-		exclude: ['stats/**', 'dist/vendor/**']
+		exclude: ['stats/**']
 		files: sources
 		frameworks: [
 			'jasmine'
@@ -22,6 +21,7 @@ module.exports = (config) ->
 		logLevel: 'WARN'
 		ngHtml2JsPreprocessor:
 			stripPrefix: 'dist/'
+		port: 9877
 		preprocessors:
 			'**/*.html': 'ng-html2js'
 			'**/*.js'  : 'coverage'
