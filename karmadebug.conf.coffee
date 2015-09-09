@@ -4,10 +4,10 @@ sources = [].concat SCRIPTS, '**/*.html'
 
 module.exports = (config) ->
 	config.set
-		autoWatch: false
+		autoWatch: true
 		basePath: 'dist'
 		browsers: [
-			'PhantomJS'
+			'Chrome'
 		]
 		colors: true
 		coverageReporter:
@@ -18,19 +18,17 @@ module.exports = (config) ->
 		frameworks: [
 			'jasmine'
 		]
-		keepalive: false
 		logLevel: 'WARN'
 		ngHtml2JsPreprocessor:
 			stripPrefix: 'dist/'
 		preprocessors:
 			'**/*.html': 'ng-html2js'
-			'**/*.js'  : 'coverage'
+			'**/*.js'  : ['coverage', 'sourcemap']
 		reporters: [
 			'spec'
 			'coverage',
-			'junit'
 		]
-		singleRun: true
+		singleRun: false
 		transports: [
 			'flashsocket'
 			'xhr-polling'
@@ -38,6 +36,3 @@ module.exports = (config) ->
 		]
 		proxies:
 			'/img': '/src/img'
-		junitReporter:
-			outputDir: '../testResults'
-			suite: 'Karma Tests'

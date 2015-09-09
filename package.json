@@ -60,6 +60,7 @@
     "karma-junit-reporter": "^0.3.4",
     "karma-ng-html2js-preprocessor": "0.1.2",
     "karma-phantomjs-launcher": "0.2.1",
+    "karma-sourcemap-loader": "^0.3.5",
     "karma-spec-reporter": "0.0.20",
     "livescript": "^1.4.0",
     "node-notifier": "^4.2.3",
@@ -72,6 +73,7 @@
     "yargs": "^3.23.0"
   },
   "scripts": {
+    "prebower": "gulp clean:bower",
     "bower": "gulp bower",
     "clean": "gulp clean:working && gulp clean:bower",
     "prod": "gulp --prod --no-serve",

@@ -28,7 +28,7 @@ module.exports = (gulp, plugins) -> ->
 	stylesSources = [].concat ("**/*#{extension}" for extension in stylesExtensions)
 
 	watcher       = gulp.watch sources, {cwd: SRC_DIRECTORY, maxListeners: 999}, tasks
-	karmaWatcher  = gulp.watch testSources, {cwd: SRC_DIRECTORY, maxListeners: 999}, ['unittest']
+	karmaWatcher  = gulp.watch testSources, {cwd: SRC_DIRECTORY, maxListeners: 999}, ['test']
 	stylesWatcher = gulp.watch stylesSources, {cwd: SRC_DIRECTORY, maxListeners: 999}, [].concat(if injectCss then ['build'] else ['reload'])
 	#
 	watcher
