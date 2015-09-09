@@ -65,7 +65,7 @@ module.exports = (gulp, plugins) -> ->
 		.pipe plugins.coffee()
 		.on 'error', onError
 
-		.pipe plugins.sourcemaps.write './', options.sourceMaps
+		.pipe plugins.sourcemaps.write()
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY

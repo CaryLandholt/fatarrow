@@ -1,6 +1,8 @@
 {DIST_DIRECTORY, STATS_DIST_DIRECTORY} = require './tasks/constants'
 {SCRIPTS} = require './config/scripts'
-sources = [].concat SCRIPTS, '**/*.html'
+sources = []
+	.concat SCRIPTS
+	.concat '**/*.html'
 
 module.exports = (config) ->
 	config.set
@@ -8,17 +10,12 @@ module.exports = (config) ->
 		browsers: [
 			'Chrome'
 		]
-		exclude: ['stats/**']
 		files: sources
-		frameworks: [
-			'jasmine'
-		]
-		logLevel: 'WARN'
+		frameworks: ['jasmine']
 		ngHtml2JsPreprocessor:
 			stripPrefix: 'dist/'
 		preprocessors:
 			'**/*.html': 'ng-html2js'
-			'**/*.js'  : ['sourcemap']
 		reporters: [
 			'spec'
 		]

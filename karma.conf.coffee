@@ -12,12 +12,10 @@ module.exports = (config) ->
 		coverageReporter:
 			type: 'html'
 			dir : '../coverage/'
-		exclude: ['stats/**']
 		files: sources
 		frameworks: [
 			'jasmine'
 		]
-		keepalive: false
 		logLevel: 'WARN'
 		ngHtml2JsPreprocessor:
 			stripPrefix: 'dist/'
@@ -27,17 +25,8 @@ module.exports = (config) ->
 			'**/*.js'  : 'coverage'
 		reporters: [
 			'spec'
-			'coverage',
-			'junit'
+			'coverage'
 		]
 		singleRun: true
-		transports: [
-			'flashsocket'
-			'xhr-polling'
-			'jsonp-polling'
-		]
 		proxies:
 			'/img': '/src/img'
-		junitReporter:
-			outputDir: '../testResults'
-			suite: 'Karma Tests'
