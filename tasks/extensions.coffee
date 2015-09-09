@@ -12,6 +12,7 @@ module.exports =
 			'.jpeg'
 			'.jpg'
 			'.png'
+			'.svg'
 		]
 	SCRIPTS:
 		COMPILED: [

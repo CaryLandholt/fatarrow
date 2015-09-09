@@ -1,9 +1,9 @@
 q      = require 'q'
 s3     = require 's3'
-config = require '../../config/s3Deploy.coffee'
 {DIST_DIRECTORY} = require '../constants'
 
 module.exports = (gulp, plugins) -> ->
+	config = require '../../config/s3Deploy.coffee'
 	{onError} = require('../events') plugins
 	deferred  = q.defer()
 
