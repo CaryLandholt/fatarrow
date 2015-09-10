@@ -75,7 +75,7 @@
   "scripts": {
     "prebower": "gulp clean:bower",
     "bower": "gulp bower",
-    "clean": "gulp clean:working && gulp clean:bower",
+    "clean": "gulp clean:working",
     "prod": "gulp --prod --no-serve",
     "predeploy": "npm test && npm run prod",
     "deploy": "gulp deploy",
