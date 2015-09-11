@@ -22,7 +22,7 @@ module.exports = (config) ->
 		port: 9877
 		preprocessors:
 			'**/*.html': 'ng-html2js'
-			'**/*.js'  : 'coverage'
+			'!(vendor)/**/!(*spec).js': 'coverage'
 		reporters: [
 			'spec'
 			'coverage'
