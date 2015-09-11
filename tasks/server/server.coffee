@@ -3,7 +3,7 @@ url = require 'url'
 browserSync = require 'browser-sync'
 {PROXY_CONFIG, PORT} = require '../../config/server'
 {DIST_DIRECTORY} = require '../constants'
-{open} = require '../options'
+{useBackendless, open} = require '../options'
 {FONTS, IMAGES, SCRIPTS, SOURCEMAPS, STYLES, VIEWS} = require '../extensions'
 
 extensions = []
@@ -31,7 +31,8 @@ module.exports = ->
 		'^.*$ /index.html [L]'
 	]
 
-	modRewriteConfig = PROXY_CONFIG
+	modRewriteConfig = []
+		.concat (unless useBackendless then PROXY_CONFIG else [])
 		.concat html5ModeConfig
 
 	browserSync
