@@ -27,6 +27,8 @@ module.exports = (config) ->
 			'spec'
 			'coverage'
 		]
+		specReporter:
+			suppressSkipped: true
 		singleRun: true
 		proxies:
 			'/img': '/src/img'
