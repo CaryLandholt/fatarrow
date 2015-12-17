@@ -67,7 +67,6 @@
     "node-notifier": "^4.2.3",
     "phantomjs": "^1.9.18",
     "plato": "^1.5.0",
-    "pre-commit": "^1.1.1",
     "protractor": "^2.2.0",
     "q": "^1.4.1",
     "s3": "^4.4.0",
@@ -85,7 +84,6 @@
     "pretest": "gulp build",
     "test": "karma start karma.conf.coffee && gulp protractor:ci",
     "posttest": "npm run clean",
-    "precommit": "karma start karma.conf.coffee && gulp protractor:ci",
     "plato": "gulp plato",
     "start": "gulp"
   },
