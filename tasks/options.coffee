@@ -1,7 +1,6 @@
 options = require 'yargs'
 	.usage 'Run gulp with the following options.'
 	.help '?'
-	.alias '?', 'help'
 	.option 'backend',
 		alias       : 'b'
 		default     : false
