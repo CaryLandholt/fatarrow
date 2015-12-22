@@ -1,11 +1,11 @@
 BOWER_COMPONENTS =
-	'angular': '1.3.8':
+	'angular': '1.4.7':
 		scripts: 'angular.min.js'
-	'angular-animate': '1.3.8':
+	'angular-animate': '1.4.7':
 		scripts: 'angular-animate.min.js'
-	'angular-mocks': '1.3.8':
+	'angular-mocks': '1.4.7':
 		scripts: 'angular-mocks.js'
-	'angular-route': '1.3.8':
+	'angular-route': '1.4.7':
 		scripts: 'angular-route.min.js'
 	'angular-loading-bar': '0.6.0':
 		scripts: 'build/loading-bar.min.js'
