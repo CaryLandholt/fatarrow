@@ -45,6 +45,11 @@ options = require 'yargs'
 		alias       : 't'
 		description : 'Deployment target'
 		type        : 'string'
+	.option 'notify',
+		alias       : 'n'
+		default     : 'system'
+		description : 'System or in-browser notifications. Defaults to "system". Use "browser" for browserSync notifications. Use "off" for no notification.'
+		type        : 'string'
 	.example 'gulp', 'Run with fake data with $httpBackend'
 	.example 'gulp --backend', 'Run with real data from an api. See config.coffee for proxy configuraton.'
 	.example 'gulp --prod --no-serve', 'Make a production build on a CI server without running the web server.'
@@ -68,6 +73,7 @@ runServer         = getSwitchOption 'serve'
 runSpecs          = !isProd and getSwitchOption 'specs'
 runWatch          = !isProd and runServer
 target            = getSwitchOption 'target'
+notify            = getSwitchOption 'notify'
 ngClassifyOptions =
 	appName: require('../config/app').APP_NAME
 
@@ -79,6 +85,7 @@ module.exports = {
 	injectCss
 	isProd
 	ngClassifyOptions
+	notify
 	open
 	runSpecs
 	runServer
