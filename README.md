@@ -32,7 +32,7 @@ Enter the following in the terminal
 
 Option 1: Using Yeoman Generator (Recommended)
 ```bash
-$ npm install -g gulp yo bower
+$ npm install -g gulp yo
 $ npm install -g generator-fatarrow
 $ mkdir my-new-project && cd $_
 $ yo fatarrow

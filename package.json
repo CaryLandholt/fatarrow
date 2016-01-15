@@ -16,7 +16,7 @@
     "node": ">=0.10.0"
   },
   "devDependencies": {
-    "bower": "^1.5.2",
+    "bower": "^1.7.2",
     "browser-sync": "^2.8.2",
     "coffee-script": "^1.7.1",
     "connect-modrewrite": "^0.8.2",
@@ -80,7 +80,7 @@
     "predeploy": "npm test && npm run prod",
     "deploy": "gulp deploy",
     "karmadebug": "karma start karmadebug.conf.coffee",
-    "postinstall": "gulp bower && gulp e2e-driver-update",
+    "postinstall": "gulp bower && bower install && gulp e2e-driver-update",
     "pretest": "gulp build",
     "test": "karma start karma.conf.coffee && gulp protractor:ci",
     "posttest": "npm run clean",

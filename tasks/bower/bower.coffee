@@ -1,4 +1,3 @@
-bower = require 'bower'
 fs = require 'fs'
 q = require 'q'
 path = require 'path'
@@ -13,12 +12,6 @@ module.exports = (gulp, plugins) -> ->
 		deferred = q.defer()
 		deferred.resolve()
 		return deferred
-
-	options =
-		directory: BOWER_DIRECTORY
-
-	bowerOptions =
-		forceLatest: true
 
 	components = []
 
@@ -47,23 +40,3 @@ module.exports = (gulp, plugins) -> ->
 					compo[key] = compo[key].concat filesToAdd
 
 		fs.writeFile BOWER_FILE, JSON.stringify bowerJson, {}, '\t'
-
-	for component, value of BOWER_COMPONENTS
-		for version, files of value
-			hasVersion = !!version
-
-			if !hasVersion
-				components.push component
-				continue
-
-			isUrl = version.match urlRegEx
-
-			if isUrl
-				components.push version
-				continue
-
-			components.push "#{component}##{version}"
-
-	bower
-		.commands.install components, bowerOptions, options
-		.on 'error', onError
