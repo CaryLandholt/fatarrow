@@ -27,6 +27,7 @@ module.exports = ->
 	html5ModeConfig = [
 		'^/img/.*$ - [L]'
 		'^/fonts/.*$ - [L]'
+		'^/vendor/.*$ - [L]'
 		"^(#{expression})$ - [L]"
 		'^.*$ /index.html [L]'
 	]
