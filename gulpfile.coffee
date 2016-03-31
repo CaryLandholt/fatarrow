@@ -20,11 +20,12 @@ gulp.task 'babel', ['prepare'], taskRequire './tasks/scripts/babel'
 # Get components via Bower
 gulp.task 'bower', taskRequire './tasks/bower/bower'
 
-# build the app
+# Build the app
 gulp.task 'build', ['spa', 'fonts', 'images'], taskRequire './tasks/build'
 
 # Generate CHANGELOG
 gulp.task 'changelog', ['normalizeComponents', 'stats'], taskRequire './tasks/changelog/changelog'
+
 # Clean all build directories
 gulp.task 'clean:bower', taskRequire './tasks/clean/cleanBower'
 
@@ -38,7 +39,12 @@ gulp.task 'coffeeScript', ['prepare'], taskRequire './tasks/scripts/coffeeScript
 gulp.task 'css', ['prepare'], taskRequire './tasks/styles/css'
 
 # Default build
-gulp.task 'default', [].concat(if runServer then ['server'] else ['build']).concat(if runWatch then ['watch'] else []).concat(if runSpecs then ['test'] else []).concat(if showHelp then ['help'] else [])
+gulp.task 'default',
+	[]
+	.concat(if runServer then ['server'] else ['build'])
+	.concat(if runWatch then ['watch'] else [])
+	.concat(if runSpecs then ['test'] else [])
+	.concat(if showHelp then ['help'] else [])
 
 # Deploy
 gulp.task 'locationDeploy', taskRequire './tasks/deploy/locationDeploy'
