@@ -1,0 +1,15 @@
+// Here's a file which doesn't really style anything, but is in place to make
+// sure that building/compiling/processing the styles works ok.
+
+// This LESS selector should get expanded into:
+// .masthead .text-muted {...}
+// And it should have the vendor prefixes in place for flexbox and user-select.
+@angular-color: #a23d30;
+
+.masthead {
+	.text-muted {
+		color: @angular-color;
+		display: flex;
+		user-select: none;
+	}
+}

@@ -1,8 +1,10 @@
+autoprefixer = require 'autoprefixer'
 browserSync = require 'browser-sync'
 {DIST_DIRECTORY, TEMP_DIRECTORY, STYLES_MIN_DIRECTORY, STYLES_MIN_FILE} = require '../constants'
 {isProd, injectCss} = require '../options'
 path = require 'path'
-templateOptions       = require '../templateOptions'
+postcss = require 'gulp-postcss'
+templateOptions = require '../templateOptions'
 {STYLES} = require '../../config/styles'
 
 module.exports = (gulp, plugins) -> ->
@@ -16,6 +18,13 @@ module.exports = (gulp, plugins) -> ->
 	src =
 		gulp
 			.src sources, {cwd: TEMP_DIRECTORY, nodir: true}
+			.on 'error', onError
+
+			# Now that we have all the preprocessor compilation done, we can perform
+			# any processing that needs to happen to the raw CSS output.
+			.pipe postcss([
+				autoprefixer(browsers: ['last 2 versions'])
+			])
 			.on 'error', onError
 
 	return if isProd
