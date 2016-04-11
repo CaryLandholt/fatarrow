@@ -83,7 +83,7 @@
     "deploy": "gulp deploy",
     "karmadebug": "karma start karmadebug.conf.coffee",
     "postinstall": "gulp bower && gulp e2e-driver-update",
-    "pretest": "gulp build",
+    "pretest": "bower install && gulp build",
     "test": "karma start karma.conf.coffee && gulp protractor:ci",
     "posttest": "npm run clean",
     "plato": "gulp plato",
