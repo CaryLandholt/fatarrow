@@ -7,7 +7,6 @@ lintNotify            = require './reporters/lintNotify'
 	SRC_DIRECTORY}    = require '../constants'
 templateOptions       = require '../templateOptions'
 {ngClassifyOptions}   = require '../options'
-{coffeeLint}          = require '../../config/coffeeLint'
 
 
 module.exports = (gulp, plugins) -> ->
@@ -32,7 +31,7 @@ module.exports = (gulp, plugins) -> ->
 			.pipe plugins.ngclassify ngClassifyOptions
 			.on 'error', onError
 
-			.pipe plugins.coffeelint coffeeLint
+			.pipe plugins.coffeelint()
 			.on 'error', onError
 
 			.pipe lintNotify 'coffeelint'
