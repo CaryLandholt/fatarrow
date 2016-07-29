@@ -1,209 +1,394 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en-us">
   <head>
-    <meta charset='utf-8' />
-    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
-    <meta name="description" content="Fatarrow : AngularJS Reference Architecture" />
-
-    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
-
-    <title>Fatarrow</title>
+    <meta charset="UTF-8">
+    <title>Fatarrow by CaryLandholt</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="stylesheets/normalize.css" media="screen">
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/github-light.css" media="screen">
   </head>
-
   <body>
+    <section class="page-header">
+      <h1 class="project-name">Fatarrow</h1>
+      <h2 class="project-tagline">AngularJS Reference Architecture</h2>
+      <a href="https://github.com/CaryLandholt/fatarrow" class="btn">View on GitHub</a>
+      <a href="https://github.com/CaryLandholt/fatarrow/zipball/master" class="btn">Download .zip</a>
+      <a href="https://github.com/CaryLandholt/fatarrow/tarball/master" class="btn">Download .tar.gz</a>
+    </section>
 
-    <!-- HEADER -->
-    <div id="header_wrap" class="outer">
-        <header class="inner">
-          <a id="forkme_banner" href="https://github.com/CaryLandholt/fatarrow">View on GitHub</a>
+    <section class="main-content">
+      <h1>
+<a id="fatarrow" class="anchor" href="#fatarrow" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>fatarrow</h1>
 
-          <h1 id="project_title">Fatarrow</h1>
-          <h2 id="project_tagline">AngularJS Reference Architecture</h2>
+<h3>
+<a id="an-angularjs-application-reference-architecture" class="anchor" href="#an-angularjs-application-reference-architecture" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>An <a href="http://angularjs.org/">AngularJS</a> application Reference Architecture</h3>
 
-            <section id="downloads">
-              <a class="zip_download_link" href="https://github.com/CaryLandholt/fatarrow/zipball/master">Download this project as a .zip file</a>
-              <a class="tar_download_link" href="https://github.com/CaryLandholt/fatarrow/tarball/master">Download this project as a tar.gz file</a>
-            </section>
-        </header>
-    </div>
+<p><a href="LICENSE"><img src="http://img.shields.io/badge/license-MIT-blue.svg?style=flat" alt="License"></a>
+<a href="https://github.com/CaryLandholt/fatarrow/tags"><img src="http://img.shields.io/github/tag/CaryLandholt/fatarrow.svg?style=flat" alt="Version"></a>
+<a href="http://travis-ci.org/CaryLandholt/fatarrow"><img src="http://img.shields.io/travis/CaryLandholt/fatarrow.svg?style=flat" alt="Build Status"></a>
+<a href="https://gemnasium.com/CaryLandholt/fatarrow"><img src="http://img.shields.io/gemnasium/CaryLandholt/fatarrow.svg?style=flat" alt="Dependency Status"></a></p>
 
-    <!-- MAIN CONTENT -->
-    <div id="main_content_wrap" class="outer">
-      <section id="main_content" class="inner">
-        <h1>
-<a name="fatarrow----" class="anchor" href="#fatarrow----"><span class="octicon octicon-link"></span></a>fatarrow <a href="https://github.com/CaryLandholt/fatarrow/tags"><img src="http://img.shields.io/github/tag/CaryLandholt/fatarrow.svg?style=flat" alt="Version"></a> <a href="http://travis-ci.org/CaryLandholt/fatarrow"><img src="http://img.shields.io/travis/CaryLandholt/fatarrow.svg?style=flat" alt="Build Status"></a> <a href="https://gemnasium.com/CaryLandholt/fatarrow"><img src="http://img.shields.io/gemnasium/CaryLandholt/fatarrow.svg?style=flat" alt="Dependency Status"></a> <a href="LICENSE"><img src="http://img.shields.io/badge/license-MIT-blue.svg?style=flat" alt="License"></a>
-</h1>
-
-<blockquote>
-<p>An <a href="http://angularjs.org/">AngularJS</a> large application Reference Architecture</p>
-</blockquote>
-
-<p>Build large <a href="http://angularjs.org/">AngularJS</a> applications with <a href="http://coffeescript.org/">CoffeeScript</a> - <strong>without the ceremony</strong>.  By the way, you can write JavaScript too.</p>
+<p>Build <a href="http://angularjs.org/">AngularJS</a> applications with <a href="http://coffeescript.org/">CoffeeScript</a> - <strong>without the ceremony</strong>. By the way, you can write JavaScript too.</p>
 
 <h2>
-<a name="table-of-contents" class="anchor" href="#table-of-contents"><span class="octicon octicon-link"></span></a>Table of Contents</h2>
+<a id="table-of-contents" class="anchor" href="#table-of-contents" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Table of Contents</h2>
 
 <ul>
 <li><a href="#installing">Installing</a></li>
 <li><a href="#running">Running</a></li>
-<li><a href="#writing-your-app">Writing Your App</a></li>
+<li><a href="#scripting">Scripting</a></li>
+<li><a href="#styling">Styling</a></li>
+<li><a href="#templating">Templating</a></li>
+<li><a href="#structure">Structure</a></li>
+<li><a href="#features">Features</a></li>
+<li><a href="#conf">Configuration</a></li>
 <li><a href="#contributing">Contributing</a></li>
 <li><a href="#changelog">Changelog</a></li>
 <li><a href="#license">License</a></li>
-</ul><h2>
-<a name="installing" class="anchor" href="#installing"><span class="octicon octicon-link"></span></a>Installing</h2>
+</ul>
+
+<h2>
+<a id="installing" class="anchor" href="#installing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Installing</h2>
 
 <p>Before running, you must install and configure the following one-time dependencies:</p>
 
 <ul>
 <li><a href="http://git-scm.com/">Git</a></li>
 <li><a href="http://nodejs.org/">Node.js</a></li>
+</ul>
+
+<p>Enter the following in the terminal</p>
+
+<p>Option 1: Using Yeoman Generator (Recommended)</p>
+
+<div class="highlight highlight-source-shell"><pre>$ npm install -g gulp yo
+$ npm install -g generator-fatarrow
+$ mkdir my-new-project <span class="pl-k">&amp;&amp;</span> <span class="pl-c1">cd</span> <span class="pl-smi">$_</span>
+$ yo fatarrow</pre></div>
+
+<p>Option 2: Clone this repo</p>
+
+<div class="highlight highlight-source-shell"><pre>$ npm install -g gulp
+$ git clone git@github.com:CaryLandholt/fatarrow.git
+$ <span class="pl-c1">cd</span> fatarrow
+$ npm install</pre></div>
+
+<h2>
+<a id="running" class="anchor" href="#running" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Running</h2>
+
+<p>Here are some useful commands to get started:</p>
+
+<p>Get all commands and options by typing</p>
+
+<div class="highlight highlight-source-shell"><pre>$ gulp <span class="pl-c1">help</span></pre></div>
+
+<p>Running with With a fake backend (<a href="https://docs.angularjs.org/api/ngMockE2E/service/%24httpBackend">$httpBackend</a>)</p>
+
+<div class="highlight highlight-source-shell"><pre>$ gulp</pre></div>
+
+<p>With a real backend (gulp will proxy calls to the backend of your choice)</p>
+
+<div class="highlight highlight-source-shell"><pre>$ gulp --backend</pre></div>
+
+<p>Build for production</p>
+
+<div class="highlight highlight-source-shell"><pre>$ gulp --prod --no-serve</pre></div>
+
+<p>Run tests on your build server</p>
+
+<div class="highlight highlight-source-shell"><pre>$ npm <span class="pl-c1">test</span></pre></div>
+
+<p>Deploy your app<a name="deploy"></a></p>
+
+<div class="highlight highlight-source-shell"><pre>$ npm <span class="pl-c1">test</span>
+$ gulp --prod --no-serve
+<span class="pl-c"># deploy to a path (configuration in /config/locationConfig.coffee)</span>
+$ gulp deploy
+<span class="pl-c"># deploy to S3 (configurtion in /config/s3Config.coffee)</span>
+$ gulp deploy --target s3</pre></div>
+
+<h2>
+<a id="scripting" class="anchor" href="#scripting" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Scripting</h2>
+
+<p>Your choice of scripting languages.</p>
+
+<ul>
+<li><strong>JavaScript</strong></li>
+<li><strong><a href="https://babeljs.io/">Babel</a></strong></li>
+<li><strong><a href="coffeescript.org">CoffeeScript</a></strong></li>
+<li><strong><a href="livescript.net">LiveScript</a></strong></li>
+<li><strong><a href="http://www.typescriptlang.org/">TypeScript</a></strong></li>
+</ul>
+
+<h2>
+<a id="styling" class="anchor" href="#styling" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Styling</h2>
+
+<p>Your choice of styling languages.</p>
+
+<ul>
+<li><strong>CSS</strong></li>
+<li><strong><a href="http://lesscss.org/">LESS</a></strong></li>
+<li><strong><a href="http://sass-lang.com/">Sass</a></strong></li>
+</ul>
+
+<h2>
+<a id="templating" class="anchor" href="#templating" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Templating</h2>
+
+<p>Your choice of templating engines.</p>
+
+<ul>
+<li><strong>HTML</strong></li>
+<li><strong><a href="http://haml.info/">Haml</a></strong></li>
+<li><strong><a href="http://jade-lang.com/">Jade</a></strong></li>
+<li><strong><a href="http://daringfireball.net/projects/markdown/">Markdown</a></strong></li>
+</ul>
+
+<h2>
+<a id="structure" class="anchor" href="#structure" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Structure</h2>
+
+<ul>
+<li>File extensions supported by fatarrow:
+
+<ul>
+<li>Scripts: <code>.coffee</code>, <code>.js</code>, <code>.ls</code>, <code>.ts</code>, <code>.es6</code>
+</li>
+<li>Styles: <code>.less</code>, <code>.css</code>, <code>.scss</code>
+</li>
+<li>Templates: <code>.html</code>, <code>.haml</code>, <code>.jade</code>
+</li>
+</ul>
+</li>
+</ul>
+
+<p><strong>(Note: to keep the example succint, <code>.coffee</code>, <code>.html</code> and <code>.less</code> extensions are used below. However, all of the file extensions listed above can be used, and even can be mix-and-matched.)</strong></p>
+
+<p>The root directory generated for a fatarrow app:</p>
+
+<pre>
+├──  e2e/
+├──  config/
+├──  src/
+│   ├──  components/
+│   │   └──  comp/
+│   │   │   ├──  test
+│   │   │   ├──  └──  comp.spec.coffee
+│   │   │   ├──  comp.coffee
+│   │   │   └──  comp.html
+│   │   │   └──  comp.backend.coffee
+│   │   │   └──  comp.less
+│   ├──  app/
+│   │   ├──  app.coffee
+│   │   ├──  appRoutes.coffee
+│   │   └──  views.backend.coffee
+│   ├──  home/
+│   │   ├──  homeController.coffee
+│   │   ├──  homeRoutes.coffee
+│   │   └──  home.html
+│   ├──  img/
+│   │   └──  angularjs.jpg
+│   └──  index.html
+├──  tasks/
+├──  bower_components/
+├──  nodes_modules/
+├──  .bowerrc
+├──  .gitignore
+├──  bower.json
+├──  gulpfile.coffee
+├──  package.json
+</pre>
+
+<p>Explanation of the folders:</p>
+
+<ul>
 <li>
-<a href="http://gulpjs.com/">gulp.js</a> - use the terminal command below</li>
-</ul><div class="highlight highlight-bash"><pre><span class="nv">$ </span>npm install -g gulp
-</pre></div>
-
-<p>Once the dependencies have been installed, enter the following commands in the terminal:</p>
-
-<div class="highlight highlight-bash"><pre><span class="nv">$ </span>git clone git@github.com:CaryLandholt/fatarrow.git
-<span class="nv">$ </span><span class="nb">cd </span>fatarrow
-<span class="nv">$ </span>npm install
-</pre></div>
-
-<h2>
-<a name="running" class="anchor" href="#running"><span class="octicon octicon-link"></span></a>Running</h2>
-
-<p>Enter the following in the terminal:</p>
-
-<div class="highlight highlight-bash"><pre><span class="nv">$ </span>gulp
-</pre></div>
+<em><code>src/app</code></em>: Angular module for the app. All app level config should go here.</li>
+<li>
+<em><code>src/home</code></em>: Each feature of the app should go in its own folder. It should contain all scripts, styles, templates and tests within the feature folder.</li>
+<li>
+<em><code>src/components</code></em>: Reusable components (directives, factories, styles, etc.)</li>
+<li>
+<em><code>e2e</code></em>: Protractor tests. They should also be separated by features/components.</li>
+<li>
+<em><code>config</code></em>: Configurtion for gulp tasks broken up by each task.</li>
+</ul>
 
 <h2>
-<a name="writing-your-app" class="anchor" href="#writing-your-app"><span class="octicon octicon-link"></span></a>Writing Your App</h2>
+<a id="features" class="anchor" href="#features" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Features</h2>
 
-<p>fatarrow takes advantage of <strong><a href="https://github.com/CaryLandholt/ng-classify">ng-classify</a></strong>, allowing you to write AngularJS modules as CoffeeScript classes.</p>
+<ul>
+<li>
+<em>Fake data</em>: Running <code>gulp</code> will include the <code>.backend.coffee</code> files and therefore Angular's $httpBackend will be utilized. This should be used for backendless development.</li>
+<li>
+<em>Real data</em>: Running <code>gulp --backend</code> will proxy all backend calls to the backend of your choice. <a href="#conf">See below</a> for configuration instructions.</li>
+<li>
+<em>Production build</em>: Running <code>gulp --prod</code> will produce builds for production. This includes:
 
-<p>Instead of writing your controllers like this:</p>
+<ul>
+<li>
+<em>ngAnnotate</em> : make your angular code minification proof</li>
+<li>
+<em><a href="https://github.com/CaryLandholt/ng-classify">ngClassify</a></em> : CoffeeScript classes for angular</li>
+<li>
+<em>minification</em> : JS, CSS and HTML</li>
+<li>
+<em>image minification</em>: images from teh <code>img</code> folder are compressed</li>
+<li>
+<em>rev</em>: minified files are rev'ed for browser cache busting</li>
+<li>
+<em>templatecache</em> : take all angular templates and include them in the minified scripts</li>
+<li>
+<em>deploy</em>: deploy to a path or to <a href="http://aws.amazon.com/s3/">AWS S3</a>. <a href="#deploy">see above</a> for commands.</li>
+</ul>
+</li>
+<li>
+<em>Dev Workflow</em>:
 
-<div class="highlight highlight-javascript"><pre><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'app'</span><span class="p">).</span><span class="nx">controller</span><span class="p">(</span><span class="s1">'todoController'</span><span class="p">,</span> <span class="p">[</span><span class="s1">'todoService'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">todoService</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">this</span><span class="p">.</span><span class="nx">todos</span> <span class="o">=</span> <span class="nx">todoService</span><span class="p">.</span><span class="nx">get</span><span class="p">();</span>
+<ul>
+<li>
+<em>watch</em> : watch your <code>src</code> folder and rebuild and reload automatically</li>
+<li>
+<em>linting</em> : lint <code>.js</code> and <code>.coffee</code> files. style checking and fixing with <a href="http://jscs.info/">JSCS</a>
+</li>
+<li>
+<em>test</em> : run e2e (protractor) and unit (karma) tests</li>
+<li>
+<em><a href="http://www.browsersync.io/">browserSync</a></em> : test on multiple devices simultaneously</li>
+<li>
+<em>newer</em>: only process changed files</li>
+<li>
+<em>HTML5Mode</em>: <a href="https://docs.angularjs.org/guide/%24location">Angular's html5Mode</a> is supported on the BrowserSync server. Be sure to <a href="https://docs.angularjs.org/guide/%24location">configure your production web server</a>. HTMO5Mode is turned on by default. See Angular's documentation to turn it off for browser compatibility.</li>
+<li>
+<em>plato</em>: perform code visualization, static analysis, and complexity analysis</li>
+</ul>
+</li>
+</ul>
 
-    <span class="k">this</span><span class="p">.</span><span class="nx">add</span> <span class="o">=</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">todo</span><span class="p">)</span> <span class="p">{</span>
-        <span class="nx">todoService</span><span class="p">.</span><span class="nx">add</span><span class="p">(</span><span class="nx">todo</span><span class="p">);</span>
-    <span class="p">};</span>
-<span class="p">}]);</span>
-</pre></div>
+<h2>
+<a id="configuration" class="anchor" href="#configuration" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Configuration<a name="conf"></a>
+</h2>
 
-<p>Write them like this:</p>
+<ul>
+<li>
+<em>.jscsrc</em>: options for JSCS. <a href="http://jscs.info/rules.html">See reference</a>
+</li>
+<li>
+<em>.jshintrc</em>: options for jsHint. <a href="http://jshint.com/docs/options/">See reference</a>
+</li>
+</ul>
 
-<div class="highlight highlight-coffee"><pre><span class="k">class</span> <span class="nx">Todo</span> <span class="k">extends</span> <span class="nx">Controller</span>
-    <span class="nv">constructor: </span><span class="nf">(@todoService) -&gt;</span>
-        <span class="vi">@todos = </span><span class="nx">@todoService</span><span class="p">.</span><span class="nx">get</span><span class="p">()</span>
+<p><strong>(Note: Configuration for the rest of the gulp plug-ins lives in the <code>config</code> folder.)</strong></p>
 
-    <span class="nv">add: </span><span class="nf">(todo) -&gt;</span>
-        <span class="nx">@todoService</span><span class="p">.</span><span class="nx">add</span> <span class="nx">todo</span>
-</pre></div>
+<ul>
+<li>
+<em>app.coffee</em>
+
+<ul>
+<li>
+<em><code>APP_NAME</code></em>: name of the angular module for the app</li>
+</ul>
+</li>
+<li>
+<em>bower.coffee</em>
+
+<ul>
+<li>
+<em><code>BOWER_COMPONENTS</code></em>: consume dependencies from bower by specifying dependency name, version, dependency type (scripts, styles, etc.) and a list of files to be consumed (cherry picking files).</li>
+</ul>
+</li>
+<li>
+<em>coffeeLint.coffee</em>: options for linting CoffeeScript. <a href="http://www.coffeelint.org/#options">See reference</a>
+</li>
+<li>
+<em>e2e.coffee</em>: options for protractor. <a href="https://github.com/angular/protractor/blob/master/docs/referenceConf.js">See reference</a>.</li>
+<li>
+<em>karma.coffee</em>: options for karma. <a href="http://karma-runner.github.io/0.8/config/configuration-file.html">See reference</a>
+</li>
+<li>
+<em>languages.coffee</em>: disable compilers not in use to optimize your build</li>
+<li>
+<em>less.coffee</em>: options for the less compiler. <a href="http://lesscss.org/usage/">See reference</a>
+</li>
+<li>
+<em>locationDeploy.coffee</em>: deploy app to a path</li>
+<li>
+<em>plato.coffee</em>: options for plato. <a href="https://github.com/es-analysis/plato">See reference</a>
+</li>
+<li>
+<em>s3Deploy.coffee</em>: options to deploy to AWS S3. <a href="https://www.npmjs.com/package/s3">See reference</a>
+</li>
+<li>
+<em><code>SCRIPTS</code></em>: load order for scripts</li>
+<li>
+<em>server.coffee</em>: options for browser-sync development server
+
+<ul>
+<li>
+<em><code>PROXY_CONFIG</code></em>: proxy backend calls during development with connect-modrewrite. <a href="https://www.npmjs.com/package/connect-modrewrite">See reference</a>
+</li>
+<li>
+<em><code>PORT</code></em>: run app on a specific port (default: 8181)</li>
+</ul>
+</li>
+<li>
+<em><code>STYLES</code></em>: load order for styles</li>
+</ul>
 
 <h3>
-<a name="structure" class="anchor" href="#structure"><span class="octicon octicon-link"></span></a>Structure</h3>
+<a id="add-bower-component" class="anchor" href="#add-bower-component" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Add Bower Component</h3>
 
-<p><strong>Source</strong></p>
+<p>You need three pieces of information for each Bower component to include in your app.</p>
 
-<pre><code>src/
-├── app/
-│   ├── app.coffee
-│   ├── appRoutes.coffee
-│   └── views.backend.coffee
-├── home/
-│   ├── home.html
-│   ├── homeController.coffee
-│   └── homeRoutes.coffee
-└── index.html
-</code></pre>
+<ol>
+<li>The Bower component name (e.g. <em>restangular</em>)</li>
+<li>The version of the component (e.g. <em>1.4.0</em>)</li>
+<li>The files within the component to include in your app (e.g. <em>restangular.min.js</em>)</li>
+</ol>
 
-<p><strong>Distribution (Dev)</strong></p>
+<p>The following will include the <strong>restangular</strong> component, version <strong>1.4.0</strong>, and place the <code>dist/restangular.min.js</code> file in the <code>vendor/scripts</code> directory.  By default, all Bower components will be placed in the <code>vendor</code> directory.</p>
 
-<pre><code>dist/
-├── app/
-│   ├── app.js
-│   ├── appRoutes.js
-│   └── views.backend.js
-├── home/
-│   ├── home.html
-│   ├── homeController.js
-│   └── homeRoutes.js
-├── vendor/
-│   ├── angular/
-│   │   └── scripts/
-|   |       └── angular.min.js
-│   ├── angular-animate/
-│   │   └── scripts/
-|   |       └── angular-animate.min.js
-│   ├── angular-mocks/
-│   │   └── scripts/
-|   |       └── angular-mocks.js
-│   ├── angular-route/
-│   │   └── scripts/
-|   |       └── angular-route.min.js
-│   ├── bootstrap/
-│   │   ├── fonts/
-|   |   |   ├── glyphicons-halflings-regular.eot
-|   |   |   ├── glyphicons-halflings-regular.svg
-|   |   |   ├── glyphicons-halflings-regular.ttf
-|   |   |   └── glyphicons-halflings-regular.woff
-│   │   └── styles/
-|   |       ├── bootstrap-theme.min.css
-|   |       └── bootstrap.min.css
-│   ├── google-code-prettify/
-│   │   ├── scripts/
-|   |   |   └── prettify.js
-│   │   └── styles/
-|   |       └── prettify.css
-└── index.html
-</code></pre>
+<div class="highlight highlight-source-coffee"><pre><span class="pl-v">BOWER_COMPONENTS</span> <span class="pl-k">=</span>
+    <span class="pl-s"><span class="pl-pds">'</span>restangular<span class="pl-pds">'</span></span><span class="pl-k">:</span> <span class="pl-s"><span class="pl-pds">'</span>1.4.0<span class="pl-pds">'</span></span><span class="pl-k">:</span>
+        <span class="pl-v">scripts</span>: <span class="pl-s"><span class="pl-pds">'</span>dist/restangular.min.js<span class="pl-pds">'</span></span></pre></div>
 
-<p><strong>Distribution (Prod)</strong></p>
+<p>If load order is important, include a reference to the file in the <strong>SCRIPTS</strong> section.</p>
 
-<pre><code>dist/
-├── fonts/
-│   ├── glyphicons-halflings-regular.eot
-│   ├── glyphicons-halflings-regular.svg
-│   ├── glyphicons-halflings-regular.ttf
-│   └── glyphicons-halflings-regular.woff
-├── scripts/
-│   └── scripts.min.js
-├── styles/
-│   └── styles.min.css
-└── index.html
-</code></pre>
+<p>The following will ensure <strong>restangular</strong> is loaded prior to <code>app.js</code>.</p>
+
+<div class="highlight highlight-source-coffee"><pre><span class="pl-v">SCRIPTS</span> <span class="pl-k">=</span>
+    <span class="pl-s"><span class="pl-pds">'</span>**/angular.min.js<span class="pl-pds">'</span></span>
+    <span class="pl-s"><span class="pl-pds">'</span>**/restangular.min.js<span class="pl-pds">'</span></span>
+    <span class="pl-s"><span class="pl-pds">'</span>**/app.js<span class="pl-pds">'</span></span>
+    <span class="pl-s"><span class="pl-pds">'</span>**/*.js<span class="pl-pds">'</span></span></pre></div>
+
+<p>For AngularJS components, include a reference to the module within your application.  For example:</p>
+
+<div class="highlight highlight-source-coffee"><pre>angular.<span class="pl-en">module</span>(<span class="pl-s"><span class="pl-pds">'</span>app<span class="pl-pds">'</span></span>, [<span class="pl-s"><span class="pl-pds">'</span>restangular<span class="pl-pds">'</span></span>]);</pre></div>
 
 <h2>
-<a name="contributing" class="anchor" href="#contributing"><span class="octicon octicon-link"></span></a>Contributing</h2>
+<a id="contributing" class="anchor" href="#contributing" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Contributing</h2>
 
 <p>See <a href="CONTRIBUTING.md">CONTRIBUTING.md</a></p>
 
 <h2>
-<a name="changelog" class="anchor" href="#changelog"><span class="octicon octicon-link"></span></a>Changelog</h2>
+<a id="changelog" class="anchor" href="#changelog" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Changelog</h2>
 
 <p>See <a href="CHANGELOG.md">CHANGELOG.md</a></p>
 
 <h2>
-<a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h2>
+<a id="license" class="anchor" href="#license" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>License</h2>
 
 <p>See <a href="LICENSE">LICENSE</a></p>
-      </section>
-    </div>
 
-    <!-- FOOTER  -->
-    <div id="footer_wrap" class="outer">
-      <footer class="inner">
-        <p class="copyright">Fatarrow maintained by <a href="https://github.com/CaryLandholt">CaryLandholt</a></p>
-        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      <footer class="site-footer">
+        <span class="site-footer-owner"><a href="https://github.com/CaryLandholt/fatarrow">Fatarrow</a> is maintained by <a href="https://github.com/CaryLandholt">CaryLandholt</a>.</span>
+
+        <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/jasonlong/cayman-theme">Cayman theme</a> by <a href="https://twitter.com/jasonlong">Jason Long</a>.</span>
       </footer>
-    </div>
 
-    
+    </section>
 
+  
   </body>
 </html>
