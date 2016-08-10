@@ -1,10 +1,14 @@
-describe 'markdown', ->
+MarkdownService = require '../markdownService'
+
+fdescribe 'markdown', ->
 	describe 'markdownService', ->
-		beforeEach module 'app'
+		# beforeEach module 'app'
+		# markdownService = null
 
-		beforeEach inject (@markdownService) ->
+		beforeEach ->
+			@markdownService = new MarkdownService()
 
-		it 'converts html from a single line of markdown', ->
+		xit 'converts html from a single line of markdown', ->
 			markdown = """
 			# fatarrow
 			"""
@@ -15,7 +19,7 @@ describe 'markdown', ->
 			expect html
 				.toEqual expected
 
-		it 'converts html from multiple lines of markdown', ->
+		xit 'converts html from multiple lines of markdown', ->
 			markdown = """
 			# fatarrow
 			## Table of Contents

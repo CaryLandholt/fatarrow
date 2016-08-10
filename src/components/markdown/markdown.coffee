@@ -1,3 +1,5 @@
+angular = require 'angular'
+
 class Markdown extends Directive
 	constructor: (markdownService) ->
 		link = (scope, element, attrs) ->
@@ -7,7 +9,9 @@ class Markdown extends Directive
 			element.html html
 
 		return {
-			link
 			replace: true
+			link
 			restrict: 'E'
 		}
+
+module.exports = Markdown

@@ -1,3 +1,8 @@
+angular = require 'angular'
+angularAnimate = require 'angular-animate'
+angularRoute = require 'angular-route'
+angularLoadingBar = require 'angular-loading-bar'
+
 class App extends App
 	constructor: ->
 		dependencies = [
@@ -6,6 +11,10 @@ class App extends App
 			'angular-loading-bar'
 		]
 
-		dependencies.push('ngMockE2E') if '<%= useBackendless %>' is 'true'
+		if '<%= useBackendless %>' is 'true'
+			require 'angular-mocks'
+			dependencies.push('ngMockE2E')
 
 		return dependencies
+
+module.exports = App

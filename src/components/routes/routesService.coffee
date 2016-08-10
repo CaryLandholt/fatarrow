@@ -1,3 +1,5 @@
+angular = require 'angular'
+
 class Routes extends Service
 	constructor: ($route) ->
 		@routes = {}
@@ -12,3 +14,5 @@ class Routes extends Service
 
 			route      = @routes[k]
 			@routes[k] = v.caption if route isnt -1
+
+module.exports = Routes

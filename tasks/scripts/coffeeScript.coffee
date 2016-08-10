@@ -2,7 +2,6 @@ es                    = require 'event-stream'
 getScriptSources      = require('../utils').getScriptSources
 lintNotify            = require './reporters/lintNotify'
 {COMPONENTS_DIRECTORY,
-	DIST_DIRECTORY,
 	TEMP_DIRECTORY,
 	SRC_DIRECTORY}    = require '../constants'
 templateOptions       = require '../templateOptions'
@@ -14,11 +13,6 @@ module.exports = (gulp, plugins) -> ->
 
 	sources = getScriptSources '.coffee'
 	srcs    = []
-
-	options =
-		sourceMaps:
-			sourceRoot: './'
-
 
 	srcs.push src =
 		gulp
@@ -58,13 +52,7 @@ module.exports = (gulp, plugins) -> ->
 		.pipe gulp.dest TEMP_DIRECTORY
 		.on 'error', onError
 
-		.pipe plugins.sourcemaps.init()
-		.on 'error', onError
-
 		.pipe plugins.coffee()
-		.on 'error', onError
-
-		.pipe plugins.sourcemaps.write()
 		.on 'error', onError
 
 		.pipe gulp.dest TEMP_DIRECTORY

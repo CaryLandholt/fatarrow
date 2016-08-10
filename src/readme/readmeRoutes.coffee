@@ -1,3 +1,5 @@
+angular = require 'angular'
+
 class ReadmeRoutes extends Config
 	constructor: ($routeProvider) ->
 		$routeProvider
@@ -6,3 +8,5 @@ class ReadmeRoutes extends Config
 			controller: 'readmeController'
 			controllerAs: 'controller'
 			templateUrl: 'readme/readme.html'
+
+module.exports = ReadmeRoutes

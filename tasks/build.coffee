@@ -10,6 +10,7 @@ module.exports = (gulp, plugins) -> ->
 		.concat EXTENSIONS.FONTS.COMPILED
 		.concat EXTENSIONS.IMAGES.COMPILED
 		.concat EXTENSIONS.SCRIPTS.COMPILED
+		.concat EXTENSIONS.SCRIPTS.UNCOMPILED
 		.concat EXTENSIONS.STYLES.COMPILED
 		.concat EXTENSIONS.VIEWS.COMPILED
 
@@ -23,11 +24,6 @@ module.exports = (gulp, plugins) -> ->
 			gulp
 				.src getSources(), {cwd: TEMP_DIRECTORY, nodir: true}
 				.on 'error', onError
-
-	extensions = extensions
-		.concat EXTENSIONS.SCRIPTS.UNCOMPILED
-		.concat EXTENSIONS.STYLES.UNCOMPILED
-		.concat EXTENSIONS.VIEWS.UNCOMPILED
 
 	sources = getSources()
 

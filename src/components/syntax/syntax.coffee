@@ -1,3 +1,5 @@
+angular = require 'angular'
+
 class Syntax extends Directive
 	constructor: ($http, $templateCache, syntaxService) ->
 		link = (scope, element, attrs) ->
@@ -60,3 +62,5 @@ class Syntax extends Directive
 				lineNumbers: '@'
 				src: '@'
 		}
+
+module.exports = Syntax

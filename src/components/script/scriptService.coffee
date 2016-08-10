@@ -1,3 +1,5 @@
+angular = require 'angular'
+
 class Script extends Service
 	constructor: ($document, $location) ->
 		url    = $location.$$absUrl
@@ -23,3 +25,5 @@ class Script extends Service
 				continue if trimmedScript[..$location.$$protocol.length - 1] is $location.$$protocol
 
 				script = trimmedScript
+
+module.exports = Script

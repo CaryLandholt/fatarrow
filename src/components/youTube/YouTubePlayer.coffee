@@ -1,3 +1,5 @@
+angular = require 'angular'
+
 class YouTubePlayer extends Factory
 	constructor: ($rootScope, $window, $log) ->
 		apiReady = false
@@ -44,3 +46,5 @@ class YouTubePlayer extends Factory
 
 				@destroy = ->
 					@player.destroy()
+
+module.exports = YouTubePlayer

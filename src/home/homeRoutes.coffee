@@ -1,3 +1,5 @@
+angular = require 'angular'
+
 class HomeRoutes extends Config
 	constructor: ($routeProvider) ->
 		$routeProvider
@@ -6,3 +8,5 @@ class HomeRoutes extends Config
 			controller: 'homeController'
 			controllerAs: 'controller'
 			templateUrl: 'home/home.html'
+
+module.exports = HomeRoutes

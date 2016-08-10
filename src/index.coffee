@@ -1,0 +1,5 @@
+require './app'
+require './components'
+require './home'
+require './readme'
+require './screencasts'

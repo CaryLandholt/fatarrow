@@ -1,3 +1,5 @@
+angular = require 'angular'
+
 class ScreencastsRoutes extends Config
 	constructor: ($routeProvider) ->
 		$routeProvider

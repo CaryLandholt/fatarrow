@@ -1,3 +1,5 @@
+angular = require 'angular'
+
 class YouTube extends Directive
 	constructor: ($log, YouTubePlayer) ->
 		uniqueIdPrefix = 'you-tube-player-'
@@ -25,3 +27,5 @@ class YouTube extends Directive
 				playlist: '@'
 				video: '@'
 		}
+
+module.exports = YouTube
